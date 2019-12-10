@@ -21,7 +21,7 @@ export class GenerateClasses {
                             clss.properties.getAlphabeticalOrdering().map((prop, propKeyGetter) => {
                                 return [
                                     fp.line([
-                                        `private readonly ${propKeyGetter(sanitize)} `,
+                                        `private readonly ${propKeyGetter(sanitize)}`,
                                         ((): fp.InlinePart => {
                                             switch (prop.initialization[0]) {
                                                 case "default":
@@ -39,7 +39,7 @@ export class GenerateClasses {
                                 () => [],
                                 parametrizedProperties => [
                                     fp.line([
-                                        `constructor (`,
+                                        `constructor(`,
                                         fp.line(parametrizedProperties.map((_pp, propKeyGetter) => {
                                             return `${propKeyGetter(sanitize)}: ${_pp.type}`
                                         })),

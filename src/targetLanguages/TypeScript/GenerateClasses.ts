@@ -14,7 +14,7 @@ export class GenerateClasses {
             dummy.classes.getAlphabeticalOrdering().map((clss, keyGetter) => {
                 return fp.paragraph([
                     ``,
-                    `class ${keyGetter(sanitize)} {`,
+                    `export class ${keyGetter(sanitize)} {`,
                     () => {
                         return [
                             //the properties
@@ -40,9 +40,12 @@ export class GenerateClasses {
                                 parametrizedProperties => [
                                     fp.line([
                                         `constructor(`,
-                                        fp.line(parametrizedProperties.map((_pp, propKeyGetter) => {
-                                            return `${propKeyGetter(sanitize)}: ${_pp.type}`
-                                        })),
+                                        fp.line(parametrizedProperties.map(
+                                            (_pp, propKeyGetter) => {
+                                                return `${propKeyGetter(sanitize)}: ${_pp.type}`
+                                            },
+                                            () => `, `
+                                        )),
                                         `) {`,
                                     ]),
                                     () => {
@@ -60,9 +63,12 @@ export class GenerateClasses {
                                 return [
                                     fp.line([
                                         `public ${methodKeyGetter(sanitize)}(`,
-                                        fp.line(method.parameters.getAlphabeticalOrdering().map((param, paramKeyGetter) => {
-                                            return `${paramKeyGetter(sanitize)}: ${param.type}`
-                                        })),
+                                        fp.line(method.parameters.getAlphabeticalOrdering().map(
+                                            (param, paramKeyGetter) => {
+                                                return `${paramKeyGetter(sanitize)}: ${param.type}`
+                                            },
+                                            () => `, `
+                                        )),
                                         `) {`,
                                     ]),
                                     () => {

@@ -1,8 +1,6 @@
 //tslint:disable: no-console
-import { serialize } from "fountain-pen"
 import * as lf from "lingua-franca-building"
-import * as x from "../src/generated/builder"
-import { GenerateClasses } from "../src/targetLanguages/TypeScript/GenerateClasses"
+import { compile, generateTypeScriptCode } from "../src"
 
 const rr = new lf.SimpleResolveReporter(
     (_dependent, message) => {
@@ -13,26 +11,24 @@ const rr = new lf.SimpleResolveReporter(
     }
 )
 
-const db = new x.DummyBuilder(lf.createBuildContext(rr))
-
-const result = db.build(c => c
-    .Class("Foo"
-        , p => p
-            .ClassProperty("a", t => t.default("new Array<int>()"))
-            .ClassProperty("b", t => t.parametrized("string"))
-        , m => m
-            .Method("bla"
+const compilationUnit = compile(rr, builder => {
+    return builder.build(c => c
+        .Class("Foo"
             , p => p
-                .MethodParameter("param", "boolean")
-            , s => s
-                .Statement("console.log('X')")
-            )
+                .ClassProperty("a", t => t.default("new Array<int>()"))
+                .ClassProperty("b", t => t.parametrized("string"))
+            , m => m
+                .Method("bla"
+                    , p => p
+                        .MethodParameter("param", "boolean")
+                    , s => s
+                        .Statement("console.log('X')")
+                )
+        )
     )
-)
+})
 
-const gc = new GenerateClasses()
 
-const paragraph = gc.Dummy(result)
+console.log(generateTypeScriptCode(compilationUnit))
 
-serialize(paragraph, "    ", true, str => { console.log(str) })
 

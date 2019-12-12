@@ -1,4 +1,4 @@
-//tslint:disable: no-console
+//tslint:disable: no-console no-shadowed-variable
 import * as lf from "lingua-franca-building"
 import { compile, generateTypeScriptCode } from "../src"
 
@@ -12,23 +12,31 @@ const rr = new lf.SimpleResolveReporter(
 )
 
 const compilationUnit = compile(rr, builder => {
-    return builder.build(c => c
-        .Class("Foo"
-            , p => p
-                .ClassProperty("a", t => t.default("new Array<int>()"))
-                .ClassProperty("b", t => t.parametrized("string"))
-            , m => m
-                .Method("bla"
-                    , p => p
-                        .MethodParameter("param", "boolean")
-                    , s => s
-                        .Statement("console.log('X')")
-                )
-        )
+    return builder.build(
+        gt => gt,
+        t => t
+            .Type("Bar", t => t.object(p => p
+                .ObjectProperty("X", t => t.string())
+            ))
+        , a => a
+            .Algorithm("Foo", t => t.class(
+                p => p
+                    .ClassProperty("a", t => t.default("new Array<int>()"))
+                    .ClassProperty("b", t => t.parametrized("string"))
+                , m => m
+                    .Method("bla"
+                        , p => p
+                            .Parameter("param", "boolean")
+                        , v => v
+                        , s => s
+                            .Statement("console.log('X')")
+                    )
+            ))
     )
 })
 
-
-console.log(generateTypeScriptCode(compilationUnit))
+const typeScriptCode = generateTypeScriptCode(compilationUnit)
+console.log(typeScriptCode.types)
+console.log(typeScriptCode.algorithms)
 
 

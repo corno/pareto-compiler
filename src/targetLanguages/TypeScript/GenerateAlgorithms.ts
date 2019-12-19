@@ -112,8 +112,8 @@ export class GenerateAlgorithms {
     }
     private Block(b: Block): fp.IParagraph {
         return [
-            b.variables.getAlphabeticalOrdering({}).map({
-                callback: (variable, variableKey) => {//FIX should not be sorted alphabetically
+            b.variables.getOrderings({}).dependencies.map({
+                callback: (variable, variableKey) => {
                     return [
                         fp.line([
                             `const ${variableKey} = `,
@@ -133,6 +133,26 @@ export class GenerateAlgorithms {
     }
     private Initializer(initializer: Initializer): fp.IInlineSection {
         switch (initializer.type[0]) {
+            case "function call": {
+                const $ = initializer.type[1]
+                return fp.line([
+                    $.path,
+                    `({`,
+                    () => {
+                        return $.arguments.getAlphabeticalOrdering({}).map({
+                            callback: (arg, argKey) => {
+                                return [
+                                    fp.line([
+                                        `"${argKey}": `,
+                                        this.Initializer(arg.initializer),
+                                    ]),
+                                ]
+                            },
+                        })
+                    },
+                    `})`,
+                ])
+            }
             case "object": {
                 const $ = initializer.type[1]
                 return fp.line([
@@ -141,8 +161,10 @@ export class GenerateAlgorithms {
                         return $.properties.getAlphabeticalOrdering({}).map({
                             callback: (prop, propKey) => {
                                 return [
-                                    `"${propKey}": `,
-                                    this.Initializer(prop.initializer),
+                                    fp.line([
+                                        `"${propKey}": `,
+                                        this.Initializer(prop.initializer),
+                                    ]),
                                 ]
                             },
                         })
@@ -153,6 +175,14 @@ export class GenerateAlgorithms {
             case "raw": {
                 const $ = initializer.type[1]
                 return fp.token($.rawstring)
+            }
+            case "tagged union": {
+                const $ = initializer.type[1]
+                return fp.line([
+                    `[ "${$.state}", `,
+                    this.Initializer($.initializer),
+                    ` ]`,
+                ])
             }
             default:
                 return assertUnreachable(initializer.type[0])

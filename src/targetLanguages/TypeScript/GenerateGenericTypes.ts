@@ -14,7 +14,7 @@ function assertUnreachable<T>(_x: never): T {
 export class GenerateGenericTypes {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `//tslint:disable: ban-types`,
+            `//tslint:disable: ban-types interface-name pareto array-type no-empty-interface`,
             compilationUnit["generic interface declarations"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: (type, keyGetter) => {
                     return [
@@ -61,16 +61,17 @@ export class GenerateGenericTypes {
                                                 ])
                                             },
                                         }),
-                                        `(`,
+                                        `(p: {`,
                                         fp.line(method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                                             onSepartor: () => `, `,
                                             onElement: (param, paramKeyGetter) => fp.line([
+                                                ` readonly `,
                                                 paramKeyGetter,
                                                 `: `,
                                                 this.GenericInType(param.type),
                                             ]),
                                         })),
-                                        `)`,
+                                        `})`,
                                         `: `,
                                         ((): fp.IInlineSection => {
                                             switch (method.type[0]) {

@@ -1,4 +1,4 @@
-//tslint:disable: ban-types
+//tslint:disable: ban-types pareto
 import * as gt from "./genericTypes"
 
 export type Algorithm = {
@@ -16,6 +16,10 @@ export type BaseInterface = {
 export type Block = {
     readonly "statements": gt.List<Statement>
     readonly "variables": gt.OrderedDictionary<Variable, VariableOrderings>
+}
+
+export type CallArgurments = {
+    readonly "initializer": Initializer
 }
 
 export type CallbackReturnValueIsGuaranteed = {
@@ -45,6 +49,11 @@ export type DefaultInitialize = {
 
 export type Function = {
     readonly "specification": FunctionSpecification
+}
+
+export type FunctionCall = {
+    readonly "arguments": gt.Dictionary<CallArgurments>
+    readonly "path": string
 }
 
 export type FunctionSpecification = {
@@ -146,8 +155,10 @@ export type Initializer = {
 }
 
 export type InitializerType =
+    | [ "function call", FunctionCall ]
     | [ "object", ObjectInitializer ]
     | [ "raw", RawInitializer ]
+    | [ "tagged union", TaggedUnionInitializer ]
 
 export type InReferenceToMethodTypeParameter = {
     readonly "type parameter": string
@@ -237,6 +248,11 @@ export type TaggedUnion = {
 
 export type TaggedUnionAlternative = {
     readonly "referenced type": string
+}
+
+export type TaggedUnionInitializer = {
+    readonly "initializer": Initializer
+    readonly "state": string
 }
 
 export type Type = {

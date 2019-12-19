@@ -31,6 +31,6 @@
   },
   "dependencies": {
     "fountain-pen": "^2.0.1",
-    "lingua-franca-building": "^0.2.6"
+    "lingua-franca-building": "^0.2.7"
   }
 }

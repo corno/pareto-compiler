@@ -58,24 +58,24 @@ function create_block(
     par__statements: (builder: StatementBuilder) => void,
 ): T.Block {
     const var_variables = (() => {
-        const dict = _buildContext.createOrderedDictionary<T.Variable, T.VariableOrderings>(
-            "Variable",
-            intermediateDictionary => par__variables(new VariableBuilder(
+        const dict = _buildContext.createOrderedDictionary<T.Variable, T.VariableOrderings>({
+            reporter: new lf.SimpleConflictingEntryReporter("Variable", _errorStr => { }),
+            callback: intermediateDictionary => par__variables(new VariableBuilder(
                 _buildContext,
                 intermediateDictionary,
             )),
-            x => ({
-                dependencies: x.createBasedOnInsertionOrder(),
-            })
-        )
+            createOrderings: x => ({
+                dependencies: x.createBasedOnInsertionOrder({}),
+            }),
+        })
         return dict
     })()
-    const var_statements = _buildContext.createList<T.Statement>(
-        intermediateList => par__statements(new StatementBuilder(
+    const var_statements = _buildContext.createList<T.Statement>({
+        callback: intermediateList => par__statements(new StatementBuilder(
             _buildContext,
             intermediateList,
-        ))
-    )
+        )),
+    })
     return {
         "variables": var_variables,
         "statements": var_statements,
@@ -112,13 +112,13 @@ function create_function_specification(
     par__block_variables: (builder: VariableBuilder) => void,
     par__block_statements: (builder: StatementBuilder) => void,
 ): T.FunctionSpecification {
-    const var_parameters = _buildContext.createDictionary<T.Parameter>(
-        "Parameter",
-        intermediateDictionary => par__parameters(new ParameterBuilder(
+    const var_parameters = _buildContext.createDictionary<T.Parameter>({
+        reporter: new lf.SimpleConflictingEntryReporter("Parameter", _errorStr => { }),
+        callback: intermediateDictionary => par__parameters(new ParameterBuilder(
             _buildContext,
             intermediateDictionary,
-        ))
-    )
+        )),
+    })
     const var_block = create_block(
         _buildContext,
         par__block_variables,
@@ -220,13 +220,13 @@ export class GenericInTypeTypeBuilder {
         par__parameters: (builder: GenericCallbackParameterBuilder) => void,
         par__type: (builder: GenericCallbackTypeBuilder) => T.GenericCallbackType,
     ): T.GenericInTypeType {
-        const var_parameters = this._buildContext.createDictionary<T.GenericCallbackParameter>(
-            "GenericCallbackParameter",
-            intermediateDictionary => par__parameters(new GenericCallbackParameterBuilder(
+        const var_parameters = this._buildContext.createDictionary<T.GenericCallbackParameter>({
+            reporter: new lf.SimpleConflictingEntryReporter("GenericCallbackParameter", _errorStr => { }),
+            callback: intermediateDictionary => par__parameters(new GenericCallbackParameterBuilder(
                 this._buildContext,
                 intermediateDictionary,
-            ))
-        )
+            )),
+        })
         const var_type = par__type(new GenericCallbackTypeBuilder(
             this._buildContext,
         ))
@@ -295,13 +295,13 @@ function create_generic_interface_reference(
     par__type_arguments: (builder: GenericArgumentBuilder) => void,
 ): T.GenericInterfaceReference {
     const var_interface = par__interface
-    const var_type_arguments = _buildContext.createDictionary<T.GenericArgument>(
-        "GenericArgument",
-        intermediateDictionary => par__type_arguments(new GenericArgumentBuilder(
+    const var_type_arguments = _buildContext.createDictionary<T.GenericArgument>({
+        reporter: new lf.SimpleConflictingEntryReporter("GenericArgument", _errorStr => { }),
+        callback: intermediateDictionary => par__type_arguments(new GenericArgumentBuilder(
             _buildContext,
             intermediateDictionary,
         ))
-    )
+    })
     return {
         "interface": var_interface,
         "type arguments": var_type_arguments,
@@ -364,6 +364,33 @@ function create_generic_return_type(
     }
 }
 
+export class CallArgurmentsBuilder {
+    //@ts-ignore
+    private readonly _buildContext: lf.IBuildContext
+    private readonly imp: lf.IDictionaryBuilder<T.CallArgurments>
+    constructor(
+        buildContext: lf.IBuildContext,
+        imp: lf.IDictionaryBuilder<T.CallArgurments>,
+    ) {
+        this._buildContext = buildContext
+        this.imp = imp
+    }
+    public CallArgurments(
+        key: string,
+        par__initializer_type: (builder: InitializerTypeBuilder) => T.InitializerType,
+    ) {
+        const var_initializer = create_initializer(
+            this._buildContext,
+            par__initializer_type,
+        )
+        const entry: T.CallArgurments = {
+            "initializer": var_initializer,
+        }
+        this.imp.add(key, entry)
+        return this
+    }
+}
+
 export class PropertyInitialierBuilder {
     //@ts-ignore
     private readonly _buildContext: lf.IBuildContext
@@ -399,16 +426,33 @@ export class InitializerTypeBuilder {
     ) {
         this._buildContext = buildContext
     }
-    public object(
-        par__properties: (builder: PropertyInitialierBuilder) => void,
+    public function_call(
+        par__path: string,
+        par__arguments: (builder: CallArgurmentsBuilder) => void,
     ): T.InitializerType {
-        const var_properties = this._buildContext.createDictionary<T.PropertyInitialier>(
-            "PropertyInitialier",
-            intermediateDictionary => par__properties(new PropertyInitialierBuilder(
+        const var_path = par__path
+        const var_arguments = this._buildContext.createDictionary<T.CallArgurments>({
+            reporter: new lf.SimpleConflictingEntryReporter("CallArgurments", _errorStr => { }),
+            callback: intermediateDictionary => par__arguments(new CallArgurmentsBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
+        return ["function call", {
+            "path": var_path,
+            "arguments": var_arguments,
+        }]
+    }
+    public object(
+        par__properties: (builder: PropertyInitialierBuilder) => void,
+    ): T.InitializerType {
+        const var_properties = this._buildContext.createDictionary<T.PropertyInitialier>({
+            reporter: new lf.SimpleConflictingEntryReporter("PropertyInitialier", _errorStr => { }),
+            callback: intermediateDictionary => par__properties(new PropertyInitialierBuilder(
+                this._buildContext,
+                intermediateDictionary,
+            ))
+        })
         return ["object", {
             "properties": var_properties,
         }]
@@ -419,6 +463,20 @@ export class InitializerTypeBuilder {
         const var_rawstring = par__rawstring
         return ["raw", {
             "rawstring": var_rawstring,
+        }]
+    }
+    public tagged_union(
+        par__state: string,
+        par__initializer_type: (builder: InitializerTypeBuilder) => T.InitializerType,
+    ): T.InitializerType {
+        const var_state = par__state
+        const var_initializer = create_initializer(
+            this._buildContext,
+            par__initializer_type,
+        )
+        return ["tagged union", {
+            "state": var_state,
+            "initializer": var_initializer,
         }]
     }
 }
@@ -601,20 +659,20 @@ export class GenericInterfaceMethodBuilder {
         par__parameters: (builder: GenericMethodParameterBuilder) => void,
         par__type: (builder: GenericFunctionTypeBuilder) => T.GenericFunctionType,
     ) {
-        const var_type_parameters = this._buildContext.createDictionary<T.GenericMethodTypeParameter>(
-            "GenericMethodTypeParameter",
-            intermediateDictionary => par__type_parameters(new GenericMethodTypeParameterBuilder(
+        const var_type_parameters = this._buildContext.createDictionary<T.GenericMethodTypeParameter>({
+            reporter: new lf.SimpleConflictingEntryReporter("GenericMethodTypeParameter", _errorStr => { }),
+            callback: intermediateDictionary => par__type_parameters(new GenericMethodTypeParameterBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
-        const var_parameters = this._buildContext.createDictionary<T.GenericMethodParameter>(
-            "GenericMethodParameter",
-            intermediateDictionary => par__parameters(new GenericMethodParameterBuilder(
+        })
+        const var_parameters = this._buildContext.createDictionary<T.GenericMethodParameter>({
+            reporter: new lf.SimpleConflictingEntryReporter("GenericMethodParameter", _errorStr => { }),
+            callback: intermediateDictionary => par__parameters(new GenericMethodParameterBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
         const var_type = par__type(new GenericFunctionTypeBuilder(
             this._buildContext,
         ))
@@ -645,27 +703,27 @@ export class GenericInterfaceDeclarationBuilder {
         par__base_interfaces: (builder: BaseInterfaceBuilder) => void,
         par__methods: (builder: GenericInterfaceMethodBuilder) => void,
     ) {
-        const var_parameters = this._buildContext.createDictionary<T.GenericInterfaceParameter>(
-            "GenericInterfaceParameter",
-            intermediateDictionary => par__parameters(new GenericInterfaceParameterBuilder(
+        const var_parameters = this._buildContext.createDictionary<T.GenericInterfaceParameter>({
+            reporter: new lf.SimpleConflictingEntryReporter("GenericInterfaceParameter", _errorStr => { }),
+            callback: intermediateDictionary => par__parameters(new GenericInterfaceParameterBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
-        const var_base_interfaces = this._buildContext.createDictionary<T.BaseInterface>(
-            "BaseInterface",
-            intermediateDictionary => par__base_interfaces(new BaseInterfaceBuilder(
+        })
+        const var_base_interfaces = this._buildContext.createDictionary<T.BaseInterface>({
+            reporter: new lf.SimpleConflictingEntryReporter("BaseInterface", _errorStr => { }),
+            callback: intermediateDictionary => par__base_interfaces(new BaseInterfaceBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
-        const var_methods = this._buildContext.createDictionary<T.GenericInterfaceMethod>(
-            "GenericInterfaceMethod",
-            intermediateDictionary => par__methods(new GenericInterfaceMethodBuilder(
+        })
+        const var_methods = this._buildContext.createDictionary<T.GenericInterfaceMethod>({
+            reporter: new lf.SimpleConflictingEntryReporter("GenericInterfaceMethod", _errorStr => { }),
+            callback: intermediateDictionary => par__methods(new GenericInterfaceMethodBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
         const entry: T.GenericInterfaceDeclaration = {
             "parameters": var_parameters,
             "base interfaces": var_base_interfaces,
@@ -768,13 +826,13 @@ export class TypeTypeBuilder {
     public object(
         par__properties: (builder: ObjectPropertyBuilder) => void,
     ): T.TypeType {
-        const var_properties = this._buildContext.createDictionary<T.ObjectProperty>(
-            "ObjectProperty",
-            intermediateDictionary => par__properties(new ObjectPropertyBuilder(
+        const var_properties = this._buildContext.createDictionary<T.ObjectProperty>({
+            reporter: new lf.SimpleConflictingEntryReporter("ObjectProperty", _errorStr => { }),
+            callback: intermediateDictionary => par__properties(new ObjectPropertyBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
         return ["object", {
             "properties": var_properties,
         }]
@@ -782,13 +840,13 @@ export class TypeTypeBuilder {
     public tagged_union(
         par__alternatives: (builder: TaggedUnionAlternativeBuilder) => void,
     ): T.TypeType {
-        const var_alternatives = this._buildContext.createDictionary<T.TaggedUnionAlternative>(
-            "TaggedUnionAlternative",
-            intermediateDictionary => par__alternatives(new TaggedUnionAlternativeBuilder(
+        const var_alternatives = this._buildContext.createDictionary<T.TaggedUnionAlternative>({
+            reporter: new lf.SimpleConflictingEntryReporter("TaggedUnionAlternative", _errorStr => { }),
+            callback: intermediateDictionary => par__alternatives(new TaggedUnionAlternativeBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
         return ["tagged union", {
             "alternatives": var_alternatives,
         }]
@@ -916,20 +974,20 @@ export class AlgorithmTypeBuilder {
         par__properties: (builder: ClassPropertyBuilder) => void,
         par__methods: (builder: MethodBuilder) => void,
     ): T.AlgorithmType {
-        const var_properties = this._buildContext.createDictionary<T.ClassProperty>(
-            "ClassProperty",
-            intermediateDictionary => par__properties(new ClassPropertyBuilder(
+        const var_properties = this._buildContext.createDictionary<T.ClassProperty>({
+            reporter: new lf.SimpleConflictingEntryReporter("ClassProperty", _errorStr => { }),
+            callback: intermediateDictionary => par__properties(new ClassPropertyBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
-        const var_methods = this._buildContext.createDictionary<T.Method>(
-            "Method",
-            intermediateDictionary => par__methods(new MethodBuilder(
+        })
+        const var_methods = this._buildContext.createDictionary<T.Method>({
+            reporter: new lf.SimpleConflictingEntryReporter("Method", _errorStr => { }),
+            callback: intermediateDictionary => par__methods(new MethodBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
         return ["class", {
             "properties": var_properties,
             "methods": var_methods,
@@ -991,27 +1049,27 @@ export class CompilationUnitBuilder {
         par__types: (builder: TypeBuilder) => void,
         par__algorithms: (builder: AlgorithmBuilder) => void,
     ) {
-        const var_generic_interface_declarations = this._buildContext.createDictionary<T.GenericInterfaceDeclaration>(
-            "GenericInterfaceDeclaration",
-            intermediateDictionary => par__generic_interface_declarations(new GenericInterfaceDeclarationBuilder(
+        const var_generic_interface_declarations = this._buildContext.createDictionary<T.GenericInterfaceDeclaration>({
+            reporter: new lf.SimpleConflictingEntryReporter("GenericInterfaceDeclaration", _errorStr => { }),
+            callback: intermediateDictionary => par__generic_interface_declarations(new GenericInterfaceDeclarationBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
-        const var_types = this._buildContext.createDictionary<T.Type>(
-            "Type",
-            intermediateDictionary => par__types(new TypeBuilder(
+        })
+        const var_types = this._buildContext.createDictionary<T.Type>({
+            reporter: new lf.SimpleConflictingEntryReporter("Type", _errorStr => { }),
+            callback: intermediateDictionary => par__types(new TypeBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
-        const var_algorithms = this._buildContext.createDictionary<T.Algorithm>(
-            "Algorithm",
-            intermediateDictionary => par__algorithms(new AlgorithmBuilder(
+        })
+        const var_algorithms = this._buildContext.createDictionary<T.Algorithm>({
+            reporter: new lf.SimpleConflictingEntryReporter("Algorithm", _errorStr => { }),
+            callback: intermediateDictionary => par__algorithms(new AlgorithmBuilder(
                 this._buildContext,
                 intermediateDictionary,
             ))
-        )
+        })
         const entry: T.CompilationUnit = {
             "generic interface declarations": var_generic_interface_declarations,
             "types": var_types,

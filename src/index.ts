@@ -10,10 +10,10 @@ import { GenerateGenericTypes } from "./targetLanguages/TypeScript/GenerateGener
 import { GenerateTypes } from "./targetLanguages/TypeScript/GenerateTypes"
 
 export function compile(
-    resolveReporter: lf.IResolveReporter,
+    //resolveReporter: lf.IResolveReporter,
     callback: (builder: CompilationUnitBuilder) => CompilationUnit
 ) {
-    return callback(new CompilationUnitBuilder(lf.createBuildContext(resolveReporter)))
+    return callback(new CompilationUnitBuilder(lf.createBuildContext()))
 }
 
 export type GeneratedCode = {

@@ -10,6 +10,10 @@ function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
 }
 
+function sanitize(key: string) {
+    return key.replace(/ /g, "_")
+}
+
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
@@ -95,14 +99,14 @@ export class GenerateAlgorithms {
     private FunctionSpecification(fs: FunctionSpecification, name: string, prefix: string): fp.IParagraph {
         return [
             fp.line([
-                `${prefix}${name}(`,
+                `${prefix}${sanitize(name)}(p: { `,
                 fp.line(fs.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
                     onSepartor: () => `, `,
                     onElement: (param, paramKey) => {
                         return `${paramKey}: ${param.type}`
                     },
                 })),
-                `) {`,
+                `}) {`,
             ]),
             () => {
                 return this.Block(fs.block)

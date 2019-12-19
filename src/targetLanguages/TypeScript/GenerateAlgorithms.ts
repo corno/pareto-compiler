@@ -17,6 +17,9 @@ function sanitize(key: string) {
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
+            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal`,
+            `import * as gt from "./genericTypes"`, //FIX
+            `import * as t from "./types"`, //FIX
             compilationUnit.algorithms.getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: (alg, key) => {
                     switch (alg.type[0]) {
@@ -51,20 +54,20 @@ export class GenerateAlgorithms {
                                             onEmpty: () => [],
                                             onNotEmpty: parametrizedProperties => [
                                                 fp.line([
-                                                    `constructor(`,
+                                                    `constructor(p: {`,
                                                     fp.line(parametrizedProperties.mapWithSeparator({
                                                         onSepartor: () => `, `,
                                                         onElement: (_pp, propKey) => {
                                                             return `${propKey}: ${_pp.type}`
                                                         },
                                                     })),
-                                                    `) {`,
+                                                    `}) {`,
                                                 ]),
                                                 () => {
                                                     return parametrizedProperties.map({
                                                         callback: (_pp, propKey) => {
                                                             return [
-                                                                `this.${propKey} = ${propKey}`,
+                                                                `this.${propKey} = p.${propKey}`,
                                                             ]
                                                         },
                                                     })
@@ -103,7 +106,7 @@ export class GenerateAlgorithms {
                 fp.line(fs.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
                     onSepartor: () => `, `,
                     onElement: (param, paramKey) => {
-                        return `${paramKey}: ${param.type}`
+                        return `"${paramKey}": ${param.type}`
                     },
                 })),
                 `}) {`,
@@ -137,10 +140,11 @@ export class GenerateAlgorithms {
     }
     private Initializer(initializer: Initializer): fp.IInlineSection {
         switch (initializer.type[0]) {
-            case "function call": {
+            case "constructor call": {
                 const $ = initializer.type[1]
                 return fp.line([
-                    $.path,
+                    `new `,
+                    sanitize($.path),
                     `({`,
                     () => {
                         return $.arguments.getAlphabeticalOrdering({}).map({
@@ -149,6 +153,48 @@ export class GenerateAlgorithms {
                                     fp.line([
                                         `"${argKey}": `,
                                         this.Initializer(arg.initializer),
+                                        `,`,
+                                    ]),
+                                ]
+                            },
+                        })
+                    },
+                    `})`,
+                ])
+            }
+            case "function call": {
+                const $ = initializer.type[1]
+                return fp.line([
+                    sanitize($.path),
+                    `({`,
+                    () => {
+                        return $.arguments.getAlphabeticalOrdering({}).map({
+                            callback: (arg, argKey) => {
+                                return [
+                                    fp.line([
+                                        `"${argKey}": `,
+                                        ((): fp.IInlineSection => {
+                                            switch (arg.type[0]) {
+                                                case "callback": {
+                                                    const $$ = arg.type[1]
+                                                    return fp.line([
+                                                        `cp => {`,
+                                                        () => {
+                                                            return this.Block($$.block)
+                                                        },
+                                                        `}`,
+                                                    ])
+                                                }
+                                                case "initializer": {
+                                                    const $$ = arg.type[1]
+                                                    return this.Initializer($$.initializer)
+                                                }
+                                                default:
+                                                    return assertUnreachable(arg.type[0])
+                                            }
+
+                                        })(),
+                                        `,`,
                                     ]),
                                 ]
                             },
@@ -168,6 +214,7 @@ export class GenerateAlgorithms {
                                     fp.line([
                                         `"${propKey}": `,
                                         this.Initializer(prop.initializer),
+                                        `,`,
                                     ]),
                                 ]
                             },

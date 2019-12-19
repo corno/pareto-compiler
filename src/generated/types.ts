@@ -1,4 +1,4 @@
-//tslint:disable: ban-types pareto
+//tslint:disable: ban-types
 import * as gt from "./genericTypes"
 
 export type Algorithm = {
@@ -9,6 +9,10 @@ export type AlgorithmType =
     | [ "class", Class ]
     | [ "function", Function ]
 
+export type ArgumentType =
+    | [ "callback", Callback ]
+    | [ "initializer", InitializerArgument ]
+
 export type BaseInterface = {
     readonly "interface": GenericInterfaceReference
 }
@@ -18,8 +22,8 @@ export type Block = {
     readonly "variables": gt.OrderedDictionary<Variable, VariableOrderings>
 }
 
-export type CallArgurments = {
-    readonly "initializer": Initializer
+export type Callback = {
+    readonly "block": Block
 }
 
 export type CallbackReturnValueIsGuaranteed = {
@@ -43,6 +47,15 @@ export type CompilationUnit = {
     readonly "types": gt.Dictionary<Type>
 }
 
+export type ConstructorCall = {
+    readonly "arguments": gt.Dictionary<ConstructorCallArgurment>
+    readonly "path": string
+}
+
+export type ConstructorCallArgurment = {
+    readonly "initializer": Initializer
+}
+
 export type DefaultInitialize = {
     readonly "initializer": string
 }
@@ -52,8 +65,12 @@ export type Function = {
 }
 
 export type FunctionCall = {
-    readonly "arguments": gt.Dictionary<CallArgurments>
+    readonly "arguments": gt.Dictionary<FunctionCallArgurment>
     readonly "path": string
+}
+
+export type FunctionCallArgurment = {
+    readonly "type": ArgumentType
 }
 
 export type FunctionSpecification = {
@@ -154,7 +171,12 @@ export type Initializer = {
     readonly "type": InitializerType
 }
 
+export type InitializerArgument = {
+    readonly "initializer": Initializer
+}
+
 export type InitializerType =
+    | [ "constructor call", ConstructorCall ]
     | [ "function call", FunctionCall ]
     | [ "object", ObjectInitializer ]
     | [ "raw", RawInitializer ]

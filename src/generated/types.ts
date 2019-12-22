@@ -60,6 +60,9 @@ export type DefaultInitialize = {
     readonly "initializer": string
 }
 
+export type DerivedTaggedUnionType = {
+}
+
 export type Function = {
     readonly "specification": FunctionSpecification
 }
@@ -260,6 +263,10 @@ export type RawPropertyType = {
     readonly "raw": string
 }
 
+export type ReferencedTaggedUnionType = {
+    readonly "type": string
+}
+
 export type ReferenceToGenericDeclaration = {
     readonly "interface": GenericInterfaceReference
 }
@@ -300,7 +307,12 @@ export type TaggedUnionAlternative = {
 export type TaggedUnionInitializer = {
     readonly "initializer": Initializer
     readonly "state": string
+    readonly "type specification": TaggedUnionTypeSpecification
 }
+
+export type TaggedUnionTypeSpecification =
+    | [ "derived", DerivedTaggedUnionType ]
+    | [ "reference", ReferencedTaggedUnionType ]
 
 export type Type = {
     readonly "type": TypeType

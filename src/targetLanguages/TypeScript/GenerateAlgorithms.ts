@@ -17,7 +17,7 @@ function sanitize(key: string) {
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal`,
+            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering`,
             `import * as gt from "./genericTypes"`, //FIX
             `import * as t from "./types"`, //FIX
             compilationUnit.algorithms.getAlphabeticalOrdering({}).map<fp.IParagraph>({
@@ -140,7 +140,7 @@ export class GenerateAlgorithms {
                     case "private": {
                         const $ = fs.access[1]
                         return fp.line([
-                            `p: { `,
+                            `_p: { `,
                             () => {
                                 return $.parameters.getAlphabeticalOrdering({}).map({
                                     callback: (param, paramKey) => {
@@ -235,7 +235,7 @@ export class GenerateAlgorithms {
                                                 case "callback": {
                                                     const $$ = arg.type[1]
                                                     return fp.line([
-                                                        `cp => {`,
+                                                        `_cp => {`,
                                                         () => {
                                                             return this.Block($$.block)
                                                         },
@@ -290,11 +290,25 @@ export class GenerateAlgorithms {
             }
             case "tagged union": {
                 const $ = initializer.type[1]
-                return fp.line([
-                    `[ "${$.state}", `,
-                    this.Initializer($.initializer),
-                    ` ]`,
-                ])
+                switch ($["type specification"][0]) {
+                    case "derived": {
+                        return fp.line([
+                            `[ "${$.state}", `,
+                            this.Initializer($.initializer),
+                            ` ]`,
+                        ])
+                    }
+                    case "reference": {
+                        const $$ = $["type specification"][1]
+                        return fp.line([
+                            `((): t.${$$.type} => { return [ "${$.state}", `,
+                            this.Initializer($.initializer),
+                            ` ]})()`,
+                        ])
+                    }
+                    default:
+                        return assertUnreachable($["type specification"][0])
+                }
             }
             default:
                 return assertUnreachable(initializer.type[0])

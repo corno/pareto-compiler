@@ -13,8 +13,7 @@ export function compile(
     //resolveReporter: lf.IResolveReporter,
     callback: (builder: CompilationUnitBuilder) => CompilationUnit
 ) {
-    return callback(new CompilationUnitBuilder(lf.createBuildContext()))
-    //    return callback(new CompilationUnitBuilder({ buildContext: lf.createBuildContext()}))
+    return callback(new CompilationUnitBuilder({ buildContext: lf.createBuildContext()}))
 }
 
 export type GeneratedCode = {

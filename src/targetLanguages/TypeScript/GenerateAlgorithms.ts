@@ -55,12 +55,13 @@ export class GenerateAlgorithms {
                                             onNotEmpty: parametrizedProperties => [
                                                 fp.line([
                                                     `constructor(p: {`,
-                                                    fp.line(parametrizedProperties.mapWithSeparator({
-                                                        onSepartor: () => `, `,
-                                                        onElement: (_pp, propKey) => {
-                                                            return `${propKey}: ${_pp.type}`
-                                                        },
-                                                    })),
+                                                    () => {
+                                                        return parametrizedProperties.map({
+                                                            callback: (_pp, propKey) => {
+                                                                return `${propKey}: ${_pp.type}`
+                                                            },
+                                                        })
+                                                    },
                                                     `}) {`,
                                                 ]),
                                                 () => {
@@ -78,7 +79,24 @@ export class GenerateAlgorithms {
                                         //the methods
                                         clss.methods.getAlphabeticalOrdering({}).map({
                                             callback: (method, methodKey) => {
-                                                return this.FunctionSpecification(method["function specification"], methodKey, "public ")
+                                                return [
+                                                    fp.line([
+                                                        ((): string => {
+                                                            switch (method.specification.access[0]) {
+                                                                case "private": {
+                                                                    return `private`
+                                                                }
+                                                                case "public": {
+                                                                    return `public`
+                                                                }
+                                                                default:
+                                                                    return assertUnreachable(method.specification.access[0])
+                                                            }
+                                                        })(),
+                                                        ` `,
+                                                        this.FunctionSpecification(method.specification, methodKey),
+                                                    ]),
+                                                ]
                                             },
                                         }),
                                     ]
@@ -89,33 +107,72 @@ export class GenerateAlgorithms {
                         case "function": {
                             const $ = alg.type[1]
                             return [
-                                ``,
-                                this.FunctionSpecification($.specification, key, "export function "),
+                                fp.line([
+                                    ((): string => {
+                                        switch ($.specification.access[0]) {
+                                            case "private": {
+                                                return ``
+                                            }
+                                            case "public": {
+                                                return `export `
+                                            }
+                                            default:
+                                                return assertUnreachable($.specification.access[0])
+                                        }
+                                    })(),
+                                    `function `,
+                                    this.FunctionSpecification($.specification, key),
+                                ]),
                             ]
                         }
                         default: return assertUnreachable(alg.type[0])
                     }
                 },
             }),
+            ``,
         ]
     }
-    private FunctionSpecification(fs: FunctionSpecification, name: string, prefix: string): fp.IParagraph {
-        return [
-            fp.line([
-                `${prefix}${sanitize(name)}(p: { `,
-                fp.line(fs.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
-                    onSepartor: () => `, `,
-                    onElement: (param, paramKey) => {
-                        return `"${paramKey}": ${param.type}`
-                    },
-                })),
-                `}) {`,
-            ]),
+    private FunctionSpecification(fs: FunctionSpecification, name: string): fp.IInlineSection {
+        return fp.line([
+            `${sanitize(name)}(`,
+            ((): fp.IInlineSection => {
+                switch (fs.access[0]) {
+                    case "private": {
+                        const $ = fs.access[1]
+                        return fp.line([
+                            `p: { `,
+                            () => {
+                                return $.parameters.getAlphabeticalOrdering({}).map({
+                                    callback: (param, paramKey) => {
+                                        return `readonly "${paramKey}": ${param.type}`
+                                    },
+                                })
+                            },
+                            `}`,
+                        ])
+                    }
+                    case "public": {
+                        const $ = fs.access[1]
+                        return fp.line([
+                            () => {
+                                return $.parameters.getOrderings({}).dependencies.map({
+                                    callback: (param, paramKey) => {
+                                        return `${sanitize(paramKey)}: ${param.type},`
+                                    },
+                                })
+                            },
+                        ])
+                    }
+                    default:
+                        return assertUnreachable(fs.access[0])
+                }
+            })(),
+            `) {`,
             () => {
                 return this.Block(fs.block)
             },
             `}`,
-        ]
+        ])
     }
     private Block(b: Block): fp.IParagraph {
         return [
@@ -123,7 +180,7 @@ export class GenerateAlgorithms {
                 callback: (variable, variableKey) => {
                     return [
                         fp.line([
-                            `const ${variableKey} = `,
+                            `const ${sanitize(variableKey)} = `,
                             this.Initializer(variable.initializer),
                         ]),
                     ]
@@ -165,7 +222,7 @@ export class GenerateAlgorithms {
             case "function call": {
                 const $ = initializer.type[1]
                 return fp.line([
-                    sanitize($.path),
+                    $.path,
                     `({`,
                     () => {
                         return $.arguments.getAlphabeticalOrdering({}).map({
@@ -226,6 +283,10 @@ export class GenerateAlgorithms {
             case "raw": {
                 const $ = initializer.type[1]
                 return fp.token($.rawstring)
+            }
+            case "selection": {
+                const $ = initializer.type[1]
+                return fp.token(sanitize($.rawselectionstring))
             }
             case "tagged union": {
                 const $ = initializer.type[1]

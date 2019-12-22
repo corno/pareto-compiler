@@ -59,7 +59,7 @@ function create_block(
 ): T.Block {
     const var_variables = (() => {
         const dict = _buildContext.createOrderedDictionary<T.Variable, T.VariableOrderings>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Variable", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Variable", reportError: _errorStr => {} }),
             callback: cp => par__variables(new VariableBuilder(
                 _buildContext,
                 cp.builder,
@@ -71,9 +71,9 @@ function create_block(
         return dict
     })()
     const var_statements = _buildContext.createList<T.Statement>({
-        callback: cp => par__statements(new StatementBuilder(
+        callback: intermediateList => par__statements(new StatementBuilder(
             _buildContext,
-            cp.builder,
+            intermediateList.builder,
         )),
     })
     return {
@@ -82,23 +82,23 @@ function create_block(
     }
 }
 
-export class ParameterBuilder {
+export class PrivateParameterBuilder {
     //@ts-ignore
     private readonly _buildContext: lf.IBuildContext
-    private readonly imp: lf.IDictionaryBuilder<T.Parameter>
+    private readonly imp: lf.IDictionaryBuilder<T.PrivateParameter>
     constructor(
         buildContext: lf.IBuildContext,
-        imp: lf.IDictionaryBuilder<T.Parameter>,
+        imp: lf.IDictionaryBuilder<T.PrivateParameter>,
     ) {
         this._buildContext = buildContext
         this.imp = imp
     }
-    public Parameter(
+    public PrivateParameter(
         key: string,
         par__type: string,
     ) {
         const var_type = par__type
-        const entry: T.Parameter = {
+        const entry: T.PrivateParameter = {
             "type": var_type,
         }
         this.imp.add({ key: key, entry: entry })
@@ -106,26 +106,90 @@ export class ParameterBuilder {
     }
 }
 
+export class PublicParameterBuilder {
+    //@ts-ignore
+    private readonly _buildContext: lf.IBuildContext
+    private readonly imp: lf.IDictionaryBuilder<T.PublicParameter>
+    constructor(
+        buildContext: lf.IBuildContext,
+        imp: lf.IDictionaryBuilder<T.PublicParameter>,
+    ) {
+        this._buildContext = buildContext
+        this.imp = imp
+    }
+    public PublicParameter(
+        key: string,
+        par__type: string,
+    ) {
+        const var_type = par__type
+        const entry: T.PublicParameter = {
+            "type": var_type,
+        }
+        this.imp.add({ key: key, entry: entry })
+        return this
+    }
+}
+
+export class FunctionAccessBuilder {
+    //@ts-ignore
+    private readonly _buildContext: lf.IBuildContext
+    constructor(
+        buildContext: lf.IBuildContext,
+    ) {
+        this._buildContext = buildContext
+    }
+    public private(
+        par__parameters: (builder: PrivateParameterBuilder) => void,
+    ): T.FunctionAccess {
+        const var_parameters = this._buildContext.createDictionary<T.PrivateParameter>({
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "PrivateParameter", reportError: _errorStr => {} }),
+            callback: cp => par__parameters(new PrivateParameterBuilder(
+                this._buildContext,
+                cp.builder,
+            )),
+        })
+        return ["private", {
+            "parameters": var_parameters,
+        }]
+    }
+    public public(
+        par__parameters: (builder: PublicParameterBuilder) => void,
+    ): T.FunctionAccess {
+        const var_parameters = (() => {
+            const dict = this._buildContext.createOrderedDictionary<T.PublicParameter, T.PublicParameterOrderings>({
+                reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "PublicParameter", reportError: _errorStr => {} }),
+                callback: cp => par__parameters(new PublicParameterBuilder(
+                    this._buildContext,
+                    cp.builder,
+                )),
+                createOrderings: x => ({
+                    dependencies: x.orderingCreator.createBasedOnInsertionOrder({}),
+                }),
+            })
+            return dict
+        })()
+        return ["public", {
+            "parameters": var_parameters,
+        }]
+    }
+}
+
 function create_function_specification(
     _buildContext: lf.IBuildContext,
-    par__parameters: (builder: ParameterBuilder) => void,
+    par__access: (builder: FunctionAccessBuilder) => T.FunctionAccess,
     par__block_variables: (builder: VariableBuilder) => void,
     par__block_statements: (builder: StatementBuilder) => void,
 ): T.FunctionSpecification {
-    const var_parameters = _buildContext.createDictionary<T.Parameter>({
-        reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Parameter", reportError: _errorStr => { } }),
-        callback: cp => par__parameters(new ParameterBuilder(
-            _buildContext,
-            cp.builder,
-        )),
-    })
+    const var_access = par__access(new FunctionAccessBuilder(
+        _buildContext,
+    ))
     const var_block = create_block(
         _buildContext,
         par__block_variables,
         par__block_statements,
     )
     return {
-        "parameters": var_parameters,
+        "access": var_access,
         "block": var_block,
     }
 }
@@ -221,7 +285,7 @@ export class GenericInTypeTypeBuilder {
         par__type: (builder: GenericCallbackTypeBuilder) => T.GenericCallbackType,
     ): T.GenericInTypeType {
         const var_parameters = this._buildContext.createDictionary<T.GenericCallbackParameter>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericCallbackParameter", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericCallbackParameter", reportError: _errorStr => {} }),
             callback: cp => par__parameters(new GenericCallbackParameterBuilder(
                 this._buildContext,
                 cp.builder,
@@ -296,7 +360,7 @@ function create_generic_interface_reference(
 ): T.GenericInterfaceReference {
     const var_interface = par__interface
     const var_type_arguments = _buildContext.createDictionary<T.GenericArgument>({
-        reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericArgument", reportError: _errorStr => { } }),
+        reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericArgument", reportError: _errorStr => {} }),
         callback: cp => par__type_arguments(new GenericArgumentBuilder(
             _buildContext,
             cp.builder,
@@ -492,7 +556,7 @@ export class InitializerTypeBuilder {
     ): T.InitializerType {
         const var_path = par__path
         const var_arguments = this._buildContext.createDictionary<T.ConstructorCallArgurment>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "ConstructorCallArgurment", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "ConstructorCallArgurment", reportError: _errorStr => {} }),
             callback: cp => par__arguments(new ConstructorCallArgurmentBuilder(
                 this._buildContext,
                 cp.builder,
@@ -509,7 +573,7 @@ export class InitializerTypeBuilder {
     ): T.InitializerType {
         const var_path = par__path
         const var_arguments = this._buildContext.createDictionary<T.FunctionCallArgurment>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "FunctionCallArgurment", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "FunctionCallArgurment", reportError: _errorStr => {} }),
             callback: cp => par__arguments(new FunctionCallArgurmentBuilder(
                 this._buildContext,
                 cp.builder,
@@ -524,7 +588,7 @@ export class InitializerTypeBuilder {
         par__properties: (builder: PropertyInitialierBuilder) => void,
     ): T.InitializerType {
         const var_properties = this._buildContext.createDictionary<T.PropertyInitialier>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "PropertyInitialier", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "PropertyInitialier", reportError: _errorStr => {} }),
             callback: cp => par__properties(new PropertyInitialierBuilder(
                 this._buildContext,
                 cp.builder,
@@ -540,6 +604,14 @@ export class InitializerTypeBuilder {
         const var_rawstring = par__rawstring
         return ["raw", {
             "rawstring": var_rawstring,
+        }]
+    }
+    public selection(
+        par__rawselectionstring: string,
+    ): T.InitializerType {
+        const var_rawselectionstring = par__rawselectionstring
+        return ["selection", {
+            "rawselectionstring": var_rawselectionstring,
         }]
     }
     public tagged_union(
@@ -737,14 +809,14 @@ export class GenericInterfaceMethodBuilder {
         par__type: (builder: GenericFunctionTypeBuilder) => T.GenericFunctionType,
     ) {
         const var_type_parameters = this._buildContext.createDictionary<T.GenericMethodTypeParameter>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericMethodTypeParameter", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericMethodTypeParameter", reportError: _errorStr => {} }),
             callback: cp => par__type_parameters(new GenericMethodTypeParameterBuilder(
                 this._buildContext,
                 cp.builder,
             )),
         })
         const var_parameters = this._buildContext.createDictionary<T.GenericMethodParameter>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericMethodParameter", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericMethodParameter", reportError: _errorStr => {} }),
             callback: cp => par__parameters(new GenericMethodParameterBuilder(
                 this._buildContext,
                 cp.builder,
@@ -781,21 +853,21 @@ export class GenericInterfaceDeclarationBuilder {
         par__methods: (builder: GenericInterfaceMethodBuilder) => void,
     ) {
         const var_parameters = this._buildContext.createDictionary<T.GenericInterfaceParameter>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericInterfaceParameter", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericInterfaceParameter", reportError: _errorStr => {} }),
             callback: cp => par__parameters(new GenericInterfaceParameterBuilder(
                 this._buildContext,
                 cp.builder,
             )),
         })
         const var_base_interfaces = this._buildContext.createDictionary<T.BaseInterface>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "BaseInterface", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "BaseInterface", reportError: _errorStr => {} }),
             callback: cp => par__base_interfaces(new BaseInterfaceBuilder(
                 this._buildContext,
                 cp.builder,
             )),
         })
         const var_methods = this._buildContext.createDictionary<T.GenericInterfaceMethod>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericInterfaceMethod", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericInterfaceMethod", reportError: _errorStr => {} }),
             callback: cp => par__methods(new GenericInterfaceMethodBuilder(
                 this._buildContext,
                 cp.builder,
@@ -904,7 +976,7 @@ export class TypeTypeBuilder {
         par__properties: (builder: ObjectPropertyBuilder) => void,
     ): T.TypeType {
         const var_properties = this._buildContext.createDictionary<T.ObjectProperty>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "ObjectProperty", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "ObjectProperty", reportError: _errorStr => {} }),
             callback: cp => par__properties(new ObjectPropertyBuilder(
                 this._buildContext,
                 cp.builder,
@@ -918,7 +990,7 @@ export class TypeTypeBuilder {
         par__alternatives: (builder: TaggedUnionAlternativeBuilder) => void,
     ): T.TypeType {
         const var_alternatives = this._buildContext.createDictionary<T.TaggedUnionAlternative>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "TaggedUnionAlternative", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "TaggedUnionAlternative", reportError: _errorStr => {} }),
             callback: cp => par__alternatives(new TaggedUnionAlternativeBuilder(
                 this._buildContext,
                 cp.builder,
@@ -1021,18 +1093,18 @@ export class MethodBuilder {
     }
     public Method(
         key: string,
-        par__function_specification_parameters: (builder: ParameterBuilder) => void,
-        par__function_specification_block_variables: (builder: VariableBuilder) => void,
-        par__function_specification_block_statements: (builder: StatementBuilder) => void,
+        par__specification_access: (builder: FunctionAccessBuilder) => T.FunctionAccess,
+        par__specification_block_variables: (builder: VariableBuilder) => void,
+        par__specification_block_statements: (builder: StatementBuilder) => void,
     ) {
-        const var_function_specification = create_function_specification(
+        const var_specification = create_function_specification(
             this._buildContext,
-            par__function_specification_parameters,
-            par__function_specification_block_variables,
-            par__function_specification_block_statements,
+            par__specification_access,
+            par__specification_block_variables,
+            par__specification_block_statements,
         )
         const entry: T.Method = {
-            "function specification": var_function_specification,
+            "specification": var_specification,
         }
         this.imp.add({ key: key, entry: entry })
         return this
@@ -1052,14 +1124,14 @@ export class AlgorithmTypeBuilder {
         par__methods: (builder: MethodBuilder) => void,
     ): T.AlgorithmType {
         const var_properties = this._buildContext.createDictionary<T.ClassProperty>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "ClassProperty", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "ClassProperty", reportError: _errorStr => {} }),
             callback: cp => par__properties(new ClassPropertyBuilder(
                 this._buildContext,
                 cp.builder,
             )),
         })
         const var_methods = this._buildContext.createDictionary<T.Method>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Method", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Method", reportError: _errorStr => {} }),
             callback: cp => par__methods(new MethodBuilder(
                 this._buildContext,
                 cp.builder,
@@ -1071,13 +1143,13 @@ export class AlgorithmTypeBuilder {
         }]
     }
     public function(
-        par__specification_parameters: (builder: ParameterBuilder) => void,
+        par__specification_access: (builder: FunctionAccessBuilder) => T.FunctionAccess,
         par__specification_block_variables: (builder: VariableBuilder) => void,
         par__specification_block_statements: (builder: StatementBuilder) => void,
     ): T.AlgorithmType {
         const var_specification = create_function_specification(
             this._buildContext,
-            par__specification_parameters,
+            par__specification_access,
             par__specification_block_variables,
             par__specification_block_statements,
         )
@@ -1127,21 +1199,21 @@ export class CompilationUnitBuilder {
         par__algorithms: (builder: AlgorithmBuilder) => void,
     ) {
         const var_generic_interface_declarations = this._buildContext.createDictionary<T.GenericInterfaceDeclaration>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericInterfaceDeclaration", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "GenericInterfaceDeclaration", reportError: _errorStr => {} }),
             callback: cp => par__generic_interface_declarations(new GenericInterfaceDeclarationBuilder(
                 this._buildContext,
                 cp.builder,
             )),
         })
         const var_types = this._buildContext.createDictionary<T.Type>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Type", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Type", reportError: _errorStr => {} }),
             callback: cp => par__types(new TypeBuilder(
                 this._buildContext,
                 cp.builder,
             )),
         })
         const var_algorithms = this._buildContext.createDictionary<T.Algorithm>({
-            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Algorithm", reportError: _errorStr => { } }),
+            reporter: lf.createSimpleConflictingEntryReporter({ typeInfo: "Algorithm", reportError: _errorStr => {} }),
             callback: cp => par__algorithms(new AlgorithmBuilder(
                 this._buildContext,
                 cp.builder,

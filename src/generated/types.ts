@@ -64,6 +64,10 @@ export type Function = {
     readonly "specification": FunctionSpecification
 }
 
+export type FunctionAccess =
+    | [ "private", Private ]
+    | [ "public", Public ]
+
 export type FunctionCall = {
     readonly "arguments": gt.Dictionary<FunctionCallArgurment>
     readonly "path": string
@@ -74,8 +78,8 @@ export type FunctionCallArgurment = {
 }
 
 export type FunctionSpecification = {
+    readonly "access": FunctionAccess
     readonly "block": Block
-    readonly "parameters": gt.Dictionary<Parameter>
 }
 
 export type GenericArgument = {
@@ -180,6 +184,7 @@ export type InitializerType =
     | [ "function call", FunctionCall ]
     | [ "object", ObjectInitializer ]
     | [ "raw", RawInitializer ]
+    | [ "selection", SelectionInitializer ]
     | [ "tagged union", TaggedUnionInitializer ]
 
 export type InReferenceToMethodTypeParameter = {
@@ -195,7 +200,7 @@ export type IsGenericReturnValueGuaranteed =
     | [ "yes", GenericReturnValueIsGuaranteed ]
 
 export type Method = {
-    readonly "function specification": FunctionSpecification
+    readonly "specification": FunctionSpecification
 }
 
 export type ObjectInitializer = {
@@ -210,11 +215,15 @@ export type ObjectType = {
     readonly "properties": gt.Dictionary<ObjectProperty>
 }
 
-export type Parameter = {
+export type ParametrizedInitialize = {
     readonly "type": string
 }
 
-export type ParametrizedInitialize = {
+export type Private = {
+    readonly "parameters": gt.Dictionary<PrivateParameter>
+}
+
+export type PrivateParameter = {
     readonly "type": string
 }
 
@@ -230,6 +239,18 @@ export type PropertyType =
     | [ "raw", RawPropertyType ]
     | [ "reference", TypeReference ]
     | [ "string", String ]
+
+export type Public = {
+    readonly "parameters": gt.OrderedDictionary<PublicParameter, PublicParameterOrderings>
+}
+
+export type PublicParameter = {
+    readonly "type": string
+}
+
+export type PublicParameterOrderings = {
+    readonly "dependencies": gt.DictionaryOrdering<PublicParameter>
+}
 
 export type RawInitializer = {
     readonly "rawstring": string
@@ -249,6 +270,10 @@ export type ReferenceToInterfaceParameter = {
 
 export type ReferenceToMethodTypeParameter = {
     readonly "type parameter": string
+}
+
+export type SelectionInitializer = {
+    readonly "rawselectionstring": string
 }
 
 export type Statement = {

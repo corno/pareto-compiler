@@ -25,8 +25,9 @@ const compilationUnit = compile(builder => {
                     .ClassProperty("b", t => t.parametrized("string"))
                 , m => m
                     .Method("bla"
-                        , p => p
-                            .Parameter("param", "boolean")
+                        , a => a.private(p => p
+                            .PrivateParameter("param", "boolean")
+                        )
                         , v => v
                         , s => s
                             .Statement("console.log('X')")

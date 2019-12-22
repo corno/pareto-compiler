@@ -14,6 +14,7 @@ export function compile(
     callback: (builder: CompilationUnitBuilder) => CompilationUnit
 ) {
     return callback(new CompilationUnitBuilder(lf.createBuildContext()))
+    //    return callback(new CompilationUnitBuilder({ buildContext: lf.createBuildContext()}))
 }
 
 export type GeneratedCode = {

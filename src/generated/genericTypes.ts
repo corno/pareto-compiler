@@ -2,7 +2,7 @@
 //tslint:disable: ban-types
 
 export * from "lingua-franca"
-export * from "lingua-franca-building"
+export * from "lingua-franca"
 
 // export interface Dictionary<Type> {
 //     getAlphabeticalOrdering(): DictionaryOrdering<Type>

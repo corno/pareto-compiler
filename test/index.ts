@@ -1,5 +1,5 @@
 //tslint:disable: no-console no-shadowed-variable
-//import * as lf from "lingua-franca-building"
+//import * as lf from "lingua-franca"
 import { compile, generateTypeScriptCode } from "../src"
 
 // const rr = new lf.SimpleResolveReporter(

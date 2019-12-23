@@ -2,7 +2,7 @@ export * from "./generated/types"
 export * from "./generated/algorithms"
 
 import * as fp from "fountain-pen"
-import * as lf from "lingua-franca-building"
+import * as lf from "lingua-franca"
 import { CompilationUnitBuilder } from "./generated/algorithms"
 import { CompilationUnit } from "./generated/types"
 import { GenerateAlgorithms } from "./targetLanguages/TypeScript/GenerateAlgorithms"

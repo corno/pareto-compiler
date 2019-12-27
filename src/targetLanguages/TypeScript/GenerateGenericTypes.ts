@@ -22,7 +22,7 @@ export class GenerateGenericTypes {
                         fp.line([
                             `export interface ${keyGetter}<`,
                             fp.line(type.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
-                                onSepartor: () => `, `,
+                                onSeparator: () => `, `,
                                 onElement: (_param, paramKeyGetter) => {
                                     return paramKeyGetter
                                 },
@@ -33,7 +33,7 @@ export class GenerateGenericTypes {
                                 onNotEmpty: baseInterfaces => fp.line([
                                     ` extends `,
                                     fp.line(baseInterfaces.mapWithSeparator<fp.InlinePart>({
-                                        onSepartor: () => `, `,
+                                        onSeparator: () => `, `,
                                         onElement: bi => this.GenericInterfaceReference(bi.interface),
                                     })),
                                 ]),
@@ -52,7 +52,7 @@ export class GenerateGenericTypes {
                                                 return fp.line([
                                                     `<`,
                                                     fp.line(typeParams.mapWithSeparator<fp.InlinePart>({
-                                                        onSepartor: () => `, `,
+                                                        onSeparator: () => `, `,
                                                         onElement: (_tp, typeParamKeyGetter) => {
                                                             return typeParamKeyGetter
                                                         },
@@ -63,7 +63,7 @@ export class GenerateGenericTypes {
                                         }),
                                         `(p: {`,
                                         fp.line(method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
-                                            onSepartor: () => `, `,
+                                            onSeparator: () => `, `,
                                             onElement: (param, paramKeyGetter) => fp.line([
                                                 ` readonly `,
                                                 paramKeyGetter,
@@ -134,7 +134,7 @@ export class GenerateGenericTypes {
                 return fp.line([
                     `(`,
                     fp.line($.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
-                        onSepartor: () => `, `,
+                        onSeparator: () => `, `,
                         onElement: (param, paramKeyGetter) => fp.line([
                             paramKeyGetter,
                             `: `,
@@ -209,7 +209,7 @@ export class GenerateGenericTypes {
             gir.interface,
             `<`,
             fp.line(gir["type arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
-                onSepartor: () => fp.token(`, `),
+                onSeparator: () => fp.token(`, `),
                 onElement: ta => this.GenericReturnType(ta.type),
             })),
             `>`,

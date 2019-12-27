@@ -20,7 +20,7 @@ export class GenerateAlgorithms {
             `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering`,
             `import * as gt from "./genericTypes"`, //FIX
             `import * as t from "./types"`, //FIX
-            compilationUnit.algorithms.getAlphabeticalOrdering({}).map<fp.IParagraph>({
+            compilationUnit["algorithm units"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: (alg, key) => {
                     switch (alg.type[0]) {
                         case "class": {

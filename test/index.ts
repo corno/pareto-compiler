@@ -13,18 +13,22 @@ import { compile, generateTypeScriptCode } from "../src"
 
 const compilationUnit = compile(builder => {
     return builder.build(
-        gt => gt,
-        t => t
+        gt => gt
+        , t => t
             .Type("Bar", t => t.object(p => p
                 .ObjectProperty("X", t => t.string())
             ))
+        , i => i
+                .Interface("InterfaceX", m => m
+                    .InterfaceMethod("IM", p => p.InterfaceMethodParameter("IMP", "X"), t => t.procedure())
+                )
         , a => a
-            .Algorithm("Foo", t => t.class(
+            .AlgorithmUnit("Foo", t => t.class(
                 p => p
                     .ClassProperty("a", t => t.default("new Array<int>()"))
                     .ClassProperty("b", t => t.parametrized("string"))
                 , m => m
-                    .Method("bla"
+                    .ClassMethod("bla"
                         , a => a.private(p => p
                             .PrivateParameter("param", "boolean")
                         )

@@ -1,11 +1,11 @@
 //tslint:disable: ban-types
 import * as gt from "./genericTypes"
 
-export type Algorithm = {
-    readonly "type": AlgorithmType
+export type AlgorithmUnit = {
+    readonly "type": AlgorithmUnitType
 }
 
-export type AlgorithmType =
+export type AlgorithmUnitType =
     | [ "class", Class ]
     | [ "function", Function ]
 
@@ -33,8 +33,12 @@ export type CallbackReturnValueIsNotGuaranteed = {
 }
 
 export type Class = {
-    readonly "methods": gt.Dictionary<Method>
+    readonly "methods": gt.Dictionary<ClassMethod>
     readonly "properties": gt.Dictionary<ClassProperty>
+}
+
+export type ClassMethod = {
+    readonly "specification": FunctionSpecification
 }
 
 export type ClassProperty = {
@@ -42,8 +46,9 @@ export type ClassProperty = {
 }
 
 export type CompilationUnit = {
-    readonly "algorithms": gt.Dictionary<Algorithm>
+    readonly "algorithm units": gt.Dictionary<AlgorithmUnit>
     readonly "generic interface declarations": gt.Dictionary<GenericInterfaceDeclaration>
+    readonly "interfaces": gt.Dictionary<Interface>
     readonly "types": gt.Dictionary<Type>
 }
 
@@ -194,6 +199,37 @@ export type InReferenceToMethodTypeParameter = {
     readonly "type parameter": string
 }
 
+export type Interface = {
+    readonly "methods": gt.Dictionary<InterfaceMethod>
+}
+
+export type InterfaceFunction = {
+    readonly "guaranteed": IsInterfaceReturnValueGuaranteed
+    readonly "type": GenericReturnType
+}
+
+export type InterfaceMethod = {
+    readonly "parameters": gt.Dictionary<InterfaceMethodParameter>
+    readonly "type": InterfaceMethodType
+}
+
+export type InterfaceMethodParameter = {
+    readonly "type": string
+}
+
+export type InterfaceMethodType =
+    | [ "function", InterfaceFunction ]
+    | [ "procedure", InterfaceProcedure ]
+
+export type InterfaceProcedure = {
+}
+
+export type InterfaceReturnValueIsGuaranteed = {
+}
+
+export type InterfaceReturnValueIsNotGuaranteed = {
+}
+
 export type IsCallbackReturnValueGuaranteed =
     | [ "no", CallbackReturnValueIsNotGuaranteed ]
     | [ "yes", CallbackReturnValueIsGuaranteed ]
@@ -202,9 +238,9 @@ export type IsGenericReturnValueGuaranteed =
     | [ "no", GenericReturnValueIsNotGuaranteed ]
     | [ "yes", GenericReturnValueIsGuaranteed ]
 
-export type Method = {
-    readonly "specification": FunctionSpecification
-}
+export type IsInterfaceReturnValueGuaranteed =
+    | [ "no", InterfaceReturnValueIsNotGuaranteed ]
+    | [ "yes", InterfaceReturnValueIsGuaranteed ]
 
 export type ObjectInitializer = {
     readonly "properties": gt.Dictionary<PropertyInitialier>

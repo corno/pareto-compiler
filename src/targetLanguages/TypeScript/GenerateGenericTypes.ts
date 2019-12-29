@@ -6,25 +6,27 @@ import {
     GenericInType,
     GenericReturnType,
 } from "../../generated/types"
+import { sanitize } from "./sanitize"
 
 function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
 }
+
 
 export class GenerateGenericTypes {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
             `//tslint:disable: ban-types interface-name pareto array-type no-empty-interface`,
             compilationUnit["generic interface declarations"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
-                callback: (type, keyGetter) => {
+                callback: (type, key) => {
                     return [
                         ``,
                         fp.line([
-                            `export interface ${keyGetter}<`,
+                            `export interface ${sanitize(key)}<`,
                             fp.line(type.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
                                 onSeparator: () => `, `,
-                                onElement: (_param, paramKeyGetter) => {
-                                    return paramKeyGetter
+                                onElement: (_param, paramKey) => {
+                                    return sanitize(paramKey)
                                 },
                             })),
                             `>`,
@@ -43,9 +45,9 @@ export class GenerateGenericTypes {
                         () => {
                             //methods
                             return type.methods.getAlphabeticalOrdering({}).map({
-                                callback: (method, methodKeyGetter) => {
+                                callback: (method, methodKey) => {
                                     return fp.line([
-                                        `${methodKeyGetter}`,
+                                        `${sanitize(methodKey)}`,
                                         method["type parameters"].getAlphabeticalOrdering({}).onEmpty<fp.IInlineSection>({
                                             onEmpty: () => fp.token(``),
                                             onNotEmpty: typeParams => {
@@ -53,8 +55,8 @@ export class GenerateGenericTypes {
                                                     `<`,
                                                     fp.line(typeParams.mapWithSeparator<fp.InlinePart>({
                                                         onSeparator: () => `, `,
-                                                        onElement: (_tp, typeParamKeyGetter) => {
-                                                            return typeParamKeyGetter
+                                                        onElement: (_tp, typeParamKey) => {
+                                                            return sanitize(typeParamKey)
                                                         },
                                                     })),
                                                     `>`,
@@ -64,9 +66,9 @@ export class GenerateGenericTypes {
                                         `(p: {`,
                                         fp.line(method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                                             onSeparator: () => `, `,
-                                            onElement: (param, paramKeyGetter) => fp.line([
+                                            onElement: (param, paramKey) => fp.line([
                                                 ` readonly `,
-                                                paramKeyGetter,
+                                                sanitize(paramKey),
                                                 `: `,
                                                 this.GenericInType(param.type),
                                             ]),
@@ -135,8 +137,8 @@ export class GenerateGenericTypes {
                     `(`,
                     fp.line($.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                         onSeparator: () => `, `,
-                        onElement: (param, paramKeyGetter) => fp.line([
-                            paramKeyGetter,
+                        onElement: (param, paramKey) => fp.line([
+                            sanitize(paramKey),
                             `: `,
                             this.GenericReturnType(param.type),
                         ]),

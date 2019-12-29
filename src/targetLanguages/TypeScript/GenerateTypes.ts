@@ -3,22 +3,25 @@ import * as fp from "fountain-pen"
 import {
     CompilationUnit,
 } from "../../generated/types"
+import { sanitize } from "./sanitize"
 
 function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
 }
 
+
 export class GenerateTypes {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
             `//tslint:disable: ban-types`,
-            `import * as gt from "./genericTypes"`, //FIX
+            `//@ts-ignore`,
+            `import * as gt from "./genericTypes"`,
             compilationUnit.types.getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: (type, key) => {
                     return [
                         ``,
                         fp.line([
-                            `export type ${key} = `,
+                            `export type ${sanitize(key)} = `,
                             ((): fp.IInlineSection => {
                                 switch (type.type[0]) {
                                     case "object": {

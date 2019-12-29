@@ -205,7 +205,7 @@ export type Interface = {
 
 export type InterfaceFunction = {
     readonly "guaranteed": IsInterfaceReturnValueGuaranteed
-    readonly "type": GenericReturnType
+    readonly "type": string
 }
 
 export type InterfaceMethod = {

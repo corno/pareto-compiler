@@ -5,21 +5,20 @@ import {
     FunctionSpecification,
     Initializer
 } from "../../generated/types"
+import { sanitize } from "./sanitize"
 
 function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
-}
-
-function sanitize(key: string) {
-    return key.replace(/ /g, "_")
 }
 
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
             `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering`,
-            `import * as gt from "./genericTypes"`, //FIX
-            `import * as t from "./types"`, //FIX
+            `//@ts-ignore`,
+            `import * as i from "./interfaces"`,
+            `//@ts-ignore`,
+            `import * as t from "./types"`,
             compilationUnit["algorithm units"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: (alg, key) => {
                     switch (alg.type[0]) {
@@ -27,7 +26,7 @@ export class GenerateAlgorithms {
                             const clss = alg.type[1]
                             return fp.paragraph([
                                 ``,
-                                `export class ${key} {`,
+                                `export class C${sanitize(key)} {`,
                                 () => {
                                     return [
                                         //the properties

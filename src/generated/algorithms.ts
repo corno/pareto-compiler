@@ -1689,12 +1689,12 @@ export class InterfaceMethodTypeBuilder {
     }
     public function(
         par__guaranteed: (builder: IsInterfaceReturnValueGuaranteedBuilder) => t.IsInterfaceReturnValueGuaranteed,
-        par__type_type: (builder: GenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
+        par__type_type: string,
     ) {
         const x = this.x_function({
             "buildContext": this.buildContext,
             "par__guaranteed": p => par__guaranteed(p.builder),
-            "par__type_type": p => par__type_type(p.builder),
+            "par__type_type": par__type_type,
         })
         return x
     }
@@ -1708,20 +1708,16 @@ export class InterfaceMethodTypeBuilder {
     private x_function(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "par__guaranteed": (p: { builder: IsInterfaceReturnValueGuaranteedBuilder }) => t.IsInterfaceReturnValueGuaranteed
-        readonly "par__type_type": (p: { builder: GenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
+        readonly "par__type_type": string
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
             "builder": new IsInterfaceReturnValueGuaranteedBuilder({
                 "buildContext": _p.buildContext,
             }),
         })
-        const var_type = create_generic_return_type({
-            "buildContext": _p.buildContext,
-            "par__type": _p["par__type_type"],
-        })
         const sg = ((): t.InterfaceMethodType => { return [ "function", {
             "guaranteed": var_guaranteed,
-            "type": var_type,
+            "type": _p.par__type_type,
         } ]})()
         return sg
     }

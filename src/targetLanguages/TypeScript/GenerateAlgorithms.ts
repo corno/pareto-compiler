@@ -16,6 +16,8 @@ export class GenerateAlgorithms {
         return [
             `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering`,
             `//@ts-ignore`,
+            `import * as gt from "./genericTypes"`,
+            `//@ts-ignore`,
             `import * as i from "./interfaces"`,
             `//@ts-ignore`,
             `import * as t from "./types"`,
@@ -34,7 +36,7 @@ export class GenerateAlgorithms {
                                             callback: (prop, propKey) => {
                                                 return [
                                                     fp.line([
-                                                        `private readonly ${propKey}`,
+                                                        `private readonly ${sanitize(propKey)}`,
                                                         ((): fp.InlinePart => {
                                                             switch (prop.initialization[0]) {
                                                                 case "default":
@@ -57,7 +59,7 @@ export class GenerateAlgorithms {
                                                     () => {
                                                         return parametrizedProperties.map({
                                                             callback: (_pp, propKey) => {
-                                                                return `${propKey}: ${_pp.type}`
+                                                                return `"${propKey}": ${_pp.type}`
                                                             },
                                                         })
                                                     },
@@ -67,7 +69,7 @@ export class GenerateAlgorithms {
                                                     return parametrizedProperties.map({
                                                         callback: (_pp, propKey) => {
                                                             return [
-                                                                `this.${propKey} = p.${propKey}`,
+                                                                `this.${sanitize(propKey)} = p["${propKey}"]`,
                                                             ]
                                                         },
                                                     })
@@ -199,7 +201,7 @@ export class GenerateAlgorithms {
             case "constructor call": {
                 const $ = initializer.type[1]
                 return fp.line([
-                    `new `,
+                    `new C`,
                     sanitize($.path),
                     `({`,
                     () => {
@@ -279,13 +281,39 @@ export class GenerateAlgorithms {
                     `}`,
                 ])
             }
-            case "raw": {
+            case "rawx": {
                 const $ = initializer.type[1]
                 return fp.token($.rawstring)
             }
             case "selection": {
                 const $ = initializer.type[1]
-                return fp.token(sanitize($.rawselectionstring))
+                return fp.line([
+                    ((): string => {
+                        switch ($["start point"][0]) {
+                            case "parameter": {
+                                const $$ = $["start point"][1]
+                                return `_p["${$$.parameter}"]`
+                            }
+                            case "callback parameter": {
+                                const $$ = $["start point"][1]
+                                return `_cp["${$$.parameter}"]`
+                            }
+                            case "property": {
+                                const $$ = $["start point"][1]
+                                return `this.${sanitize($$.property)}`
+                            }
+                            case "variable": {
+                                const $$ = $["start point"][1]
+                                return `${sanitize($$.variable)}`
+                            }
+                            default:
+                                return assertUnreachable($["start point"][0])
+                        }
+                    })(),
+                    fp.line($.steps.map({
+                        callback: step => `["${step.rawselectionstring}"]`,
+                    })),
+                ])
             }
             case "tagged union": {
                 const $ = initializer.type[1]
@@ -300,9 +328,17 @@ export class GenerateAlgorithms {
                     case "reference": {
                         const $$ = $["type specification"][1]
                         return fp.line([
-                            `((): t.${$$.type} => { return [ "${$.state}", `,
-                            this.Initializer($.initializer),
-                            ` ]})()`,
+                            `((): t.${$$.type} => {`,
+                            () => {
+                                return [
+                                    fp.line([
+                                        `return ["${$.state}", `,
+                                        this.Initializer($.initializer),
+                                        `]`,
+                                    ]),
+                                ]
+                            },
+                            `})()`,
                         ])
                     }
                     default:

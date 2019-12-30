@@ -1,4 +1,5 @@
 //tslint:disable: ban-types
+//@ts-ignore
 import * as gt from "./genericTypes"
 
 export type AlgorithmUnit = {
@@ -191,12 +192,12 @@ export type InitializerType =
     | [ "constructor call", ConstructorCall ]
     | [ "function call", FunctionCall ]
     | [ "object", ObjectInitializer ]
-    | [ "raw", RawInitializer ]
+    | [ "rawx", RawInitializer ]
     | [ "selection", SelectionInitializer ]
     | [ "tagged union", TaggedUnionInitializer ]
 
 export type InReferenceToMethodTypeParameter = {
-    readonly "type parameter": string
+    readonly "type parameter": gt.Reference<GenericMethodTypeParameter>
 }
 
 export type Interface = {
@@ -205,7 +206,7 @@ export type Interface = {
 
 export type InterfaceFunction = {
     readonly "guaranteed": IsInterfaceReturnValueGuaranteed
-    readonly "type": string
+    readonly "raw return type": string
 }
 
 export type InterfaceMethod = {
@@ -316,7 +317,34 @@ export type ReferenceToMethodTypeParameter = {
 }
 
 export type SelectionInitializer = {
+    readonly "start point": SelectionStartPoint
+    readonly "steps": gt.List<SelectionStep>
+}
+
+export type SelectionStartPoint =
+    | [ "callback parameter", StartFromCallbackParameter ]
+    | [ "parameter", StartFromParameter ]
+    | [ "property", StartFromProperty ]
+    | [ "variable", StartFromVariable ]
+
+export type SelectionStep = {
     readonly "rawselectionstring": string
+}
+
+export type StartFromCallbackParameter = {
+    readonly "parameter": string
+}
+
+export type StartFromParameter = {
+    readonly "parameter": string
+}
+
+export type StartFromProperty = {
+    readonly "property": string
+}
+
+export type StartFromVariable = {
+    readonly "variable": string
 }
 
 export type Statement = {

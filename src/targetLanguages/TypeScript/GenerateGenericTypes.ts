@@ -176,7 +176,7 @@ export class GenerateGenericTypes {
             }
             case "method type parameter": {
                 const $ = gt.type[1]
-                return fp.token($["type parameter"])
+                return fp.token($["type parameter"].getKey({ sanitizer: sanitize }))
             }
             case "string": {
                 return fp.token("string")

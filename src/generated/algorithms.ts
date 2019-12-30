@@ -1,20 +1,24 @@
 // tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering
+//@ts-ignore
 import * as gt from "./genericTypes"
+//@ts-ignore
+import * as i from "./interfaces"
+//@ts-ignore
 import * as t from "./types"
 
-export class AlgorithmUnitBuilder {
+export class CAlgorithmUnitBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.AlgorithmUnit>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.AlgorithmUnit>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.AlgorithmUnit>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public AlgorithmUnit(
         key: string,
-        par__type: (builder: AlgorithmUnitTypeBuilder) => t.AlgorithmUnitType,
+        par__type: (builder: CAlgorithmUnitTypeBuilder) => t.AlgorithmUnitType,
     ) {
         const x = this.x_AlgorithmUnit({
             "buildContext": this.buildContext,
@@ -26,11 +30,11 @@ export class AlgorithmUnitBuilder {
     private x_AlgorithmUnit(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type": (p: { builder: AlgorithmUnitTypeBuilder }) => t.AlgorithmUnitType
+        readonly "par__type": (p: { builder: CAlgorithmUnitTypeBuilder }) => t.AlgorithmUnitType
     }) {
         const var_type = _p["par__type"]({
-            "builder": new AlgorithmUnitTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CAlgorithmUnitTypeBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -41,16 +45,16 @@ export class AlgorithmUnitBuilder {
     }
 }
 
-export class AlgorithmUnitTypeBuilder {
+export class CAlgorithmUnitTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public class(
-        par__properties: (builder: ClassPropertyBuilder) => void,
-        par__methods: (builder: ClassMethodBuilder) => void,
+        par__properties: (builder: CClassPropertyBuilder) => void,
+        par__methods: (builder: CClassMethodBuilder) => void,
     ) {
         const x = this.x_class({
             "buildContext": this.buildContext,
@@ -60,9 +64,9 @@ export class AlgorithmUnitTypeBuilder {
         return x
     }
     public function(
-        par__specification_access: (builder: FunctionAccessBuilder) => t.FunctionAccess,
-        par__specification_block_variables: (builder: VariableBuilder) => void,
-        par__specification_block_statements: (builder: StatementBuilder) => void,
+        par__specification_access: (builder: CFunctionAccessBuilder) => t.FunctionAccess,
+        par__specification_block_variables: (builder: CVariableBuilder) => void,
+        par__specification_block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_function({
             "buildContext": this.buildContext,
@@ -74,14 +78,14 @@ export class AlgorithmUnitTypeBuilder {
     }
     private x_class(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__methods": (p: { builder: ClassMethodBuilder }) => void
-        readonly "par__properties": (p: { builder: ClassPropertyBuilder }) => void
+        readonly "par__methods": (p: { builder: CClassMethodBuilder }) => void
+        readonly "par__properties": (p: { builder: CClassPropertyBuilder }) => void
     }) {
         const var_properties = _p.buildContext.createDictionary<t.ClassProperty>({
             "callback": _cp => {
-                const x = new ClassPropertyBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CClassPropertyBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__properties"]({
                     "builder": x,
@@ -89,15 +93,15 @@ export class AlgorithmUnitTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "ClassProperty",
             }),
         })
         const var_methods = _p.buildContext.createDictionary<t.ClassMethod>({
             "callback": _cp => {
-                const x = new ClassMethodBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CClassMethodBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__methods"]({
                     "builder": x,
@@ -105,45 +109,49 @@ export class AlgorithmUnitTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "ClassMethod",
             }),
         })
-        const sg = ((): t.AlgorithmUnitType => { return [ "class", {
-            "methods": var_methods,
-            "properties": var_properties,
-        } ]})()
+        const sg = ((): t.AlgorithmUnitType => {
+            return ["class", {
+                "methods": var_methods,
+                "properties": var_properties,
+            }]
+        })()
         return sg
     }
     private x_function(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__specification_access": (p: { builder: FunctionAccessBuilder }) => t.FunctionAccess
-        readonly "par__specification_block_statements": (p: { builder: StatementBuilder }) => void
-        readonly "par__specification_block_variables": (p: { builder: VariableBuilder }) => void
+        readonly "par__specification_access": (p: { builder: CFunctionAccessBuilder }) => t.FunctionAccess
+        readonly "par__specification_block_statements": (p: { builder: CStatementBuilder }) => void
+        readonly "par__specification_block_variables": (p: { builder: CVariableBuilder }) => void
     }) {
         const var_specification = create_function_specification({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__access": _p["par__specification_access"],
             "par__block_statements": _p["par__specification_block_statements"],
             "par__block_variables": _p["par__specification_block_variables"],
         })
-        const sg = ((): t.AlgorithmUnitType => { return [ "function", {
-            "specification": var_specification,
-        } ]})()
+        const sg = ((): t.AlgorithmUnitType => {
+            return ["function", {
+                "specification": var_specification,
+            }]
+        })()
         return sg
     }
 }
 
-export class ArgumentTypeBuilder {
+export class CArgumentTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public callback(
-        par__block_variables: (builder: VariableBuilder) => void,
-        par__block_statements: (builder: StatementBuilder) => void,
+        par__block_variables: (builder: CVariableBuilder) => void,
+        par__block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_callback({
             "buildContext": this.buildContext,
@@ -153,7 +161,7 @@ export class ArgumentTypeBuilder {
         return x
     }
     public initializer(
-        par__initializer_type: (builder: InitializerTypeBuilder) => t.InitializerType,
+        par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_initializer({
             "buildContext": this.buildContext,
@@ -163,48 +171,52 @@ export class ArgumentTypeBuilder {
     }
     private x_callback(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__block_statements": (p: { builder: StatementBuilder }) => void
-        readonly "par__block_variables": (p: { builder: VariableBuilder }) => void
+        readonly "par__block_statements": (p: { builder: CStatementBuilder }) => void
+        readonly "par__block_variables": (p: { builder: CVariableBuilder }) => void
     }) {
         const var_block = create_block({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__statements": _p["par__block_statements"],
             "par__variables": _p["par__block_variables"],
         })
-        const sg = ((): t.ArgumentType => { return [ "callback", {
-            "block": var_block,
-        } ]})()
+        const sg = ((): t.ArgumentType => {
+            return ["callback", {
+                "block": var_block,
+            }]
+        })()
         return sg
     }
     private x_initializer(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__initializer_type": (p: { builder: InitializerTypeBuilder }) => t.InitializerType
+        readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
         })
-        const sg = ((): t.ArgumentType => { return [ "initializer", {
-            "initializer": var_initializer,
-        } ]})()
+        const sg = ((): t.ArgumentType => {
+            return ["initializer", {
+                "initializer": var_initializer,
+            }]
+        })()
         return sg
     }
 }
 
-export class BaseInterfaceBuilder {
+export class CBaseInterfaceBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.BaseInterface>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.BaseInterface>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.BaseInterface>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public BaseInterface(
         key: string,
         par__interface_interface: string,
-        par__interface_type_arguments: (builder: GenericArgumentBuilder) => void,
+        par__interface_type_arguments: (builder: CGenericArgumentBuilder) => void,
     ) {
         const x = this.x_BaseInterface({
             "buildContext": this.buildContext,
@@ -218,10 +230,10 @@ export class BaseInterfaceBuilder {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__interface_interface": string
-        readonly "par__interface_type arguments": (p: { builder: GenericArgumentBuilder }) => void
+        readonly "par__interface_type arguments": (p: { builder: CGenericArgumentBuilder }) => void
     }) {
         const var_interface = create_generic_interface_reference({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__interface": _p["par__interface_interface"],
             "par__type arguments": _p["par__interface_type arguments"],
         })
@@ -233,21 +245,21 @@ export class BaseInterfaceBuilder {
     }
 }
 
-export class ClassMethodBuilder {
+export class CClassMethodBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ClassMethod>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.ClassMethod>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.ClassMethod>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public ClassMethod(
         key: string,
-        par__specification_access: (builder: FunctionAccessBuilder) => t.FunctionAccess,
-        par__specification_block_variables: (builder: VariableBuilder) => void,
-        par__specification_block_statements: (builder: StatementBuilder) => void,
+        par__specification_access: (builder: CFunctionAccessBuilder) => t.FunctionAccess,
+        par__specification_block_variables: (builder: CVariableBuilder) => void,
+        par__specification_block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_ClassMethod({
             "buildContext": this.buildContext,
@@ -261,12 +273,12 @@ export class ClassMethodBuilder {
     private x_ClassMethod(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__specification_access": (p: { builder: FunctionAccessBuilder }) => t.FunctionAccess
-        readonly "par__specification_block_statements": (p: { builder: StatementBuilder }) => void
-        readonly "par__specification_block_variables": (p: { builder: VariableBuilder }) => void
+        readonly "par__specification_access": (p: { builder: CFunctionAccessBuilder }) => t.FunctionAccess
+        readonly "par__specification_block_statements": (p: { builder: CStatementBuilder }) => void
+        readonly "par__specification_block_variables": (p: { builder: CVariableBuilder }) => void
     }) {
         const var_specification = create_function_specification({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__access": _p["par__specification_access"],
             "par__block_statements": _p["par__specification_block_statements"],
             "par__block_variables": _p["par__specification_block_variables"],
@@ -279,19 +291,19 @@ export class ClassMethodBuilder {
     }
 }
 
-export class ClassPropertyBuilder {
+export class CClassPropertyBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ClassProperty>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.ClassProperty>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.ClassProperty>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public ClassProperty(
         key: string,
-        par__initialization: (builder: PropertyInitializationBuilder) => t.PropertyInitialization,
+        par__initialization: (builder: CPropertyInitializationBuilder) => t.PropertyInitialization,
     ) {
         const x = this.x_ClassProperty({
             "buildContext": this.buildContext,
@@ -303,11 +315,11 @@ export class ClassPropertyBuilder {
     private x_ClassProperty(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__initialization": (p: { builder: PropertyInitializationBuilder }) => t.PropertyInitialization
+        readonly "par__initialization": (p: { builder: CPropertyInitializationBuilder }) => t.PropertyInitialization
     }) {
         const var_initialization = _p["par__initialization"]({
-            "builder": new PropertyInitializationBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CPropertyInitializationBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -318,18 +330,18 @@ export class ClassPropertyBuilder {
     }
 }
 
-export class CompilationUnitBuilder {
+export class CCompilationUnitBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public build(
-        par__generic_interface_declarations: (builder: GenericInterfaceDeclarationBuilder) => void,
-        par__types: (builder: TypeBuilder) => void,
-        par__interfaces: (builder: InterfaceBuilder) => void,
-        par__algorithm_units: (builder: AlgorithmUnitBuilder) => void,
+        par__generic_interface_declarations: (builder: CGenericInterfaceDeclarationBuilder) => void,
+        par__types: (builder: CTypeBuilder) => void,
+        par__interfaces: (builder: CInterfaceBuilder) => void,
+        par__algorithm_units: (builder: CAlgorithmUnitBuilder) => void,
     ) {
         const x = this.x_build({
             "buildContext": this.buildContext,
@@ -342,16 +354,16 @@ export class CompilationUnitBuilder {
     }
     private x_build(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__algorithm units": (p: { builder: AlgorithmUnitBuilder }) => void
-        readonly "par__generic interface declarations": (p: { builder: GenericInterfaceDeclarationBuilder }) => void
-        readonly "par__interfaces": (p: { builder: InterfaceBuilder }) => void
-        readonly "par__types": (p: { builder: TypeBuilder }) => void
+        readonly "par__algorithm units": (p: { builder: CAlgorithmUnitBuilder }) => void
+        readonly "par__generic interface declarations": (p: { builder: CGenericInterfaceDeclarationBuilder }) => void
+        readonly "par__interfaces": (p: { builder: CInterfaceBuilder }) => void
+        readonly "par__types": (p: { builder: CTypeBuilder }) => void
     }) {
         const var_generic_interface_declarations = _p.buildContext.createDictionary<t.GenericInterfaceDeclaration>({
             "callback": _cp => {
-                const x = new GenericInterfaceDeclarationBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CGenericInterfaceDeclarationBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__generic interface declarations"]({
                     "builder": x,
@@ -359,15 +371,15 @@ export class CompilationUnitBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "GenericInterfaceDeclaration",
             }),
         })
         const var_types = _p.buildContext.createDictionary<t.Type>({
             "callback": _cp => {
-                const x = new TypeBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CTypeBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__types"]({
                     "builder": x,
@@ -375,15 +387,15 @@ export class CompilationUnitBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "Type",
             }),
         })
         const var_interfaces = _p.buildContext.createDictionary<t.Interface>({
             "callback": _cp => {
-                const x = new InterfaceBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CInterfaceBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__interfaces"]({
                     "builder": x,
@@ -391,15 +403,15 @@ export class CompilationUnitBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "Interface",
             }),
         })
         const var_algorithm_units = _p.buildContext.createDictionary<t.AlgorithmUnit>({
             "callback": _cp => {
-                const x = new AlgorithmUnitBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CAlgorithmUnitBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__algorithm units"]({
                     "builder": x,
@@ -407,7 +419,7 @@ export class CompilationUnitBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "AlgorithmUnit",
             }),
         })
@@ -421,19 +433,19 @@ export class CompilationUnitBuilder {
     }
 }
 
-export class ConstructorCallArgurmentBuilder {
+export class CConstructorCallArgurmentBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ConstructorCallArgurment>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.ConstructorCallArgurment>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.ConstructorCallArgurment>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public ConstructorCallArgurment(
         key: string,
-        par__initializer_type: (builder: InitializerTypeBuilder) => t.InitializerType,
+        par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_ConstructorCallArgurment({
             "buildContext": this.buildContext,
@@ -445,10 +457,10 @@ export class ConstructorCallArgurmentBuilder {
     private x_ConstructorCallArgurment(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__initializer_type": (p: { builder: InitializerTypeBuilder }) => t.InitializerType
+        readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
         })
         const entry = {
@@ -460,14 +472,14 @@ export class ConstructorCallArgurmentBuilder {
 }
 function create_block(_p: {
     readonly "buildContext": gt.IBuildContext
-    readonly "par__statements": (p: { builder: StatementBuilder }) => void
-    readonly "par__variables": (p: { builder: VariableBuilder }) => void
+    readonly "par__statements": (p: { builder: CStatementBuilder }) => void
+    readonly "par__variables": (p: { builder: CVariableBuilder }) => void
 }) {
     const var_variables = _p.buildContext.createOrderedDictionary<t.Variable, t.VariableOrderings>({
         "callback": _cp => {
-            const x = new VariableBuilder({
-                "buildContext": _p.buildContext,
-                "builder": _cp.builder,
+            const x = new CVariableBuilder({
+                "buildContext": _p["buildContext"],
+                "builder": _cp["builder"],
             })
             const y = _p["par__variables"]({
                 "builder": x,
@@ -481,15 +493,15 @@ function create_block(_p: {
             return z
         },
         "reporter": gt.createSimpleConflictingEntryReporter({
-            "reportError": errorStr => { console.error(errorStr)},
+            "reportError": (_dependent, errorStr) => { console.error(errorStr) },
             "typeInfo": "Variable",
         }),
     })
     const var_statements = _p.buildContext.createList<t.Statement>({
         "callback": _cp => {
-            const x = new StatementBuilder({
-                "buildContext": _p.buildContext,
-                "builder": _cp.builder,
+            const x = new CStatementBuilder({
+                "buildContext": _p["buildContext"],
+                "builder": _cp["builder"],
             })
             const y = _p["par__statements"]({
                 "builder": x,
@@ -505,17 +517,17 @@ function create_block(_p: {
 }
 function create_function_specification(_p: {
     readonly "buildContext": gt.IBuildContext
-    readonly "par__access": (p: { builder: FunctionAccessBuilder }) => t.FunctionAccess
-    readonly "par__block_statements": (p: { builder: StatementBuilder }) => void
-    readonly "par__block_variables": (p: { builder: VariableBuilder }) => void
+    readonly "par__access": (p: { builder: CFunctionAccessBuilder }) => t.FunctionAccess
+    readonly "par__block_statements": (p: { builder: CStatementBuilder }) => void
+    readonly "par__block_variables": (p: { builder: CVariableBuilder }) => void
 }) {
     const var_access = _p["par__access"]({
-        "builder": new FunctionAccessBuilder({
-            "buildContext": _p.buildContext,
+        "builder": new CFunctionAccessBuilder({
+            "buildContext": _p["buildContext"],
         }),
     })
     const var_block = create_block({
-        "buildContext": _p.buildContext,
+        "buildContext": _p["buildContext"],
         "par__statements": _p["par__block_statements"],
         "par__variables": _p["par__block_variables"],
     })
@@ -527,11 +539,13 @@ function create_function_specification(_p: {
 }
 function create_generic_in_type(_p: {
     readonly "buildContext": gt.IBuildContext
-    readonly "par__type": (p: { builder: GenericInTypeTypeBuilder }) => t.GenericInTypeType
+    readonly "par__type": (p: { builder: CGenericInTypeTypeBuilder }) => t.GenericInTypeType
+    readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
 }) {
     const var_type = _p["par__type"]({
-        "builder": new GenericInTypeTypeBuilder({
-            "buildContext": _p.buildContext,
+        "builder": new CGenericInTypeTypeBuilder({
+            "buildContext": _p["buildContext"],
+            "param_method type parameters": _p["param_method type parameters"],
         }),
     })
     const component = {
@@ -542,14 +556,14 @@ function create_generic_in_type(_p: {
 function create_generic_interface_reference(_p: {
     readonly "buildContext": gt.IBuildContext
     readonly "par__interface": string
-    readonly "par__type arguments": (p: { builder: GenericArgumentBuilder }) => void
+    readonly "par__type arguments": (p: { builder: CGenericArgumentBuilder }) => void
 }) {
     const var_interface = _p["par__interface"]
     const var_type_arguments = _p.buildContext.createDictionary<t.GenericArgument>({
         "callback": _cp => {
-            const x = new GenericArgumentBuilder({
-                "buildContext": _p.buildContext,
-                "builder": _cp.builder,
+            const x = new CGenericArgumentBuilder({
+                "buildContext": _p["buildContext"],
+                "builder": _cp["builder"],
             })
             const y = _p["par__type arguments"]({
                 "builder": x,
@@ -557,7 +571,7 @@ function create_generic_interface_reference(_p: {
             return y
         },
         "reporter": gt.createSimpleConflictingEntryReporter({
-            "reportError": errorStr => { console.error(errorStr)},
+            "reportError": (_dependent, errorStr) => { console.error(errorStr) },
             "typeInfo": "GenericArgument",
         }),
     })
@@ -569,11 +583,11 @@ function create_generic_interface_reference(_p: {
 }
 function create_generic_return_type(_p: {
     readonly "buildContext": gt.IBuildContext
-    readonly "par__type": (p: { builder: GenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
+    readonly "par__type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
 }) {
     const var_type = _p["par__type"]({
-        "builder": new GenericReturnTypeTypeBuilder({
-            "buildContext": _p.buildContext,
+        "builder": new CGenericReturnTypeTypeBuilder({
+            "buildContext": _p["buildContext"],
         }),
     })
     const component = {
@@ -583,11 +597,11 @@ function create_generic_return_type(_p: {
 }
 function create_initializer(_p: {
     readonly "buildContext": gt.IBuildContext
-    readonly "par__type": (p: { builder: InitializerTypeBuilder }) => t.InitializerType
+    readonly "par__type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
 }) {
     const var_type = _p["par__type"]({
-        "builder": new InitializerTypeBuilder({
-            "buildContext": _p.buildContext,
+        "builder": new CInitializerTypeBuilder({
+            "buildContext": _p["buildContext"],
         }),
     })
     const component = {
@@ -596,15 +610,15 @@ function create_initializer(_p: {
     return component
 }
 
-export class FunctionAccessBuilder {
+export class CFunctionAccessBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public private(
-        par__parameters: (builder: PrivateParameterBuilder) => void,
+        par__parameters: (builder: CPrivateParameterBuilder) => void,
     ) {
         const x = this.x_private({
             "buildContext": this.buildContext,
@@ -613,7 +627,7 @@ export class FunctionAccessBuilder {
         return x
     }
     public public(
-        par__parameters: (builder: PublicParameterBuilder) => void,
+        par__parameters: (builder: CPublicParameterBuilder) => void,
     ) {
         const x = this.x_public({
             "buildContext": this.buildContext,
@@ -623,13 +637,13 @@ export class FunctionAccessBuilder {
     }
     private x_private(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__parameters": (p: { builder: PrivateParameterBuilder }) => void
+        readonly "par__parameters": (p: { builder: CPrivateParameterBuilder }) => void
     }) {
         const var_parameters = _p.buildContext.createDictionary<t.PrivateParameter>({
             "callback": _cp => {
-                const x = new PrivateParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CPrivateParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -637,24 +651,26 @@ export class FunctionAccessBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "PrivateParameter",
             }),
         })
-        const sg = ((): t.FunctionAccess => { return [ "private", {
-            "parameters": var_parameters,
-        } ]})()
+        const sg = ((): t.FunctionAccess => {
+            return ["private", {
+                "parameters": var_parameters,
+            }]
+        })()
         return sg
     }
     private x_public(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__parameters": (p: { builder: PublicParameterBuilder }) => void
+        readonly "par__parameters": (p: { builder: CPublicParameterBuilder }) => void
     }) {
         const var_parameters = _p.buildContext.createOrderedDictionary<t.PublicParameter, t.PublicParameterOrderings>({
             "callback": _cp => {
-                const x = new PublicParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CPublicParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -668,30 +684,32 @@ export class FunctionAccessBuilder {
                 return z
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "PublicParameter",
             }),
         })
-        const sg = ((): t.FunctionAccess => { return [ "public", {
-            "parameters": var_parameters,
-        } ]})()
+        const sg = ((): t.FunctionAccess => {
+            return ["public", {
+                "parameters": var_parameters,
+            }]
+        })()
         return sg
     }
 }
 
-export class FunctionCallArgurmentBuilder {
+export class CFunctionCallArgurmentBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.FunctionCallArgurment>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.FunctionCallArgurment>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.FunctionCallArgurment>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public FunctionCallArgurment(
         key: string,
-        par__type: (builder: ArgumentTypeBuilder) => t.ArgumentType,
+        par__type: (builder: CArgumentTypeBuilder) => t.ArgumentType,
     ) {
         const x = this.x_FunctionCallArgurment({
             "buildContext": this.buildContext,
@@ -703,11 +721,11 @@ export class FunctionCallArgurmentBuilder {
     private x_FunctionCallArgurment(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type": (p: { builder: ArgumentTypeBuilder }) => t.ArgumentType
+        readonly "par__type": (p: { builder: CArgumentTypeBuilder }) => t.ArgumentType
     }) {
         const var_type = _p["par__type"]({
-            "builder": new ArgumentTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CArgumentTypeBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -718,19 +736,19 @@ export class FunctionCallArgurmentBuilder {
     }
 }
 
-export class GenericArgumentBuilder {
+export class CGenericArgumentBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericArgument>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericArgument>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericArgument>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public GenericArgument(
         key: string,
-        par__type_type: (builder: GenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
+        par__type_type: (builder: CGenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
     ) {
         const x = this.x_GenericArgument({
             "buildContext": this.buildContext,
@@ -742,10 +760,10 @@ export class GenericArgumentBuilder {
     private x_GenericArgument(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type_type": (p: { builder: GenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
+        readonly "par__type_type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
     }) {
         const var_type = create_generic_return_type({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
         })
         const entry = {
@@ -756,34 +774,39 @@ export class GenericArgumentBuilder {
     }
 }
 
-export class GenericCallbackParameterBuilder {
+export class CGenericCallbackParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericCallbackParameter>
+    private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericCallbackParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericCallbackParameter>
+        "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
+        this.param_method_type_parameters = p["param_method type parameters"]
     }
     public GenericCallbackParameter(
         key: string,
-        par__type_type: (builder: GenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
+        par__type_type: (builder: CGenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
     ) {
         const x = this.x_GenericCallbackParameter({
             "buildContext": this.buildContext,
             "key": key,
             "par__type_type": p => par__type_type(p.builder),
+            "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_GenericCallbackParameter(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type_type": (p: { builder: GenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
+        readonly "par__type_type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_type = create_generic_return_type({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
         })
         const entry = {
@@ -794,21 +817,25 @@ export class GenericCallbackParameterBuilder {
     }
 }
 
-export class GenericCallbackTypeBuilder {
+export class CGenericCallbackTypeBuilder {
     private readonly buildContext: gt.IBuildContext
+    private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
+        "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
+        this.param_method_type_parameters = p["param_method type parameters"]
     }
     public function(
-        par__guaranteed: (builder: IsCallbackReturnValueGuaranteedBuilder) => t.IsCallbackReturnValueGuaranteed,
-        par__type_type: (builder: GenericInTypeTypeBuilder) => t.GenericInTypeType,
+        par__guaranteed: (builder: CIsCallbackReturnValueGuaranteedBuilder) => t.IsCallbackReturnValueGuaranteed,
+        par__type_type: (builder: CGenericInTypeTypeBuilder) => t.GenericInTypeType,
     ) {
         const x = this.x_function({
             "buildContext": this.buildContext,
             "par__guaranteed": p => par__guaranteed(p.builder),
             "par__type_type": p => par__type_type(p.builder),
+            "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
@@ -816,48 +843,57 @@ export class GenericCallbackTypeBuilder {
     ) {
         const x = this.x_procedure({
             "buildContext": this.buildContext,
+            "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_function(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__guaranteed": (p: { builder: IsCallbackReturnValueGuaranteedBuilder }) => t.IsCallbackReturnValueGuaranteed
-        readonly "par__type_type": (p: { builder: GenericInTypeTypeBuilder }) => t.GenericInTypeType
+        readonly "par__guaranteed": (p: { builder: CIsCallbackReturnValueGuaranteedBuilder }) => t.IsCallbackReturnValueGuaranteed
+        readonly "par__type_type": (p: { builder: CGenericInTypeTypeBuilder }) => t.GenericInTypeType
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
-            "builder": new IsCallbackReturnValueGuaranteedBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CIsCallbackReturnValueGuaranteedBuilder({
+                "buildContext": _p["buildContext"],
+                "param_method type parameters": _p["param_method type parameters"],
             }),
         })
         const var_type = create_generic_in_type({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
+            "param_method type parameters": _p["param_method type parameters"],
         })
-        const sg = ((): t.GenericCallbackType => { return [ "function", {
-            "guaranteed": var_guaranteed,
-            "type": var_type,
-        } ]})()
+        const sg = ((): t.GenericCallbackType => {
+            return ["function", {
+                "guaranteed": var_guaranteed,
+                "type": var_type,
+            }]
+        })()
         return sg
     }
     private x_procedure(_p: {
         readonly "buildContext": gt.IBuildContext
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        const sg = ((): t.GenericCallbackType => { return [ "procedure", {
-        } ]})()
+        const sg = ((): t.GenericCallbackType => {
+            return ["procedure", {
+            }]
+        })()
         return sg
     }
 }
 
-export class GenericFunctionTypeBuilder {
+export class CGenericFunctionTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public function(
-        par__guaranteed: (builder: IsGenericReturnValueGuaranteedBuilder) => t.IsGenericReturnValueGuaranteed,
-        par__type_type: (builder: GenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
+        par__guaranteed: (builder: CIsGenericReturnValueGuaranteedBuilder) => t.IsGenericReturnValueGuaranteed,
+        par__type_type: (builder: CGenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
     ) {
         const x = this.x_function({
             "buildContext": this.buildContext,
@@ -875,48 +911,52 @@ export class GenericFunctionTypeBuilder {
     }
     private x_function(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__guaranteed": (p: { builder: IsGenericReturnValueGuaranteedBuilder }) => t.IsGenericReturnValueGuaranteed
-        readonly "par__type_type": (p: { builder: GenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
+        readonly "par__guaranteed": (p: { builder: CIsGenericReturnValueGuaranteedBuilder }) => t.IsGenericReturnValueGuaranteed
+        readonly "par__type_type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
-            "builder": new IsGenericReturnValueGuaranteedBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CIsGenericReturnValueGuaranteedBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const var_type = create_generic_return_type({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
         })
-        const sg = ((): t.GenericFunctionType => { return [ "function", {
-            "guaranteed": var_guaranteed,
-            "type": var_type,
-        } ]})()
+        const sg = ((): t.GenericFunctionType => {
+            return ["function", {
+                "guaranteed": var_guaranteed,
+                "type": var_type,
+            }]
+        })()
         return sg
     }
     private x_procedure(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.GenericFunctionType => { return [ "procedure", {
-        } ]})()
+        const sg = ((): t.GenericFunctionType => {
+            return ["procedure", {
+            }]
+        })()
         return sg
     }
 }
 
-export class GenericInterfaceDeclarationBuilder {
+export class CGenericInterfaceDeclarationBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericInterfaceDeclaration>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericInterfaceDeclaration>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericInterfaceDeclaration>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public GenericInterfaceDeclaration(
         key: string,
-        par__parameters: (builder: GenericInterfaceParameterBuilder) => void,
-        par__base_interfaces: (builder: BaseInterfaceBuilder) => void,
-        par__methods: (builder: GenericInterfaceMethodBuilder) => void,
+        par__parameters: (builder: CGenericInterfaceParameterBuilder) => void,
+        par__base_interfaces: (builder: CBaseInterfaceBuilder) => void,
+        par__methods: (builder: CGenericInterfaceMethodBuilder) => void,
     ) {
         const x = this.x_GenericInterfaceDeclaration({
             "buildContext": this.buildContext,
@@ -930,15 +970,15 @@ export class GenericInterfaceDeclarationBuilder {
     private x_GenericInterfaceDeclaration(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__base interfaces": (p: { builder: BaseInterfaceBuilder }) => void
-        readonly "par__methods": (p: { builder: GenericInterfaceMethodBuilder }) => void
-        readonly "par__parameters": (p: { builder: GenericInterfaceParameterBuilder }) => void
+        readonly "par__base interfaces": (p: { builder: CBaseInterfaceBuilder }) => void
+        readonly "par__methods": (p: { builder: CGenericInterfaceMethodBuilder }) => void
+        readonly "par__parameters": (p: { builder: CGenericInterfaceParameterBuilder }) => void
     }) {
         const var_parameters = _p.buildContext.createDictionary<t.GenericInterfaceParameter>({
             "callback": _cp => {
-                const x = new GenericInterfaceParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CGenericInterfaceParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -946,15 +986,15 @@ export class GenericInterfaceDeclarationBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "GenericInterfaceParameter",
             }),
         })
         const var_base_interfaces = _p.buildContext.createDictionary<t.BaseInterface>({
             "callback": _cp => {
-                const x = new BaseInterfaceBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CBaseInterfaceBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__base interfaces"]({
                     "builder": x,
@@ -962,15 +1002,15 @@ export class GenericInterfaceDeclarationBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "BaseInterface",
             }),
         })
         const var_methods = _p.buildContext.createDictionary<t.GenericInterfaceMethod>({
             "callback": _cp => {
-                const x = new GenericInterfaceMethodBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CGenericInterfaceMethodBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__methods"]({
                     "builder": x,
@@ -978,7 +1018,7 @@ export class GenericInterfaceDeclarationBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "GenericInterfaceMethod",
             }),
         })
@@ -992,21 +1032,21 @@ export class GenericInterfaceDeclarationBuilder {
     }
 }
 
-export class GenericInterfaceMethodBuilder {
+export class CGenericInterfaceMethodBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericInterfaceMethod>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericInterfaceMethod>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericInterfaceMethod>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public GenericInterfaceMethod(
         key: string,
-        par__type_parameters: (builder: GenericMethodTypeParameterBuilder) => void,
-        par__parameters: (builder: GenericMethodParameterBuilder) => void,
-        par__type: (builder: GenericFunctionTypeBuilder) => t.GenericFunctionType,
+        par__type_parameters: (builder: CGenericMethodTypeParameterBuilder) => void,
+        par__parameters: (builder: CGenericMethodParameterBuilder) => void,
+        par__type: (builder: CGenericFunctionTypeBuilder) => t.GenericFunctionType,
     ) {
         const x = this.x_GenericInterfaceMethod({
             "buildContext": this.buildContext,
@@ -1020,15 +1060,15 @@ export class GenericInterfaceMethodBuilder {
     private x_GenericInterfaceMethod(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__parameters": (p: { builder: GenericMethodParameterBuilder }) => void
-        readonly "par__type": (p: { builder: GenericFunctionTypeBuilder }) => t.GenericFunctionType
-        readonly "par__type parameters": (p: { builder: GenericMethodTypeParameterBuilder }) => void
+        readonly "par__parameters": (p: { builder: CGenericMethodParameterBuilder }) => void
+        readonly "par__type": (p: { builder: CGenericFunctionTypeBuilder }) => t.GenericFunctionType
+        readonly "par__type parameters": (p: { builder: CGenericMethodTypeParameterBuilder }) => void
     }) {
         const var_type_parameters = _p.buildContext.createDictionary<t.GenericMethodTypeParameter>({
             "callback": _cp => {
-                const x = new GenericMethodTypeParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CGenericMethodTypeParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__type parameters"]({
                     "builder": x,
@@ -1036,15 +1076,16 @@ export class GenericInterfaceMethodBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "GenericMethodTypeParameter",
             }),
         })
         const var_parameters = _p.buildContext.createDictionary<t.GenericMethodParameter>({
             "callback": _cp => {
-                const x = new GenericMethodParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CGenericMethodParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
+                    "propvar_type parameters": this.buildContext.createLookup({ dict: var_type_parameters }),
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -1052,13 +1093,13 @@ export class GenericInterfaceMethodBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "GenericMethodParameter",
             }),
         })
         const var_type = _p["par__type"]({
-            "builder": new GenericFunctionTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CGenericFunctionTypeBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -1071,15 +1112,15 @@ export class GenericInterfaceMethodBuilder {
     }
 }
 
-export class GenericInterfaceParameterBuilder {
+export class CGenericInterfaceParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericInterfaceParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericInterfaceParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericInterfaceParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public GenericInterfaceParameter(
         key: string,
@@ -1101,21 +1142,25 @@ export class GenericInterfaceParameterBuilder {
     }
 }
 
-export class GenericInTypeTypeBuilder {
+export class CGenericInTypeTypeBuilder {
     private readonly buildContext: gt.IBuildContext
+    private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
+        "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
+        this.param_method_type_parameters = p["param_method type parameters"]
     }
     public callback(
-        par__parameters: (builder: GenericCallbackParameterBuilder) => void,
-        par__type: (builder: GenericCallbackTypeBuilder) => t.GenericCallbackType,
+        par__parameters: (builder: CGenericCallbackParameterBuilder) => void,
+        par__type: (builder: CGenericCallbackTypeBuilder) => t.GenericCallbackType,
     ) {
         const x = this.x_callback({
             "buildContext": this.buildContext,
             "par__parameters": p => par__parameters(p.builder),
             "par__type": p => par__type(p.builder),
+            "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
@@ -1125,6 +1170,7 @@ export class GenericInTypeTypeBuilder {
         const x = this.x_method_type_parameter({
             "buildContext": this.buildContext,
             "par__type parameter": par__type_parameter,
+            "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
@@ -1132,19 +1178,22 @@ export class GenericInTypeTypeBuilder {
     ) {
         const x = this.x_string({
             "buildContext": this.buildContext,
+            "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_callback(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__parameters": (p: { builder: GenericCallbackParameterBuilder }) => void
-        readonly "par__type": (p: { builder: GenericCallbackTypeBuilder }) => t.GenericCallbackType
+        readonly "par__parameters": (p: { builder: CGenericCallbackParameterBuilder }) => void
+        readonly "par__type": (p: { builder: CGenericCallbackTypeBuilder }) => t.GenericCallbackType
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_parameters = _p.buildContext.createDictionary<t.GenericCallbackParameter>({
             "callback": _cp => {
-                const x = new GenericCallbackParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CGenericCallbackParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
+                    "param_method type parameters": _p["param_method type parameters"],
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -1152,53 +1201,72 @@ export class GenericInTypeTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "GenericCallbackParameter",
             }),
         })
         const var_type = _p["par__type"]({
-            "builder": new GenericCallbackTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CGenericCallbackTypeBuilder({
+                "buildContext": _p["buildContext"],
+                "param_method type parameters": _p["param_method type parameters"],
             }),
         })
-        const sg = ((): t.GenericInTypeType => { return [ "callback", {
-            "parameters": var_parameters,
-            "type": var_type,
-        } ]})()
+        const sg = ((): t.GenericInTypeType => {
+            return ["callback", {
+                "parameters": var_parameters,
+                "type": var_type,
+            }]
+        })()
         return sg
     }
     private x_method_type_parameter(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "par__type parameter": string
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        const var_type_parameter = _p["par__type parameter"]
-        const sg = ((): t.GenericInTypeType => { return [ "method type parameter", {
-            "type parameter": var_type_parameter,
-        } ]})()
+        const var_type_parameter = this.param_method_type_parameters.createReference({
+            "key": _p["par__type parameter"],
+            "reporter": gt.createSimpleReferenceResolveReporter({
+                "delayed": false,
+                "reportError": () => {},
+                "typeInfo": "XXXX",
+            }),
+        })
+        const sg = ((): t.GenericInTypeType => {
+            return ["method type parameter", {
+                "type parameter": var_type_parameter,
+            }]
+        })()
         return sg
     }
     private x_string(_p: {
         readonly "buildContext": gt.IBuildContext
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        const sg = ((): t.GenericInTypeType => { return [ "string", {
-        } ]})()
+        const sg = ((): t.GenericInTypeType => {
+            return ["string", {
+            }]
+        })()
         return sg
     }
 }
 
-export class GenericMethodParameterBuilder {
+export class CGenericMethodParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericMethodParameter>
+    private readonly propvar_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericMethodParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericMethodParameter>
+        "propvar_type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
+        this.propvar_type_parameters = p["propvar_type parameters"]
     }
     public GenericMethodParameter(
         key: string,
-        par__type_type: (builder: GenericInTypeTypeBuilder) => t.GenericInTypeType,
+        par__type_type: (builder: CGenericInTypeTypeBuilder) => t.GenericInTypeType,
     ) {
         const x = this.x_GenericMethodParameter({
             "buildContext": this.buildContext,
@@ -1210,11 +1278,12 @@ export class GenericMethodParameterBuilder {
     private x_GenericMethodParameter(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type_type": (p: { builder: GenericInTypeTypeBuilder }) => t.GenericInTypeType
+        readonly "par__type_type": (p: { builder: CGenericInTypeTypeBuilder }) => t.GenericInTypeType
     }) {
         const var_type = create_generic_in_type({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
+            "param_method type parameters": this.propvar_type_parameters,
         })
         const entry = {
             "type": var_type,
@@ -1224,15 +1293,15 @@ export class GenericMethodParameterBuilder {
     }
 }
 
-export class GenericMethodTypeParameterBuilder {
+export class CGenericMethodTypeParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericMethodTypeParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.GenericMethodTypeParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public GenericMethodTypeParameter(
         key: string,
@@ -1254,12 +1323,12 @@ export class GenericMethodTypeParameterBuilder {
     }
 }
 
-export class GenericReturnTypeTypeBuilder {
+export class CGenericReturnTypeTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public interface_parameter(
         par__parameter: string,
@@ -1281,7 +1350,7 @@ export class GenericReturnTypeTypeBuilder {
     }
     public reference_to_generic_declaration(
         par__interface_interface: string,
-        par__interface_type_arguments: (builder: GenericArgumentBuilder) => void,
+        par__interface_type_arguments: (builder: CGenericArgumentBuilder) => void,
     ) {
         const x = this.x_reference_to_generic_declaration({
             "buildContext": this.buildContext,
@@ -1302,9 +1371,11 @@ export class GenericReturnTypeTypeBuilder {
         readonly "par__parameter": string
     }) {
         const var_parameter = _p["par__parameter"]
-        const sg = ((): t.GenericReturnTypeType => { return [ "interface parameter", {
-            "parameter": var_parameter,
-        } ]})()
+        const sg = ((): t.GenericReturnTypeType => {
+            return ["interface parameter", {
+                "parameter": var_parameter,
+            }]
+        })()
         return sg
     }
     private x_method_type_parameter(_p: {
@@ -1312,45 +1383,51 @@ export class GenericReturnTypeTypeBuilder {
         readonly "par__type parameter": string
     }) {
         const var_type_parameter = _p["par__type parameter"]
-        const sg = ((): t.GenericReturnTypeType => { return [ "method type parameter", {
-            "type parameter": var_type_parameter,
-        } ]})()
+        const sg = ((): t.GenericReturnTypeType => {
+            return ["method type parameter", {
+                "type parameter": var_type_parameter,
+            }]
+        })()
         return sg
     }
     private x_reference_to_generic_declaration(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "par__interface_interface": string
-        readonly "par__interface_type arguments": (p: { builder: GenericArgumentBuilder }) => void
+        readonly "par__interface_type arguments": (p: { builder: CGenericArgumentBuilder }) => void
     }) {
         const var_interface = create_generic_interface_reference({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__interface": _p["par__interface_interface"],
             "par__type arguments": _p["par__interface_type arguments"],
         })
-        const sg = ((): t.GenericReturnTypeType => { return [ "reference to generic declaration", {
-            "interface": var_interface,
-        } ]})()
+        const sg = ((): t.GenericReturnTypeType => {
+            return ["reference to generic declaration", {
+                "interface": var_interface,
+            }]
+        })()
         return sg
     }
     private x_string(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.GenericReturnTypeType => { return [ "string", {
-        } ]})()
+        const sg = ((): t.GenericReturnTypeType => {
+            return ["string", {
+            }]
+        })()
         return sg
     }
 }
 
-export class InitializerTypeBuilder {
+export class CInitializerTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public constructor_call(
         par__path: string,
-        par__arguments: (builder: ConstructorCallArgurmentBuilder) => void,
+        par__arguments: (builder: CConstructorCallArgurmentBuilder) => void,
     ) {
         const x = this.x_constructor_call({
             "buildContext": this.buildContext,
@@ -1361,7 +1438,7 @@ export class InitializerTypeBuilder {
     }
     public function_call(
         par__path: string,
-        par__arguments: (builder: FunctionCallArgurmentBuilder) => void,
+        par__arguments: (builder: CFunctionCallArgurmentBuilder) => void,
     ) {
         const x = this.x_function_call({
             "buildContext": this.buildContext,
@@ -1371,7 +1448,7 @@ export class InitializerTypeBuilder {
         return x
     }
     public object(
-        par__properties: (builder: PropertyInitialierBuilder) => void,
+        par__properties: (builder: CPropertyInitialierBuilder) => void,
     ) {
         const x = this.x_object({
             "buildContext": this.buildContext,
@@ -1379,28 +1456,30 @@ export class InitializerTypeBuilder {
         })
         return x
     }
-    public raw(
+    public rawx(
         par__rawstring: string,
     ) {
-        const x = this.x_raw({
+        const x = this.x_rawx({
             "buildContext": this.buildContext,
             "par__rawstring": par__rawstring,
         })
         return x
     }
     public selection(
-        par__rawselectionstring: string,
+        par__start_point: (builder: CSelectionStartPointBuilder) => t.SelectionStartPoint,
+        par__steps: (builder: CSelectionStepBuilder) => void,
     ) {
         const x = this.x_selection({
             "buildContext": this.buildContext,
-            "par__rawselectionstring": par__rawselectionstring,
+            "par__start point": p => par__start_point(p.builder),
+            "par__steps": p => par__steps(p.builder),
         })
         return x
     }
     public tagged_union(
-        par__type_specification: (builder: TaggedUnionTypeSpecificationBuilder) => t.TaggedUnionTypeSpecification,
+        par__type_specification: (builder: CTaggedUnionTypeSpecificationBuilder) => t.TaggedUnionTypeSpecification,
         par__state: string,
-        par__initializer_type: (builder: InitializerTypeBuilder) => t.InitializerType,
+        par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_tagged_union({
             "buildContext": this.buildContext,
@@ -1412,15 +1491,15 @@ export class InitializerTypeBuilder {
     }
     private x_constructor_call(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__arguments": (p: { builder: ConstructorCallArgurmentBuilder }) => void
+        readonly "par__arguments": (p: { builder: CConstructorCallArgurmentBuilder }) => void
         readonly "par__path": string
     }) {
         const var_path = _p["par__path"]
         const var_arguments = _p.buildContext.createDictionary<t.ConstructorCallArgurment>({
             "callback": _cp => {
-                const x = new ConstructorCallArgurmentBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CConstructorCallArgurmentBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__arguments"]({
                     "builder": x,
@@ -1428,27 +1507,29 @@ export class InitializerTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "ConstructorCallArgurment",
             }),
         })
-        const sg = ((): t.InitializerType => { return [ "constructor call", {
-            "arguments": var_arguments,
-            "path": var_path,
-        } ]})()
+        const sg = ((): t.InitializerType => {
+            return ["constructor call", {
+                "arguments": var_arguments,
+                "path": var_path,
+            }]
+        })()
         return sg
     }
     private x_function_call(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__arguments": (p: { builder: FunctionCallArgurmentBuilder }) => void
+        readonly "par__arguments": (p: { builder: CFunctionCallArgurmentBuilder }) => void
         readonly "par__path": string
     }) {
         const var_path = _p["par__path"]
         const var_arguments = _p.buildContext.createDictionary<t.FunctionCallArgurment>({
             "callback": _cp => {
-                const x = new FunctionCallArgurmentBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CFunctionCallArgurmentBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__arguments"]({
                     "builder": x,
@@ -1456,25 +1537,27 @@ export class InitializerTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "FunctionCallArgurment",
             }),
         })
-        const sg = ((): t.InitializerType => { return [ "function call", {
-            "arguments": var_arguments,
-            "path": var_path,
-        } ]})()
+        const sg = ((): t.InitializerType => {
+            return ["function call", {
+                "arguments": var_arguments,
+                "path": var_path,
+            }]
+        })()
         return sg
     }
     private x_object(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__properties": (p: { builder: PropertyInitialierBuilder }) => void
+        readonly "par__properties": (p: { builder: CPropertyInitialierBuilder }) => void
     }) {
         const var_properties = _p.buildContext.createDictionary<t.PropertyInitialier>({
             "callback": _cp => {
-                const x = new PropertyInitialierBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CPropertyInitialierBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__properties"]({
                     "builder": x,
@@ -1482,73 +1565,99 @@ export class InitializerTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "PropertyInitialier",
             }),
         })
-        const sg = ((): t.InitializerType => { return [ "object", {
-            "properties": var_properties,
-        } ]})()
+        const sg = ((): t.InitializerType => {
+            return ["object", {
+                "properties": var_properties,
+            }]
+        })()
         return sg
     }
-    private x_raw(_p: {
+    private x_rawx(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "par__rawstring": string
     }) {
         const var_rawstring = _p["par__rawstring"]
-        const sg = ((): t.InitializerType => { return [ "raw", {
-            "rawstring": var_rawstring,
-        } ]})()
+        const sg = ((): t.InitializerType => {
+            return ["rawx", {
+                "rawstring": var_rawstring,
+            }]
+        })()
         return sg
     }
     private x_selection(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__rawselectionstring": string
+        readonly "par__start point": (p: { builder: CSelectionStartPointBuilder }) => t.SelectionStartPoint
+        readonly "par__steps": (p: { builder: CSelectionStepBuilder }) => void
     }) {
-        const var_rawselectionstring = _p["par__rawselectionstring"]
-        const sg = ((): t.InitializerType => { return [ "selection", {
-            "rawselectionstring": var_rawselectionstring,
-        } ]})()
+        const var_start_point = _p["par__start point"]({
+            "builder": new CSelectionStartPointBuilder({
+                "buildContext": _p["buildContext"],
+            }),
+        })
+        const var_steps = _p.buildContext.createList<t.SelectionStep>({
+            "callback": _cp => {
+                const x = new CSelectionStepBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
+                })
+                const y = _p["par__steps"]({
+                    "builder": x,
+                })
+                return y
+            },
+        })
+        const sg = ((): t.InitializerType => {
+            return ["selection", {
+                "start point": var_start_point,
+                "steps": var_steps,
+            }]
+        })()
         return sg
     }
     private x_tagged_union(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__initializer_type": (p: { builder: InitializerTypeBuilder }) => t.InitializerType
+        readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
         readonly "par__state": string
-        readonly "par__type specification": (p: { builder: TaggedUnionTypeSpecificationBuilder }) => t.TaggedUnionTypeSpecification
+        readonly "par__type specification": (p: { builder: CTaggedUnionTypeSpecificationBuilder }) => t.TaggedUnionTypeSpecification
     }) {
         const var_type_specification = _p["par__type specification"]({
-            "builder": new TaggedUnionTypeSpecificationBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CTaggedUnionTypeSpecificationBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const var_state = _p["par__state"]
         const var_initializer = create_initializer({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
         })
-        const sg = ((): t.InitializerType => { return [ "tagged union", {
-            "initializer": var_initializer,
-            "state": var_state,
-            "type specification": var_type_specification,
-        } ]})()
+        const sg = ((): t.InitializerType => {
+            return ["tagged union", {
+                "initializer": var_initializer,
+                "state": var_state,
+                "type specification": var_type_specification,
+            }]
+        })()
         return sg
     }
 }
 
-export class InterfaceBuilder {
+export class CInterfaceBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Interface>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.Interface>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.Interface>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public Interface(
         key: string,
-        par__methods: (builder: InterfaceMethodBuilder) => void,
+        par__methods: (builder: CInterfaceMethodBuilder) => void,
     ) {
         const x = this.x_Interface({
             "buildContext": this.buildContext,
@@ -1560,13 +1669,13 @@ export class InterfaceBuilder {
     private x_Interface(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__methods": (p: { builder: InterfaceMethodBuilder }) => void
+        readonly "par__methods": (p: { builder: CInterfaceMethodBuilder }) => void
     }) {
         const var_methods = _p.buildContext.createDictionary<t.InterfaceMethod>({
             "callback": _cp => {
-                const x = new InterfaceMethodBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CInterfaceMethodBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__methods"]({
                     "builder": x,
@@ -1574,7 +1683,7 @@ export class InterfaceBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "InterfaceMethod",
             }),
         })
@@ -1586,20 +1695,20 @@ export class InterfaceBuilder {
     }
 }
 
-export class InterfaceMethodBuilder {
+export class CInterfaceMethodBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.InterfaceMethod>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.InterfaceMethod>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.InterfaceMethod>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public InterfaceMethod(
         key: string,
-        par__parameters: (builder: InterfaceMethodParameterBuilder) => void,
-        par__type: (builder: InterfaceMethodTypeBuilder) => t.InterfaceMethodType,
+        par__parameters: (builder: CInterfaceMethodParameterBuilder) => void,
+        par__type: (builder: CInterfaceMethodTypeBuilder) => t.InterfaceMethodType,
     ) {
         const x = this.x_InterfaceMethod({
             "buildContext": this.buildContext,
@@ -1612,14 +1721,14 @@ export class InterfaceMethodBuilder {
     private x_InterfaceMethod(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__parameters": (p: { builder: InterfaceMethodParameterBuilder }) => void
-        readonly "par__type": (p: { builder: InterfaceMethodTypeBuilder }) => t.InterfaceMethodType
+        readonly "par__parameters": (p: { builder: CInterfaceMethodParameterBuilder }) => void
+        readonly "par__type": (p: { builder: CInterfaceMethodTypeBuilder }) => t.InterfaceMethodType
     }) {
         const var_parameters = _p.buildContext.createDictionary<t.InterfaceMethodParameter>({
             "callback": _cp => {
-                const x = new InterfaceMethodParameterBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CInterfaceMethodParameterBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -1627,13 +1736,13 @@ export class InterfaceMethodBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "InterfaceMethodParameter",
             }),
         })
         const var_type = _p["par__type"]({
-            "builder": new InterfaceMethodTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CInterfaceMethodTypeBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -1645,15 +1754,15 @@ export class InterfaceMethodBuilder {
     }
 }
 
-export class InterfaceMethodParameterBuilder {
+export class CInterfaceMethodParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.InterfaceMethodParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.InterfaceMethodParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.InterfaceMethodParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public InterfaceMethodParameter(
         key: string,
@@ -1680,21 +1789,21 @@ export class InterfaceMethodParameterBuilder {
     }
 }
 
-export class InterfaceMethodTypeBuilder {
+export class CInterfaceMethodTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public function(
-        par__guaranteed: (builder: IsInterfaceReturnValueGuaranteedBuilder) => t.IsInterfaceReturnValueGuaranteed,
-        par__type_type: string,
+        par__guaranteed: (builder: CIsInterfaceReturnValueGuaranteedBuilder) => t.IsInterfaceReturnValueGuaranteed,
+        par__raw_return_type: string,
     ) {
         const x = this.x_function({
             "buildContext": this.buildContext,
             "par__guaranteed": p => par__guaranteed(p.builder),
-            "par__type_type": par__type_type,
+            "par__raw return type": par__raw_return_type,
         })
         return x
     }
@@ -1707,35 +1816,88 @@ export class InterfaceMethodTypeBuilder {
     }
     private x_function(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__guaranteed": (p: { builder: IsInterfaceReturnValueGuaranteedBuilder }) => t.IsInterfaceReturnValueGuaranteed
-        readonly "par__type_type": string
+        readonly "par__guaranteed": (p: { builder: CIsInterfaceReturnValueGuaranteedBuilder }) => t.IsInterfaceReturnValueGuaranteed
+        readonly "par__raw return type": string
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
-            "builder": new IsInterfaceReturnValueGuaranteedBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CIsInterfaceReturnValueGuaranteedBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
-        const sg = ((): t.InterfaceMethodType => { return [ "function", {
-            "guaranteed": var_guaranteed,
-            "type": _p.par__type_type,
-        } ]})()
+        const var_raw_return_type = _p["par__raw return type"]
+        const sg = ((): t.InterfaceMethodType => {
+            return ["function", {
+                "guaranteed": var_guaranteed,
+                "raw return type": var_raw_return_type,
+            }]
+        })()
         return sg
     }
     private x_procedure(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.InterfaceMethodType => { return [ "procedure", {
-        } ]})()
+        const sg = ((): t.InterfaceMethodType => {
+            return ["procedure", {
+            }]
+        })()
         return sg
     }
 }
 
-export class IsCallbackReturnValueGuaranteedBuilder {
+export class CIsCallbackReturnValueGuaranteedBuilder {
+    private readonly buildContext: gt.IBuildContext
+    private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
+    constructor(p: {
+        "buildContext": gt.IBuildContext
+        "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
+    }) {
+        this.buildContext = p["buildContext"]
+        this.param_method_type_parameters = p["param_method type parameters"]
+    }
+    public no(
+    ) {
+        const x = this.x_no({
+            "buildContext": this.buildContext,
+            "param_method type parameters": this.param_method_type_parameters,
+        })
+        return x
+    }
+    private x_no(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
+    }) {
+        const sg = ((): t.IsCallbackReturnValueGuaranteed => {
+            return ["no", {
+            }]
+        })()
+        return sg
+    }
+    private x_yes(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
+    }) {
+        const sg = ((): t.IsCallbackReturnValueGuaranteed => {
+            return ["yes", {
+            }]
+        })()
+        return sg
+    }
+    public yes(
+    ) {
+        const x = this.x_yes({
+            "buildContext": this.buildContext,
+            "param_method type parameters": this.param_method_type_parameters,
+        })
+        return x
+    }
+}
+
+export class CIsGenericReturnValueGuaranteedBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public no(
     ) {
@@ -1747,15 +1909,19 @@ export class IsCallbackReturnValueGuaranteedBuilder {
     private x_no(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.IsCallbackReturnValueGuaranteed => { return [ "no", {
-        } ]})()
+        const sg = ((): t.IsGenericReturnValueGuaranteed => {
+            return ["no", {
+            }]
+        })()
         return sg
     }
     private x_yes(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.IsCallbackReturnValueGuaranteed => { return [ "yes", {
-        } ]})()
+        const sg = ((): t.IsGenericReturnValueGuaranteed => {
+            return ["yes", {
+            }]
+        })()
         return sg
     }
     public yes(
@@ -1767,12 +1933,12 @@ export class IsCallbackReturnValueGuaranteedBuilder {
     }
 }
 
-export class IsGenericReturnValueGuaranteedBuilder {
+export class CIsInterfaceReturnValueGuaranteedBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public no(
     ) {
@@ -1784,15 +1950,19 @@ export class IsGenericReturnValueGuaranteedBuilder {
     private x_no(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.IsGenericReturnValueGuaranteed => { return [ "no", {
-        } ]})()
+        const sg = ((): t.IsInterfaceReturnValueGuaranteed => {
+            return ["no", {
+            }]
+        })()
         return sg
     }
     private x_yes(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.IsGenericReturnValueGuaranteed => { return [ "yes", {
-        } ]})()
+        const sg = ((): t.IsInterfaceReturnValueGuaranteed => {
+            return ["yes", {
+            }]
+        })()
         return sg
     }
     public yes(
@@ -1804,56 +1974,19 @@ export class IsGenericReturnValueGuaranteedBuilder {
     }
 }
 
-export class IsInterfaceReturnValueGuaranteedBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        buildContext: gt.IBuildContext
-    }) {
-        this.buildContext = p.buildContext
-    }
-    public no(
-    ) {
-        const x = this.x_no({
-            "buildContext": this.buildContext,
-        })
-        return x
-    }
-    private x_no(_p: {
-        readonly "buildContext": gt.IBuildContext
-    }) {
-        const sg = ((): t.IsInterfaceReturnValueGuaranteed => { return [ "no", {
-        } ]})()
-        return sg
-    }
-    private x_yes(_p: {
-        readonly "buildContext": gt.IBuildContext
-    }) {
-        const sg = ((): t.IsInterfaceReturnValueGuaranteed => { return [ "yes", {
-        } ]})()
-        return sg
-    }
-    public yes(
-    ) {
-        const x = this.x_yes({
-            "buildContext": this.buildContext,
-        })
-        return x
-    }
-}
-
-export class ObjectPropertyBuilder {
+export class CObjectPropertyBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ObjectProperty>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.ObjectProperty>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.ObjectProperty>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public ObjectProperty(
         key: string,
-        par__type: (builder: PropertyTypeBuilder) => t.PropertyType,
+        par__type: (builder: CPropertyTypeBuilder) => t.PropertyType,
     ) {
         const x = this.x_ObjectProperty({
             "buildContext": this.buildContext,
@@ -1865,11 +1998,11 @@ export class ObjectPropertyBuilder {
     private x_ObjectProperty(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type": (p: { builder: PropertyTypeBuilder }) => t.PropertyType
+        readonly "par__type": (p: { builder: CPropertyTypeBuilder }) => t.PropertyType
     }) {
         const var_type = _p["par__type"]({
-            "builder": new PropertyTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CPropertyTypeBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -1880,15 +2013,15 @@ export class ObjectPropertyBuilder {
     }
 }
 
-export class PrivateParameterBuilder {
+export class CPrivateParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.PrivateParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.PrivateParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.PrivateParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public PrivateParameter(
         key: string,
@@ -1915,19 +2048,19 @@ export class PrivateParameterBuilder {
     }
 }
 
-export class PropertyInitialierBuilder {
+export class CPropertyInitialierBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.PropertyInitialier>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.PropertyInitialier>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.PropertyInitialier>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public PropertyInitialier(
         key: string,
-        par__initializer_type: (builder: InitializerTypeBuilder) => t.InitializerType,
+        par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_PropertyInitialier({
             "buildContext": this.buildContext,
@@ -1939,10 +2072,10 @@ export class PropertyInitialierBuilder {
     private x_PropertyInitialier(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__initializer_type": (p: { builder: InitializerTypeBuilder }) => t.InitializerType
+        readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
         })
         const entry = {
@@ -1953,12 +2086,12 @@ export class PropertyInitialierBuilder {
     }
 }
 
-export class PropertyInitializationBuilder {
+export class CPropertyInitializationBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public default(
         par__initializer: string,
@@ -1983,9 +2116,11 @@ export class PropertyInitializationBuilder {
         readonly "par__initializer": string
     }) {
         const var_initializer = _p["par__initializer"]
-        const sg = ((): t.PropertyInitialization => { return [ "default", {
-            "initializer": var_initializer,
-        } ]})()
+        const sg = ((): t.PropertyInitialization => {
+            return ["default", {
+                "initializer": var_initializer,
+            }]
+        })()
         return sg
     }
     private x_parametrized(_p: {
@@ -1993,19 +2128,21 @@ export class PropertyInitializationBuilder {
         readonly "par__type": string
     }) {
         const var_type = _p["par__type"]
-        const sg = ((): t.PropertyInitialization => { return [ "parametrized", {
-            "type": var_type,
-        } ]})()
+        const sg = ((): t.PropertyInitialization => {
+            return ["parametrized", {
+                "type": var_type,
+            }]
+        })()
         return sg
     }
 }
 
-export class PropertyTypeBuilder {
+export class CPropertyTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public raw(
         par__raw: string,
@@ -2037,9 +2174,11 @@ export class PropertyTypeBuilder {
         readonly "par__raw": string
     }) {
         const var_raw = _p["par__raw"]
-        const sg = ((): t.PropertyType => { return [ "raw", {
-            "raw": var_raw,
-        } ]})()
+        const sg = ((): t.PropertyType => {
+            return ["raw", {
+                "raw": var_raw,
+            }]
+        })()
         return sg
     }
     private x_reference(_p: {
@@ -2047,29 +2186,33 @@ export class PropertyTypeBuilder {
         readonly "par__referenced type": string
     }) {
         const var_referenced_type = _p["par__referenced type"]
-        const sg = ((): t.PropertyType => { return [ "reference", {
-            "referenced type": var_referenced_type,
-        } ]})()
+        const sg = ((): t.PropertyType => {
+            return ["reference", {
+                "referenced type": var_referenced_type,
+            }]
+        })()
         return sg
     }
     private x_string(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.PropertyType => { return [ "string", {
-        } ]})()
+        const sg = ((): t.PropertyType => {
+            return ["string", {
+            }]
+        })()
         return sg
     }
 }
 
-export class PublicParameterBuilder {
+export class CPublicParameterBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.PublicParameter>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.PublicParameter>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.PublicParameter>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public PublicParameter(
         key: string,
@@ -2096,15 +2239,140 @@ export class PublicParameterBuilder {
     }
 }
 
-export class StatementBuilder {
+export class CSelectionStartPointBuilder {
+    private readonly buildContext: gt.IBuildContext
+    constructor(p: {
+        "buildContext": gt.IBuildContext
+    }) {
+        this.buildContext = p["buildContext"]
+    }
+    public callback_parameter(
+        par__parameter: string,
+    ) {
+        const x = this.x_callback_parameter({
+            "buildContext": this.buildContext,
+            "par__parameter": par__parameter,
+        })
+        return x
+    }
+    public parameter(
+        par__parameter: string,
+    ) {
+        const x = this.x_parameter({
+            "buildContext": this.buildContext,
+            "par__parameter": par__parameter,
+        })
+        return x
+    }
+    public property(
+        par__property: string,
+    ) {
+        const x = this.x_property({
+            "buildContext": this.buildContext,
+            "par__property": par__property,
+        })
+        return x
+    }
+    public variable(
+        par__variable: string,
+    ) {
+        const x = this.x_variable({
+            "buildContext": this.buildContext,
+            "par__variable": par__variable,
+        })
+        return x
+    }
+    private x_callback_parameter(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "par__parameter": string
+    }) {
+        const var_parameter = _p["par__parameter"]
+        const sg = ((): t.SelectionStartPoint => {
+            return ["callback parameter", {
+                "parameter": var_parameter,
+            }]
+        })()
+        return sg
+    }
+    private x_parameter(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "par__parameter": string
+    }) {
+        const var_parameter = _p["par__parameter"]
+        const sg = ((): t.SelectionStartPoint => {
+            return ["parameter", {
+                "parameter": var_parameter,
+            }]
+        })()
+        return sg
+    }
+    private x_property(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "par__property": string
+    }) {
+        const var_property = _p["par__property"]
+        const sg = ((): t.SelectionStartPoint => {
+            return ["property", {
+                "property": var_property,
+            }]
+        })()
+        return sg
+    }
+    private x_variable(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "par__variable": string
+    }) {
+        const var_variable = _p["par__variable"]
+        const sg = ((): t.SelectionStartPoint => {
+            return ["variable", {
+                "variable": var_variable,
+            }]
+        })()
+        return sg
+    }
+}
+
+export class CSelectionStepBuilder {
+    private readonly buildContext: gt.IBuildContext
+    private readonly builder: gt.IListBuilder<t.SelectionStep>
+    constructor(p: {
+        "buildContext": gt.IBuildContext
+        "builder": gt.IListBuilder<t.SelectionStep>
+    }) {
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
+    }
+    public SelectionStep(
+        par__rawselectionstring: string,
+    ) {
+        const x = this.x_SelectionStep({
+            "buildContext": this.buildContext,
+            "par__rawselectionstring": par__rawselectionstring,
+        })
+        return x
+    }
+    private x_SelectionStep(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "par__rawselectionstring": string
+    }) {
+        const var_rawselectionstring = _p["par__rawselectionstring"]
+        const entry = {
+            "rawselectionstring": var_rawselectionstring,
+        }
+        this.builder.push({ element: entry })
+        return this
+    }
+}
+
+export class CStatementBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IListBuilder<t.Statement>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IListBuilder<t.Statement>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IListBuilder<t.Statement>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public Statement(
         par__raw_value: string,
@@ -2128,15 +2396,15 @@ export class StatementBuilder {
     }
 }
 
-export class TaggedUnionAlternativeBuilder {
+export class CTaggedUnionAlternativeBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.TaggedUnionAlternative>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.TaggedUnionAlternative>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.TaggedUnionAlternative>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public TaggedUnionAlternative(
         key: string,
@@ -2163,12 +2431,12 @@ export class TaggedUnionAlternativeBuilder {
     }
 }
 
-export class TaggedUnionTypeSpecificationBuilder {
+export class CTaggedUnionTypeSpecificationBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public derived(
     ) {
@@ -2189,8 +2457,10 @@ export class TaggedUnionTypeSpecificationBuilder {
     private x_derived(_p: {
         readonly "buildContext": gt.IBuildContext
     }) {
-        const sg = ((): t.TaggedUnionTypeSpecification => { return [ "derived", {
-        } ]})()
+        const sg = ((): t.TaggedUnionTypeSpecification => {
+            return ["derived", {
+            }]
+        })()
         return sg
     }
     private x_reference(_p: {
@@ -2198,26 +2468,28 @@ export class TaggedUnionTypeSpecificationBuilder {
         readonly "par__type": string
     }) {
         const var_type = _p["par__type"]
-        const sg = ((): t.TaggedUnionTypeSpecification => { return [ "reference", {
-            "type": var_type,
-        } ]})()
+        const sg = ((): t.TaggedUnionTypeSpecification => {
+            return ["reference", {
+                "type": var_type,
+            }]
+        })()
         return sg
     }
 }
 
-export class TypeBuilder {
+export class CTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Type>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.Type>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.Type>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public Type(
         key: string,
-        par__type: (builder: TypeTypeBuilder) => t.TypeType,
+        par__type: (builder: CTypeTypeBuilder) => t.TypeType,
     ) {
         const x = this.x_Type({
             "buildContext": this.buildContext,
@@ -2229,11 +2501,11 @@ export class TypeBuilder {
     private x_Type(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__type": (p: { builder: TypeTypeBuilder }) => t.TypeType
+        readonly "par__type": (p: { builder: CTypeTypeBuilder }) => t.TypeType
     }) {
         const var_type = _p["par__type"]({
-            "builder": new TypeTypeBuilder({
-                "buildContext": _p.buildContext,
+            "builder": new CTypeTypeBuilder({
+                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -2244,15 +2516,15 @@ export class TypeBuilder {
     }
 }
 
-export class TypeTypeBuilder {
+export class CTypeTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
-        buildContext: gt.IBuildContext
+        "buildContext": gt.IBuildContext
     }) {
-        this.buildContext = p.buildContext
+        this.buildContext = p["buildContext"]
     }
     public object(
-        par__properties: (builder: ObjectPropertyBuilder) => void,
+        par__properties: (builder: CObjectPropertyBuilder) => void,
     ) {
         const x = this.x_object({
             "buildContext": this.buildContext,
@@ -2261,7 +2533,7 @@ export class TypeTypeBuilder {
         return x
     }
     public tagged_union(
-        par__alternatives: (builder: TaggedUnionAlternativeBuilder) => void,
+        par__alternatives: (builder: CTaggedUnionAlternativeBuilder) => void,
     ) {
         const x = this.x_tagged_union({
             "buildContext": this.buildContext,
@@ -2271,13 +2543,13 @@ export class TypeTypeBuilder {
     }
     private x_object(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__properties": (p: { builder: ObjectPropertyBuilder }) => void
+        readonly "par__properties": (p: { builder: CObjectPropertyBuilder }) => void
     }) {
         const var_properties = _p.buildContext.createDictionary<t.ObjectProperty>({
             "callback": _cp => {
-                const x = new ObjectPropertyBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CObjectPropertyBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__properties"]({
                     "builder": x,
@@ -2285,24 +2557,26 @@ export class TypeTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "ObjectProperty",
             }),
         })
-        const sg = ((): t.TypeType => { return [ "object", {
-            "properties": var_properties,
-        } ]})()
+        const sg = ((): t.TypeType => {
+            return ["object", {
+                "properties": var_properties,
+            }]
+        })()
         return sg
     }
     private x_tagged_union(_p: {
         readonly "buildContext": gt.IBuildContext
-        readonly "par__alternatives": (p: { builder: TaggedUnionAlternativeBuilder }) => void
+        readonly "par__alternatives": (p: { builder: CTaggedUnionAlternativeBuilder }) => void
     }) {
         const var_alternatives = _p.buildContext.createDictionary<t.TaggedUnionAlternative>({
             "callback": _cp => {
-                const x = new TaggedUnionAlternativeBuilder({
-                    "buildContext": _p.buildContext,
-                    "builder": _cp.builder,
+                const x = new CTaggedUnionAlternativeBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
                 })
                 const y = _p["par__alternatives"]({
                     "builder": x,
@@ -2310,30 +2584,32 @@ export class TypeTypeBuilder {
                 return y
             },
             "reporter": gt.createSimpleConflictingEntryReporter({
-                "reportError": errorStr => { console.error(errorStr)},
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
                 "typeInfo": "TaggedUnionAlternative",
             }),
         })
-        const sg = ((): t.TypeType => { return [ "tagged union", {
-            "alternatives": var_alternatives,
-        } ]})()
+        const sg = ((): t.TypeType => {
+            return ["tagged union", {
+                "alternatives": var_alternatives,
+            }]
+        })()
         return sg
     }
 }
 
-export class VariableBuilder {
+export class CVariableBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Variable>
     constructor(p: {
-        buildContext: gt.IBuildContext
-        builder: gt.IDictionaryBuilder<t.Variable>
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.Variable>
     }) {
-        this.buildContext = p.buildContext
-        this.builder = p.builder
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
     }
     public Variable(
         key: string,
-        par__initializer_type: (builder: InitializerTypeBuilder) => t.InitializerType,
+        par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_Variable({
             "buildContext": this.buildContext,
@@ -2345,10 +2621,10 @@ export class VariableBuilder {
     private x_Variable(_p: {
         readonly "buildContext": gt.IBuildContext
         readonly "key": string
-        readonly "par__initializer_type": (p: { builder: InitializerTypeBuilder }) => t.InitializerType
+        readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p.buildContext,
+            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
         })
         const entry = {

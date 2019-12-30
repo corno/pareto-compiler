@@ -54,7 +54,7 @@ export class GenerateInterfaces {
                                                                         return assertUnreachable($.guaranteed[0])
                                                                 }
                                                             })(),
-                                                            $.type,
+                                                            $["raw return type"],
                                                         ])
                                                     }
                                                     case "procedure": {

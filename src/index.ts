@@ -3,7 +3,7 @@ export * from "./generated/algorithms"
 
 import * as fp from "fountain-pen"
 import * as lf from "lingua-franca"
-import { CompilationUnitBuilder } from "./generated/algorithms"
+import { CCompilationUnitBuilder } from "./generated/algorithms"
 import { CompilationUnit } from "./generated/types"
 import { GenerateAlgorithms } from "./targetLanguages/TypeScript/GenerateAlgorithms"
 import { GenerateGenericTypes } from "./targetLanguages/TypeScript/GenerateGenericTypes"
@@ -12,9 +12,9 @@ import { GenerateTypes } from "./targetLanguages/TypeScript/GenerateTypes"
 
 export function compile(
     //resolveReporter: lf.IResolveReporter,
-    callback: (builder: CompilationUnitBuilder) => CompilationUnit
+    callback: (builder: CCompilationUnitBuilder) => CompilationUnit
 ) {
-    return callback(new CompilationUnitBuilder({ buildContext: lf.createBuildContext()}))
+    return callback(new CCompilationUnitBuilder({ buildContext: lf.createBuildContext()}))
 }
 
 export type GeneratedCode = {

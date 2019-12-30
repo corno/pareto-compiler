@@ -40,7 +40,7 @@ export class GenerateTypes {
                                                                             const $ = alt.type[1]
                                                                             return fp.line([
                                                                                 `gt.`,
-                                                                                $["referenced type"],
+                                                                                $["referenced type"].getKey({ sanitizer: key => key}),
                                                                                 `<`,
                                                                                 fp.line($.arguments.getAlphabeticalOrdering({}).mapWithSeparator({
                                                                                     onSeparator: () => `, `,

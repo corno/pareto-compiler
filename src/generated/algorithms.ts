@@ -380,6 +380,7 @@ export class CCompilationUnitBuilder {
                 const x = new CTypeBuilder({
                     "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
+                    "propvar_generic interface declarations": this.buildContext.createLookup({ dict: var_generic_interface_declarations }),
                 })
                 const y = _p["par__types"]({
                     "builder": x,
@@ -1224,7 +1225,7 @@ export class CGenericInTypeTypeBuilder {
         readonly "par__type parameter": string
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        const var_type_parameter = this.param_method_type_parameters.createReference({
+        const var_type_parameter = _p["param_method type parameters"].createReference({
             "key": _p["par__type parameter"],
             "reporter": gt.createSimpleReferenceResolveReporter({
                 "delayed": false,
@@ -2012,12 +2013,15 @@ export class CIsInterfaceReturnValueGuaranteedBuilder {
 export class CObjectPropertyBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ObjectProperty>
+    private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
     constructor(p: {
         "buildContext": gt.IBuildContext
         "builder": gt.IDictionaryBuilder<t.ObjectProperty>
+        "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
         this.buildContext = p["buildContext"]
         this.builder = p["builder"]
+        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
     }
     public ObjectProperty(
         key: string,
@@ -2038,6 +2042,7 @@ export class CObjectPropertyBuilder {
         const var_type = _p["par__type"]({
             "builder": new CPropertyTypeBuilder({
                 "buildContext": _p["buildContext"],
+                "propvar_generic interface declarations": this.propvar_generic_interface_declarations,
             }),
         })
         const entry = {
@@ -2174,10 +2179,13 @@ export class CPropertyInitializationBuilder {
 
 export class CPropertyTypeBuilder {
     private readonly buildContext: gt.IBuildContext
+    private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
     constructor(p: {
         "buildContext": gt.IBuildContext
+        "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
         this.buildContext = p["buildContext"]
+        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
     }
     public generic_type(
         par__referenced_type: string,
@@ -2220,7 +2228,14 @@ export class CPropertyTypeBuilder {
         readonly "par__arguments": (p: { builder: CGenericTypeArgumentsBuilder }) => void
         readonly "par__referenced type": string
     }) {
-        const var_referenced_type = _p["par__referenced type"]
+        const var_referenced_type = this.propvar_generic_interface_declarations.createReference({
+            "key": _p["par__referenced type"],
+            "reporter": gt.createSimpleReferenceResolveReporter({
+                "delayed": false,
+                "reportError": () => {},
+                "typeInfo": "XXXX",
+            }),
+        })
         const var_arguments = _p.buildContext.createDictionary<t.GenericTypeArguments>({
             "callback": _cp => {
                 const x = new CGenericTypeArgumentsBuilder({
@@ -2556,12 +2571,15 @@ export class CTaggedUnionTypeSpecificationBuilder {
 export class CTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Type>
+    private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
     constructor(p: {
         "buildContext": gt.IBuildContext
         "builder": gt.IDictionaryBuilder<t.Type>
+        "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
         this.buildContext = p["buildContext"]
         this.builder = p["builder"]
+        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
     }
     public Type(
         key: string,
@@ -2582,6 +2600,7 @@ export class CTypeBuilder {
         const var_type = _p["par__type"]({
             "builder": new CTypeTypeBuilder({
                 "buildContext": _p["buildContext"],
+                "propvar_generic interface declarations": this.propvar_generic_interface_declarations,
             }),
         })
         const entry = {
@@ -2594,10 +2613,13 @@ export class CTypeBuilder {
 
 export class CTypeTypeBuilder {
     private readonly buildContext: gt.IBuildContext
+    private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
     constructor(p: {
         "buildContext": gt.IBuildContext
+        "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
         this.buildContext = p["buildContext"]
+        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
     }
     public object(
         par__properties: (builder: CObjectPropertyBuilder) => void,
@@ -2626,6 +2648,7 @@ export class CTypeTypeBuilder {
                 const x = new CObjectPropertyBuilder({
                     "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
+                    "propvar_generic interface declarations": this.propvar_generic_interface_declarations,
                 })
                 const y = _p["par__properties"]({
                     "builder": x,

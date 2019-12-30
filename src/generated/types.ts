@@ -186,7 +186,7 @@ export type GenericTypeArguments = {
 
 export type GenericTypeProperty = {
     readonly "arguments": gt.Dictionary<GenericTypeArguments>
-    readonly "referenced type": string
+    readonly "referenced type": gt.Reference<GenericInterfaceDeclaration>
 }
 
 export type Initializer = {

@@ -36,6 +36,19 @@ export class GenerateTypes {
                                                                 `readonly "${altKey}": `,
                                                                 ((): fp.IInlineSection => {
                                                                     switch (alt.type[0]) {
+                                                                        case "generic type": {
+                                                                            const $ = alt.type[1]
+                                                                            return fp.line([
+                                                                                `gt.`,
+                                                                                $["referenced type"],
+                                                                                `<`,
+                                                                                fp.line($.arguments.getAlphabeticalOrdering({}).mapWithSeparator({
+                                                                                    onSeparator: () => `, `,
+                                                                                    onElement: arg => arg.raw,
+                                                                                })),
+                                                                                `>`,
+                                                                            ])
+                                                                        }
                                                                         case "raw": {
                                                                             const $ = alt.type[1]
                                                                             return fp.token($.raw)

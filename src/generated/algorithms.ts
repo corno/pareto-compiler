@@ -1418,6 +1418,41 @@ export class CGenericReturnTypeTypeBuilder {
     }
 }
 
+export class CGenericTypeArgumentsBuilder {
+    private readonly buildContext: gt.IBuildContext
+    private readonly builder: gt.IDictionaryBuilder<t.GenericTypeArguments>
+    constructor(p: {
+        "buildContext": gt.IBuildContext
+        "builder": gt.IDictionaryBuilder<t.GenericTypeArguments>
+    }) {
+        this.buildContext = p["buildContext"]
+        this.builder = p["builder"]
+    }
+    public GenericTypeArguments(
+        key: string,
+        par__raw: string,
+    ) {
+        const x = this.x_GenericTypeArguments({
+            "buildContext": this.buildContext,
+            "key": key,
+            "par__raw": par__raw,
+        })
+        return x
+    }
+    private x_GenericTypeArguments(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "key": string
+        readonly "par__raw": string
+    }) {
+        const var_raw = _p["par__raw"]
+        const entry = {
+            "raw": var_raw,
+        }
+        this.builder.add({ key: _p.key, entry: entry })
+        return this
+    }
+}
+
 export class CInitializerTypeBuilder {
     private readonly buildContext: gt.IBuildContext
     constructor(p: {
@@ -2144,6 +2179,17 @@ export class CPropertyTypeBuilder {
     }) {
         this.buildContext = p["buildContext"]
     }
+    public generic_type(
+        par__referenced_type: string,
+        par__arguments: (builder: CGenericTypeArgumentsBuilder) => void,
+    ) {
+        const x = this.x_generic_type({
+            "buildContext": this.buildContext,
+            "par__arguments": p => par__arguments(p.builder),
+            "par__referenced type": par__referenced_type,
+        })
+        return x
+    }
     public raw(
         par__raw: string,
     ) {
@@ -2168,6 +2214,36 @@ export class CPropertyTypeBuilder {
             "buildContext": this.buildContext,
         })
         return x
+    }
+    private x_generic_type(_p: {
+        readonly "buildContext": gt.IBuildContext
+        readonly "par__arguments": (p: { builder: CGenericTypeArgumentsBuilder }) => void
+        readonly "par__referenced type": string
+    }) {
+        const var_referenced_type = _p["par__referenced type"]
+        const var_arguments = _p.buildContext.createDictionary<t.GenericTypeArguments>({
+            "callback": _cp => {
+                const x = new CGenericTypeArgumentsBuilder({
+                    "buildContext": _p["buildContext"],
+                    "builder": _cp["builder"],
+                })
+                const y = _p["par__arguments"]({
+                    "builder": x,
+                })
+                return y
+            },
+            "reporter": gt.createSimpleConflictingEntryReporter({
+                "reportError": (_dependent, errorStr) => { console.error(errorStr) },
+                "typeInfo": "GenericTypeArguments",
+            }),
+        })
+        const sg = ((): t.PropertyType => {
+            return ["generic type", {
+                "arguments": var_arguments,
+                "referenced type": var_referenced_type,
+            }]
+        })()
+        return sg
     }
     private x_raw(_p: {
         readonly "buildContext": gt.IBuildContext

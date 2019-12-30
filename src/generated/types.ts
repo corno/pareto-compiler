@@ -180,6 +180,15 @@ export type GenericReturnValueIsGuaranteed = {
 export type GenericReturnValueIsNotGuaranteed = {
 }
 
+export type GenericTypeArguments = {
+    readonly "raw": string
+}
+
+export type GenericTypeProperty = {
+    readonly "arguments": gt.Dictionary<GenericTypeArguments>
+    readonly "referenced type": string
+}
+
 export type Initializer = {
     readonly "type": InitializerType
 }
@@ -276,6 +285,7 @@ export type PropertyInitialization =
     | [ "parametrized", ParametrizedInitialize ]
 
 export type PropertyType =
+    | [ "generic type", GenericTypeProperty ]
     | [ "raw", RawPropertyType ]
     | [ "reference", TypeReference ]
     | [ "string", String ]

@@ -3,7 +3,7 @@ import * as fp from "fountain-pen"
 import {
     CompilationUnit,
 } from "../../generated/types"
-import { sanitize } from "./sanitize"
+import { sanitize, sanitize2 } from "./sanitize"
 
 function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
@@ -17,51 +17,51 @@ export class GenerateTypes {
             `//@ts-ignore`,
             `import * as gt from "./genericTypes"`,
             compilationUnit.types.getAlphabeticalOrdering({}).map<fp.IParagraph>({
-                callback: (type, key) => {
+                callback: cp => {
                     return [
                         ``,
                         fp.line([
-                            `export type ${sanitize(key)} = `,
+                            `export type ${sanitize(cp.key)} = `,
                             ((): fp.InlinePart => {
-                                switch (type.type[0]) {
+                                switch (cp.element.type[0]) {
                                     case "object": {
-                                        const $ = type.type[1]
+                                        const $ = cp.element.type[1]
                                         return [
                                             `{`,
                                             () => {
                                                 return $.properties.getAlphabeticalOrdering({}).map({
-                                                    callback: (alt, altKey) => {
+                                                    callback: cp => {
                                                         return [
                                                             fp.line([
-                                                                `readonly "${altKey}": `,
+                                                                `readonly "${cp.key}": `,
                                                                 ((): fp.InlinePart => {
-                                                                    switch (alt.type[0]) {
+                                                                    switch (cp.element.type[0]) {
                                                                         case "generic type": {
-                                                                            const $ = alt.type[1]
+                                                                            const $ = cp.element.type[1]
                                                                             return [
                                                                                 `gt.`,
-                                                                                $["referenced type"].getKey({ sanitizer: key => key}),
+                                                                                $["referenced type"].getKey({ sanitizer: sanitize2 }),
                                                                                 `<`,
                                                                                 $.arguments.getAlphabeticalOrdering({}).mapWithSeparator({
                                                                                     onSeparator: () => `, `,
-                                                                                    onElement: arg => arg.raw,
+                                                                                    onElement: cp => cp.element.raw,
                                                                                 }),
                                                                                 `>`,
                                                                             ]
                                                                         }
                                                                         case "raw": {
-                                                                            const $ = alt.type[1]
+                                                                            const $ = cp.element.type[1]
                                                                             return $.raw
                                                                         }
                                                                         case "reference": {
-                                                                            const $ = alt.type[1]
+                                                                            const $ = cp.element.type[1]
                                                                             return $["referenced type"]
                                                                         }
                                                                         case "string": {
                                                                             //const $ = alt.type[1]
                                                                             return `string`
                                                                         }
-                                                                        default: return assertUnreachable(alt.type[0])
+                                                                        default: return assertUnreachable(cp.element.type[0])
                                                                     }
                                                                 })(),
                                                             ]),
@@ -73,20 +73,20 @@ export class GenerateTypes {
                                         ]
                                     }
                                     case "tagged union": {
-                                        const $ = type.type[1]
+                                        const $ = cp.element.type[1]
                                         return [
                                             () => {
                                                 return $.alternatives.getAlphabeticalOrdering({}).map({
-                                                    callback: (alt, altKey) => {
+                                                    callback: cp => {
                                                         return [
-                                                            `| [ "${altKey}", ${alt["referenced type"]} ]`,
+                                                            `| [ "${cp.key}", ${cp.element["referenced type"]} ]`,
                                                         ]
                                                     },
                                                 })
                                             },
                                         ]
                                     }
-                                    default: return assertUnreachable(type.type[0])
+                                    default: return assertUnreachable(cp.element.type[0])
                                 }
                             })(),
                         ]),

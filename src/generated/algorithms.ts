@@ -2601,51 +2601,102 @@ function serialize_block(_p: {
     readonly "type": t.Block
 }) {
     _p.out.write({
+        "string": "{",
+    })
+    _p.out.write({
         "string": '"statements": ',
     })
     _p.type["statements"].map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"type": ',
             })
-            switch (_cp["type"][0]) {
+            switch (_cp.element["type"][0]) {
                 case "call": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"call", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"call": ',
                         })
                         serialize_function_call({ type: $["call"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
+                        })
                         break
                     }
                 }
                 case "raw": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"raw", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"raw value": ',
                         })
                         _p.out.write({
                             "string": $["raw value"],
                         })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
+                        })
                         break
                     }
                 }
                 case "switch": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"switch", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"cases": ',
                         })
                         $["cases"].getAlphabeticalOrdering({}).map({
                             "callback": _cp => {
                                 _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
                                     "string": '"block": ',
                                 })
-                                serialize_block({ type: _cp["block"], out: _p.out })
+                                serialize_block({ type: _cp.element["block"], out: _p.out })
+                                _p.out.write({
+                                    "string": "}",
+                                })
                             },
                         })
                         _p.out.write({
@@ -2654,11 +2705,20 @@ function serialize_block(_p: {
                         _p.out.write({
                             "string": $["raw expression"],
                         })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
+                        })
                         break
                     }
                 }
-                default: return assertUnreachable(_cp["type"][0])
+                default: return assertUnreachable(_cp.element["type"][0])
             }
+            _p.out.write({
+                "string": "}",
+            })
         },
     })
     _p.out.write({
@@ -2667,10 +2727,19 @@ function serialize_block(_p: {
     _p.type["variables"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"initializer": ',
             })
-            serialize_initializer({ type: _cp["initializer"], out: _p.out })
+            serialize_initializer({ type: _cp.element["initializer"], out: _p.out })
+            _p.out.write({
+                "string": "}",
+            })
         },
+    })
+    _p.out.write({
+        "string": "}",
     })
 }
 
@@ -2679,38 +2748,77 @@ function serialize_function_call(_p: {
     readonly "type": t.FunctionCall
 }) {
     _p.out.write({
+        "string": "{",
+    })
+    _p.out.write({
         "string": '"arguments": ',
     })
     _p.type["arguments"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"type": ',
             })
-            switch (_cp["type"][0]) {
+            switch (_cp.element["type"][0]) {
                 case "callback": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"callback", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"block": ',
                         })
                         serialize_block({ type: $["block"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
+                        })
                         break
                     }
                 }
                 case "initializer": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"initializer", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"initializer": ',
                         })
                         serialize_initializer({ type: $["initializer"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
+                        })
                         break
                     }
                 }
-                default: return assertUnreachable(_cp["type"][0])
+                default: return assertUnreachable(_cp.element["type"][0])
             }
+            _p.out.write({
+                "string": "}",
+            })
         },
     })
     _p.out.write({
@@ -2719,12 +2827,18 @@ function serialize_function_call(_p: {
     _p.out.write({
         "string": _p.type["path"],
     })
+    _p.out.write({
+        "string": "}",
+    })
 }
 
 function serialize_function_specification(_p: {
     readonly "out": gt.Out
     readonly "type": t.FunctionSpecification
 }) {
+    _p.out.write({
+        "string": "{",
+    })
     _p.out.write({
         "string": '"access": ',
     })
@@ -2734,17 +2848,38 @@ function serialize_function_specification(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"private", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"parameters": ',
                 })
                 $["parameters"].getAlphabeticalOrdering({}).map({
                     "callback": _cp => {
                         _p.out.write({
+                            "string": "{",
+                        })
+                        _p.out.write({
                             "string": '"type": ',
                         })
                         _p.out.write({
-                            "string": _cp["type"],
+                            "string": _cp.element["type"],
+                        })
+                        _p.out.write({
+                            "string": "}",
                         })
                     },
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -2754,17 +2889,38 @@ function serialize_function_specification(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"public", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"parameters": ',
                 })
                 $["parameters"].getAlphabeticalOrdering({}).map({
                     "callback": _cp => {
                         _p.out.write({
+                            "string": "{",
+                        })
+                        _p.out.write({
                             "string": '"type": ',
                         })
                         _p.out.write({
-                            "string": _cp["type"],
+                            "string": _cp.element["type"],
+                        })
+                        _p.out.write({
+                            "string": "}",
                         })
                     },
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -2775,12 +2931,18 @@ function serialize_function_specification(_p: {
         "string": '"block": ',
     })
     serialize_block({ type: _p.type["block"], out: _p.out })
+    _p.out.write({
+        "string": "}",
+    })
 }
 
 function serialize_generic_in_type(_p: {
     readonly "out": gt.Out
     readonly "type": t.GenericInType
 }) {
+    _p.out.write({
+        "string": "{",
+    })
     _p.out.write({
         "string": '"type": ',
     })
@@ -2790,14 +2952,29 @@ function serialize_generic_in_type(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"callback", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"parameters": ',
                 })
                 $["parameters"].getAlphabeticalOrdering({}).map({
                     "callback": _cp => {
                         _p.out.write({
+                            "string": "{",
+                        })
+                        _p.out.write({
                             "string": '"type": ',
                         })
-                        serialize_generic_return_type({ type: _cp["type"], out: _p.out })
+                        serialize_generic_return_type({ type: _cp.element["type"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
                     },
                 })
                 _p.out.write({
@@ -2809,6 +2986,15 @@ function serialize_generic_in_type(_p: {
                         {
                             const $ = _$
                             _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"function", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
                                 "string": '"guaranteed": ',
                             })
                             switch ($["guaranteed"][0]) {
@@ -2816,6 +3002,21 @@ function serialize_generic_in_type(_p: {
                                     const _$ = $["guaranteed"][1]
                                     {
                                         const $ = _$
+                                        _p.out.write({
+                                            "string": "[",
+                                        })
+                                        _p.out.write({
+                                            "string": '"no", ',
+                                        })
+                                        _p.out.write({
+                                            "string": "{",
+                                        })
+                                        _p.out.write({
+                                            "string": "}",
+                                        })
+                                        _p.out.write({
+                                            "string": "]",
+                                        })
                                         break
                                     }
                                 }
@@ -2823,6 +3024,21 @@ function serialize_generic_in_type(_p: {
                                     const _$ = $["guaranteed"][1]
                                     {
                                         const $ = _$
+                                        _p.out.write({
+                                            "string": "[",
+                                        })
+                                        _p.out.write({
+                                            "string": '"yes", ',
+                                        })
+                                        _p.out.write({
+                                            "string": "{",
+                                        })
+                                        _p.out.write({
+                                            "string": "}",
+                                        })
+                                        _p.out.write({
+                                            "string": "]",
+                                        })
                                         break
                                     }
                                 }
@@ -2832,6 +3048,12 @@ function serialize_generic_in_type(_p: {
                                 "string": '"type": ',
                             })
                             serialize_generic_in_type({ type: $["type"], out: _p.out })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
+                            })
                             break
                         }
                     }
@@ -2839,11 +3061,32 @@ function serialize_generic_in_type(_p: {
                         const _$ = $["type"][1]
                         {
                             const $ = _$
+                            _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"procedure", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
+                            })
                             break
                         }
                     }
                     default: return assertUnreachable($["type"][0])
                 }
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
@@ -2852,9 +3095,24 @@ function serialize_generic_in_type(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"method type parameter", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"type parameter": ',
                 })
                 //serializeReference
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
@@ -2862,17 +3120,38 @@ function serialize_generic_in_type(_p: {
             const _$ = _p.type["type"][1]
             {
                 const $ = _$
+                _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"string", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
         default: return assertUnreachable(_p.type["type"][0])
     }
+    _p.out.write({
+        "string": "}",
+    })
 }
 
 function serialize_generic_interface_reference(_p: {
     readonly "out": gt.Out
     readonly "type": t.GenericInterfaceReference
 }) {
+    _p.out.write({
+        "string": "{",
+    })
     _p.out.write({
         "string": '"interface": ',
     })
@@ -2885,10 +3164,19 @@ function serialize_generic_interface_reference(_p: {
     _p.type["type arguments"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"type": ',
             })
-            serialize_generic_return_type({ type: _cp["type"], out: _p.out })
+            serialize_generic_return_type({ type: _cp.element["type"], out: _p.out })
+            _p.out.write({
+                "string": "}",
+            })
         },
+    })
+    _p.out.write({
+        "string": "}",
     })
 }
 
@@ -2896,6 +3184,9 @@ function serialize_generic_return_type(_p: {
     readonly "out": gt.Out
     readonly "type": t.GenericReturnType
 }) {
+    _p.out.write({
+        "string": "{",
+    })
     _p.out.write({
         "string": '"type": ',
     })
@@ -2905,10 +3196,25 @@ function serialize_generic_return_type(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"interface parameter", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"parameter": ',
                 })
                 _p.out.write({
                     "string": $["parameter"],
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -2918,9 +3224,24 @@ function serialize_generic_return_type(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"method type parameter", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"type parameter": ',
                 })
                 //serializeReference
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
@@ -2929,9 +3250,24 @@ function serialize_generic_return_type(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"reference to generic declaration", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"interface": ',
                 })
                 serialize_generic_interface_reference({ type: $["interface"], out: _p.out })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
@@ -2939,17 +3275,38 @@ function serialize_generic_return_type(_p: {
             const _$ = _p.type["type"][1]
             {
                 const $ = _$
+                _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"string", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
         default: return assertUnreachable(_p.type["type"][0])
     }
+    _p.out.write({
+        "string": "}",
+    })
 }
 
 function serialize_initializer(_p: {
     readonly "out": gt.Out
     readonly "type": t.Initializer
 }) {
+    _p.out.write({
+        "string": "{",
+    })
     _p.out.write({
         "string": '"type": ',
     })
@@ -2959,14 +3316,29 @@ function serialize_initializer(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"constructor call", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"arguments": ',
                 })
                 $["arguments"].getAlphabeticalOrdering({}).map({
                     "callback": _cp => {
                         _p.out.write({
+                            "string": "{",
+                        })
+                        _p.out.write({
                             "string": '"initializer": ',
                         })
-                        serialize_initializer({ type: _cp["initializer"], out: _p.out })
+                        serialize_initializer({ type: _cp.element["initializer"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
                     },
                 })
                 _p.out.write({
@@ -2974,6 +3346,12 @@ function serialize_initializer(_p: {
                 })
                 _p.out.write({
                     "string": $["path"],
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -2983,9 +3361,24 @@ function serialize_initializer(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"function call", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"call": ',
                 })
                 serialize_function_call({ type: $["call"], out: _p.out })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
@@ -2994,15 +3387,36 @@ function serialize_initializer(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"object", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"properties": ',
                 })
                 $["properties"].getAlphabeticalOrdering({}).map({
                     "callback": _cp => {
                         _p.out.write({
+                            "string": "{",
+                        })
+                        _p.out.write({
                             "string": '"initializer": ',
                         })
-                        serialize_initializer({ type: _cp["initializer"], out: _p.out })
+                        serialize_initializer({ type: _cp.element["initializer"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
                     },
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -3012,10 +3426,25 @@ function serialize_initializer(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"rawx", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"rawstring": ',
                 })
                 _p.out.write({
                     "string": $["rawstring"],
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -3025,6 +3454,15 @@ function serialize_initializer(_p: {
             {
                 const $ = _$
                 _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"selection", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
+                _p.out.write({
                     "string": '"start point": ',
                 })
                 switch ($["start point"][0]) {
@@ -3033,10 +3471,25 @@ function serialize_initializer(_p: {
                         {
                             const $ = _$
                             _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"callback parameter", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
                                 "string": '"parameter": ',
                             })
                             _p.out.write({
                                 "string": $["parameter"],
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
                             })
                             break
                         }
@@ -3046,10 +3499,25 @@ function serialize_initializer(_p: {
                         {
                             const $ = _$
                             _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"parameter", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
                                 "string": '"parameter": ',
                             })
                             _p.out.write({
                                 "string": $["parameter"],
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
                             })
                             break
                         }
@@ -3059,10 +3527,25 @@ function serialize_initializer(_p: {
                         {
                             const $ = _$
                             _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"property", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
                                 "string": '"property": ',
                             })
                             _p.out.write({
                                 "string": $["property"],
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
                             })
                             break
                         }
@@ -3072,10 +3555,25 @@ function serialize_initializer(_p: {
                         {
                             const $ = _$
                             _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"variable", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
                                 "string": '"variable": ',
                             })
                             _p.out.write({
                                 "string": $["variable"],
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
                             })
                             break
                         }
@@ -3088,12 +3586,24 @@ function serialize_initializer(_p: {
                 $["steps"].map({
                     "callback": _cp => {
                         _p.out.write({
+                            "string": "{",
+                        })
+                        _p.out.write({
                             "string": '"rawselectionstring": ',
                         })
                         _p.out.write({
-                            "string": _cp["rawselectionstring"],
+                            "string": _cp.element["rawselectionstring"],
+                        })
+                        _p.out.write({
+                            "string": "}",
                         })
                     },
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 break
             }
@@ -3102,6 +3612,15 @@ function serialize_initializer(_p: {
             const _$ = _p.type["type"][1]
             {
                 const $ = _$
+                _p.out.write({
+                    "string": "[",
+                })
+                _p.out.write({
+                    "string": '"tagged union", ',
+                })
+                _p.out.write({
+                    "string": "{",
+                })
                 _p.out.write({
                     "string": '"initializer": ',
                 })
@@ -3120,6 +3639,21 @@ function serialize_initializer(_p: {
                         const _$ = $["type specification"][1]
                         {
                             const $ = _$
+                            _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"derived", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
+                            })
                             break
                         }
                     }
@@ -3128,21 +3662,45 @@ function serialize_initializer(_p: {
                         {
                             const $ = _$
                             _p.out.write({
+                                "string": "[",
+                            })
+                            _p.out.write({
+                                "string": '"reference", ',
+                            })
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
                                 "string": '"type": ',
                             })
                             _p.out.write({
                                 "string": $["type"],
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
+                            _p.out.write({
+                                "string": "]",
                             })
                             break
                         }
                     }
                     default: return assertUnreachable($["type specification"][0])
                 }
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": "]",
+                })
                 break
             }
         }
         default: return assertUnreachable(_p.type["type"][0])
     }
+    _p.out.write({
+        "string": "}",
+    })
 }
 
 function serializex(_p: {
@@ -3150,27 +3708,48 @@ function serializex(_p: {
     readonly "type": t.CompilationUnit
 }) {
     _p.out.write({
+        "string": "{",
+    })
+    _p.out.write({
         "string": '"algorithm units": ',
     })
     _p.type["algorithm units"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"type": ',
             })
-            switch (_cp["type"][0]) {
+            switch (_cp.element["type"][0]) {
                 case "class": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"class", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"methods": ',
                         })
                         $["methods"].getAlphabeticalOrdering({}).map({
                             "callback": _cp => {
                                 _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
                                     "string": '"specification": ',
                                 })
-                                serialize_function_specification({ type: _cp["specification"], out: _p.out })
+                                serialize_function_specification({ type: _cp.element["specification"], out: _p.out })
+                                _p.out.write({
+                                    "string": "}",
+                                })
                             },
                         })
                         _p.out.write({
@@ -3179,55 +3758,115 @@ function serializex(_p: {
                         $["properties"].getAlphabeticalOrdering({}).map({
                             "callback": _cp => {
                                 _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
                                     "string": '"initialization": ',
                                 })
-                                switch (_cp["initialization"][0]) {
+                                switch (_cp.element["initialization"][0]) {
                                     case "default": {
-                                        const _$ = _cp["initialization"][1]
+                                        const _$ = _cp.element["initialization"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"default", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
                                             _p.out.write({
                                                 "string": '"initializer": ',
                                             })
                                             _p.out.write({
                                                 "string": $["initializer"],
                                             })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
                                     case "parametrized": {
-                                        const _$ = _cp["initialization"][1]
+                                        const _$ = _cp.element["initialization"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"parametrized", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
                                             _p.out.write({
                                                 "string": '"type": ',
                                             })
                                             _p.out.write({
                                                 "string": $["type"],
                                             })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
-                                    default: return assertUnreachable(_cp["initialization"][0])
+                                    default: return assertUnreachable(_cp.element["initialization"][0])
                                 }
+                                _p.out.write({
+                                    "string": "}",
+                                })
                             },
+                        })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
                         })
                         break
                     }
                 }
                 case "function": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"function", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"specification": ',
                         })
                         serialize_function_specification({ type: $["specification"], out: _p.out })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
+                        })
                         break
                     }
                 }
-                default: return assertUnreachable(_cp["type"][0])
+                default: return assertUnreachable(_cp.element["type"][0])
             }
+            _p.out.write({
+                "string": "}",
+            })
         },
     })
     _p.out.write({
@@ -3236,40 +3875,67 @@ function serializex(_p: {
     _p.type["generic interface declarations"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"base interfaces": ',
             })
-            _cp["base interfaces"].getAlphabeticalOrdering({}).map({
+            _cp.element["base interfaces"].getAlphabeticalOrdering({}).map({
                 "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
                     _p.out.write({
                         "string": '"interface": ',
                     })
-                    serialize_generic_interface_reference({ type: _cp["interface"], out: _p.out })
+                    serialize_generic_interface_reference({ type: _cp.element["interface"], out: _p.out })
+                    _p.out.write({
+                        "string": "}",
+                    })
                 },
             })
             _p.out.write({
                 "string": '"methods": ',
             })
-            _cp["methods"].getAlphabeticalOrdering({}).map({
+            _cp.element["methods"].getAlphabeticalOrdering({}).map({
                 "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
                     _p.out.write({
                         "string": '"parameters": ',
                     })
-                    _cp["parameters"].getAlphabeticalOrdering({}).map({
+                    _cp.element["parameters"].getAlphabeticalOrdering({}).map({
                         "callback": _cp => {
+                            _p.out.write({
+                                "string": "{",
+                            })
                             _p.out.write({
                                 "string": '"type": ',
                             })
-                            serialize_generic_in_type({ type: _cp["type"], out: _p.out })
+                            serialize_generic_in_type({ type: _cp.element["type"], out: _p.out })
+                            _p.out.write({
+                                "string": "}",
+                            })
                         },
                     })
                     _p.out.write({
                         "string": '"type": ',
                     })
-                    switch (_cp["type"][0]) {
+                    switch (_cp.element["type"][0]) {
                         case "function": {
-                            const _$ = _cp["type"][1]
+                            const _$ = _cp.element["type"][1]
                             {
                                 const $ = _$
+                                _p.out.write({
+                                    "string": "[",
+                                })
+                                _p.out.write({
+                                    "string": '"function", ',
+                                })
+                                _p.out.write({
+                                    "string": "{",
+                                })
                                 _p.out.write({
                                     "string": '"guaranteed": ',
                                 })
@@ -3278,6 +3944,21 @@ function serializex(_p: {
                                         const _$ = $["guaranteed"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"no", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
@@ -3285,6 +3966,21 @@ function serializex(_p: {
                                         const _$ = $["guaranteed"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"yes", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
@@ -3294,33 +3990,72 @@ function serializex(_p: {
                                     "string": '"type": ',
                                 })
                                 serialize_generic_return_type({ type: $["type"], out: _p.out })
+                                _p.out.write({
+                                    "string": "}",
+                                })
+                                _p.out.write({
+                                    "string": "]",
+                                })
                                 break
                             }
                         }
                         case "procedure": {
-                            const _$ = _cp["type"][1]
+                            const _$ = _cp.element["type"][1]
                             {
                                 const $ = _$
+                                _p.out.write({
+                                    "string": "[",
+                                })
+                                _p.out.write({
+                                    "string": '"procedure", ',
+                                })
+                                _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
+                                    "string": "}",
+                                })
+                                _p.out.write({
+                                    "string": "]",
+                                })
                                 break
                             }
                         }
-                        default: return assertUnreachable(_cp["type"][0])
+                        default: return assertUnreachable(_cp.element["type"][0])
                     }
                     _p.out.write({
                         "string": '"type parameters": ',
                     })
-                    _cp["type parameters"].getAlphabeticalOrdering({}).map({
+                    _cp.element["type parameters"].getAlphabeticalOrdering({}).map({
                         "callback": _cp => {
+                            _p.out.write({
+                                "string": "{",
+                            })
+                            _p.out.write({
+                                "string": "}",
+                            })
                         },
+                    })
+                    _p.out.write({
+                        "string": "}",
                     })
                 },
             })
             _p.out.write({
                 "string": '"parameters": ',
             })
-            _cp["parameters"].getAlphabeticalOrdering({}).map({
+            _cp.element["parameters"].getAlphabeticalOrdering({}).map({
                 "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
+                    _p.out.write({
+                        "string": "}",
+                    })
                 },
+            })
+            _p.out.write({
+                "string": "}",
             })
         },
     })
@@ -3330,31 +4065,52 @@ function serializex(_p: {
     _p.type["interfaces"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"methods": ',
             })
-            _cp["methods"].getAlphabeticalOrdering({}).map({
+            _cp.element["methods"].getAlphabeticalOrdering({}).map({
                 "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
                     _p.out.write({
                         "string": '"parameters": ',
                     })
-                    _cp["parameters"].getAlphabeticalOrdering({}).map({
+                    _cp.element["parameters"].getAlphabeticalOrdering({}).map({
                         "callback": _cp => {
+                            _p.out.write({
+                                "string": "{",
+                            })
                             _p.out.write({
                                 "string": '"type": ',
                             })
                             _p.out.write({
-                                "string": _cp["type"],
+                                "string": _cp.element["type"],
+                            })
+                            _p.out.write({
+                                "string": "}",
                             })
                         },
                     })
                     _p.out.write({
                         "string": '"type": ',
                     })
-                    switch (_cp["type"][0]) {
+                    switch (_cp.element["type"][0]) {
                         case "function": {
-                            const _$ = _cp["type"][1]
+                            const _$ = _cp.element["type"][1]
                             {
                                 const $ = _$
+                                _p.out.write({
+                                    "string": "[",
+                                })
+                                _p.out.write({
+                                    "string": '"function", ',
+                                })
+                                _p.out.write({
+                                    "string": "{",
+                                })
                                 _p.out.write({
                                     "string": '"guaranteed": ',
                                 })
@@ -3363,6 +4119,21 @@ function serializex(_p: {
                                         const _$ = $["guaranteed"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"no", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
@@ -3370,6 +4141,21 @@ function serializex(_p: {
                                         const _$ = $["guaranteed"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"yes", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
@@ -3381,19 +4167,46 @@ function serializex(_p: {
                                 _p.out.write({
                                     "string": $["raw return type"],
                                 })
+                                _p.out.write({
+                                    "string": "}",
+                                })
+                                _p.out.write({
+                                    "string": "]",
+                                })
                                 break
                             }
                         }
                         case "procedure": {
-                            const _$ = _cp["type"][1]
+                            const _$ = _cp.element["type"][1]
                             {
                                 const $ = _$
+                                _p.out.write({
+                                    "string": "[",
+                                })
+                                _p.out.write({
+                                    "string": '"procedure", ',
+                                })
+                                _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
+                                    "string": "}",
+                                })
+                                _p.out.write({
+                                    "string": "]",
+                                })
                                 break
                             }
                         }
-                        default: return assertUnreachable(_cp["type"][0])
+                        default: return assertUnreachable(_cp.element["type"][0])
                     }
+                    _p.out.write({
+                        "string": "}",
+                    })
                 },
+            })
+            _p.out.write({
+                "string": "}",
             })
         },
     })
@@ -3403,36 +4216,66 @@ function serializex(_p: {
     _p.type["types"].getAlphabeticalOrdering({}).map({
         "callback": _cp => {
             _p.out.write({
+                "string": "{",
+            })
+            _p.out.write({
                 "string": '"type": ',
             })
-            switch (_cp["type"][0]) {
+            switch (_cp.element["type"][0]) {
                 case "object": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"object", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"properties": ',
                         })
                         $["properties"].getAlphabeticalOrdering({}).map({
                             "callback": _cp => {
                                 _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
                                     "string": '"type": ',
                                 })
-                                switch (_cp["type"][0]) {
+                                switch (_cp.element["type"][0]) {
                                     case "generic type": {
-                                        const _$ = _cp["type"][1]
+                                        const _$ = _cp.element["type"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"generic type", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
                                             _p.out.write({
                                                 "string": '"arguments": ',
                                             })
                                             $["arguments"].getAlphabeticalOrdering({}).map({
                                                 "callback": _cp => {
                                                     _p.out.write({
+                                                        "string": "{",
+                                                    })
+                                                    _p.out.write({
                                                         "string": '"raw": ',
                                                     })
                                                     _p.out.write({
-                                                        "string": _cp["raw"],
+                                                        "string": _cp.element["raw"],
+                                                    })
+                                                    _p.out.write({
+                                                        "string": "}",
                                                     })
                                                 },
                                             })
@@ -3440,72 +4283,159 @@ function serializex(_p: {
                                                 "string": '"referenced type": ',
                                             })
                                             //serializeReference
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
                                     case "raw": {
-                                        const _$ = _cp["type"][1]
+                                        const _$ = _cp.element["type"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"raw", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
                                             _p.out.write({
                                                 "string": '"raw": ',
                                             })
                                             _p.out.write({
                                                 "string": $["raw"],
                                             })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
                                     case "reference": {
-                                        const _$ = _cp["type"][1]
+                                        const _$ = _cp.element["type"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"reference", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
                                             _p.out.write({
                                                 "string": '"referenced type": ',
                                             })
                                             _p.out.write({
                                                 "string": $["referenced type"],
                                             })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
                                     case "string": {
-                                        const _$ = _cp["type"][1]
+                                        const _$ = _cp.element["type"][1]
                                         {
                                             const $ = _$
+                                            _p.out.write({
+                                                "string": "[",
+                                            })
+                                            _p.out.write({
+                                                "string": '"string", ',
+                                            })
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": "]",
+                                            })
                                             break
                                         }
                                     }
-                                    default: return assertUnreachable(_cp["type"][0])
+                                    default: return assertUnreachable(_cp.element["type"][0])
                                 }
+                                _p.out.write({
+                                    "string": "}",
+                                })
                             },
+                        })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
                         })
                         break
                     }
                 }
                 case "tagged union": {
-                    const _$ = _cp["type"][1]
+                    const _$ = _cp.element["type"][1]
                     {
                         const $ = _$
+                        _p.out.write({
+                            "string": "[",
+                        })
+                        _p.out.write({
+                            "string": '"tagged union", ',
+                        })
+                        _p.out.write({
+                            "string": "{",
+                        })
                         _p.out.write({
                             "string": '"alternatives": ',
                         })
                         $["alternatives"].getAlphabeticalOrdering({}).map({
                             "callback": _cp => {
                                 _p.out.write({
+                                    "string": "{",
+                                })
+                                _p.out.write({
                                     "string": '"referenced type": ',
                                 })
                                 _p.out.write({
-                                    "string": _cp["referenced type"],
+                                    "string": _cp.element["referenced type"],
+                                })
+                                _p.out.write({
+                                    "string": "}",
                                 })
                             },
+                        })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": "]",
                         })
                         break
                     }
                 }
-                default: return assertUnreachable(_cp["type"][0])
+                default: return assertUnreachable(_cp.element["type"][0])
             }
+            _p.out.write({
+                "string": "}",
+            })
         },
+    })
+    _p.out.write({
+        "string": "}",
     })
 }
 

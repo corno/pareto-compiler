@@ -28,28 +28,28 @@ export class GenerateAlgorithms {
             `function assertUnreachable(_x: never) { throw new Error("Unreachable") }`,
             ``,
             compilationUnit["algorithm units"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
-                callback: (alg, key) => {
-                    switch (alg.type[0]) {
+                callback: cp => {
+                    switch (cp.element.type[0]) {
                         case "class": {
-                            const clss = alg.type[1]
+                            const clss = cp.element.type[1]
                             return [
                                 ``,
-                                `export class C${sanitize(key)} {`,
+                                `export class C${sanitize(cp.key)} {`,
                                 () => {
                                     return [
                                         //the properties
                                         clss.properties.getAlphabeticalOrdering({}).map({
-                                            callback: (prop, propKey) => {
+                                            callback: cp => {
                                                 return [
                                                     fp.line([
-                                                        `private readonly ${sanitize(propKey)}`,
+                                                        `private readonly ${sanitize(cp.key)}`,
                                                         ((): fp.InlinePart => {
-                                                            switch (prop.initialization[0]) {
+                                                            switch (cp.element.initialization[0]) {
                                                                 case "default":
-                                                                    return ` = ${prop.initialization[1].initializer}`
+                                                                    return ` = ${cp.element.initialization[1].initializer}`
                                                                 case "parametrized":
-                                                                    return `: ${prop.initialization[1].type}`
-                                                                default: return assertUnreachable(prop.initialization[0])
+                                                                    return `: ${cp.element.initialization[1].type}`
+                                                                default: return assertUnreachable(cp.element.initialization[0])
                                                             }
                                                         })(),
                                                     ]),
@@ -57,25 +57,27 @@ export class GenerateAlgorithms {
                                             },
                                         }),
                                         //the possible constructor
-                                        clss.properties.getAlphabeticalOrdering({}).filter({ callback: prop => prop.initialization[0] === "parametrized" ? prop.initialization[1] : null }).onEmpty({
+                                        clss.properties.getAlphabeticalOrdering({}).filter({
+                                            callback: cp => cp.element.initialization[0] === "parametrized" ? cp.element.initialization[1] : null,
+                                        }).onEmpty({
                                             onEmpty: () => [],
-                                            onNotEmpty: parametrizedProperties => [
+                                            onNotEmpty: cp => [
                                                 fp.line([
                                                     `constructor(p: {`,
                                                     () => {
-                                                        return parametrizedProperties.map({
-                                                            callback: (_pp, propKey) => {
-                                                                return `"${propKey}": ${_pp.type}`
+                                                        return cp.dictionaryOrdering.map({
+                                                            callback: cp => {
+                                                                return `"${cp.key}": ${cp.element.type}`
                                                             },
                                                         })
                                                     },
                                                     `}) {`,
                                                 ]),
                                                 () => {
-                                                    return parametrizedProperties.map({
-                                                        callback: (_pp, propKey) => {
+                                                    return cp.dictionaryOrdering.map({
+                                                        callback: cp => {
                                                             return [
-                                                                `this.${sanitize(propKey)} = p["${propKey}"]`,
+                                                                `this.${sanitize(cp.key)} = p["${cp.key}"]`,
                                                             ]
                                                         },
                                                     })
@@ -85,11 +87,11 @@ export class GenerateAlgorithms {
                                         }),
                                         //the methods
                                         clss.methods.getAlphabeticalOrdering({}).map({
-                                            callback: (method, methodKey) => {
+                                            callback: cp => {
                                                 return [
                                                     fp.line([
                                                         ((): string => {
-                                                            switch (method.specification.access[0]) {
+                                                            switch (cp.element.specification.access[0]) {
                                                                 case "private": {
                                                                     return `private`
                                                                 }
@@ -97,11 +99,11 @@ export class GenerateAlgorithms {
                                                                     return `public`
                                                                 }
                                                                 default:
-                                                                    return assertUnreachable(method.specification.access[0])
+                                                                    return assertUnreachable(cp.element.specification.access[0])
                                                             }
                                                         })(),
                                                         ` `,
-                                                        this.FunctionSpecification(method.specification, methodKey),
+                                                        this.FunctionSpecification(cp.element.specification, cp.key),
                                                     ]),
                                                 ]
                                             },
@@ -112,7 +114,7 @@ export class GenerateAlgorithms {
                             ]
                         }
                         case "function": {
-                            const $ = alg.type[1]
+                            const $ = cp.element.type[1]
                             return [
                                 ``,
                                 fp.line([
@@ -129,11 +131,11 @@ export class GenerateAlgorithms {
                                         }
                                     })(),
                                     `function `,
-                                    this.FunctionSpecification($.specification, key),
+                                    this.FunctionSpecification($.specification, cp.key),
                                 ]),
                             ]
                         }
-                        default: return assertUnreachable(alg.type[0])
+                        default: return assertUnreachable(cp.element.type[0])
                     }
                 },
             }),
@@ -151,8 +153,8 @@ export class GenerateAlgorithms {
                             `_p: { `,
                             () => {
                                 return $.parameters.getAlphabeticalOrdering({}).map({
-                                    callback: (param, paramKey) => {
-                                        return `readonly "${paramKey}": ${param.type}`
+                                    callback: cp => {
+                                        return `readonly "${cp.key}": ${cp.element.type}`
                                     },
                                 })
                             },
@@ -164,8 +166,8 @@ export class GenerateAlgorithms {
                         return [
                             () => {
                                 return $.parameters.getOrderings({}).dependencies.map({
-                                    callback: (param, paramKey) => {
-                                        return `${sanitize(paramKey)}: ${param.type},`
+                                    callback: cp => {
+                                        return `${sanitize(cp.key)}: ${cp.element.type},`
                                     },
                                 })
                             },
@@ -185,39 +187,39 @@ export class GenerateAlgorithms {
     private Block(b: Block): fp.IParagraph {
         return [
             b.variables.getOrderings({}).dependencies.map({
-                callback: (variable, variableKey) => {
+                callback: cp => {
                     return [
                         fp.line([
-                            `const ${sanitize(variableKey)} = `,
-                            this.Initializer(variable.initializer),
+                            `const ${sanitize(cp.key)} = `,
+                            this.Initializer(cp.element.initializer),
                         ]),
                     ]
                 },
             }),
             b.statements.map({
-                callback: statement => {
+                callback: cp => {
                     return ((): fp.IParagraph => {
-                        switch (statement.type[0]) {
+                        switch (cp.element.type[0]) {
                             case "call": {
-                                const $$ = statement.type[1]
+                                const $$ = cp.element.type[1]
                                 return [fp.line([this.FunctionCall($$.call)])]
                             }
                             case "raw": {
-                                const $$ = statement.type[1]
+                                const $$ = cp.element.type[1]
                                 return [
                                     $$["raw value"],
                                 ]
                             }
                             case "switch": {
-                                const $$ = statement.type[1]
+                                const $$ = cp.element.type[1]
                                 return [
                                     `switch (${$$["raw expression"]}[0]) {`,
                                     () => {
                                         return [
                                             $$.cases.getAlphabeticalOrdering({}).map({
-                                                callback: (cs, caseKey) => {
+                                                callback: cp => {
                                                     return [
-                                                        `case "${caseKey}": {`,
+                                                        `case "${cp.key}": {`,
                                                         () => {
                                                             return [
                                                                 `const _$ = ${$$["raw expression"]}[1]`,
@@ -225,7 +227,7 @@ export class GenerateAlgorithms {
                                                                 () => {
                                                                     return [
                                                                         `const $ = _$`,
-                                                                        this.Block(cs.block),
+                                                                        this.Block(cp.element.block),
                                                                         `break`,
                                                                     ]
                                                                 },
@@ -243,7 +245,7 @@ export class GenerateAlgorithms {
                                 ]
                             }
                             default:
-                                return assertUnreachable(statement.type[0])
+                                return assertUnreachable(cp.element.type[0])
                         }
 
                     })()
@@ -257,14 +259,14 @@ export class GenerateAlgorithms {
             `({`,
             () => {
                 return $.arguments.getAlphabeticalOrdering({}).map({
-                    callback: (arg, argKey) => {
+                    callback: cp => {
                         return [
                             fp.line([
-                                `"${argKey}": `,
+                                `"${cp.key}": `,
                                 ((): fp.InlinePart => {
-                                    switch (arg.type[0]) {
+                                    switch (cp.element.type[0]) {
                                         case "callback": {
-                                            const $$ = arg.type[1]
+                                            const $$ = cp.element.type[1]
                                             return [
                                                 `_cp => {`,
                                                 () => {
@@ -274,11 +276,11 @@ export class GenerateAlgorithms {
                                             ]
                                         }
                                         case "initializer": {
-                                            const $$ = arg.type[1]
+                                            const $$ = cp.element.type[1]
                                             return this.Initializer($$.initializer)
                                         }
                                         default:
-                                            return assertUnreachable(arg.type[0])
+                                            return assertUnreachable(cp.element.type[0])
                                     }
 
                                 })(),
@@ -301,11 +303,11 @@ export class GenerateAlgorithms {
                     `({`,
                     () => {
                         return $.arguments.getAlphabeticalOrdering({}).map({
-                            callback: (arg, argKey) => {
+                            callback: cp => {
                                 return [
                                     fp.line([
-                                        `"${argKey}": `,
-                                        this.Initializer(arg.initializer),
+                                        `"${cp.key}": `,
+                                        this.Initializer(cp.element.initializer),
                                         `,`,
                                     ]),
                                 ]
@@ -325,11 +327,11 @@ export class GenerateAlgorithms {
                     `{`,
                     () => {
                         return $.properties.getAlphabeticalOrdering({}).map({
-                            callback: (prop, propKey) => {
+                            callback: cp => {
                                 return [
                                     fp.line([
-                                        `"${propKey}": `,
-                                        this.Initializer(prop.initializer),
+                                        `"${cp.key}": `,
+                                        this.Initializer(cp.element.initializer),
                                         `,`,
                                     ]),
                                 ]
@@ -371,7 +373,7 @@ export class GenerateAlgorithms {
                         }
                     })(),
                     $.steps.map({
-                        callback: step => `["${step.rawselectionstring}"]`,
+                        callback: cp => `["${cp.element.rawselectionstring}"]`,
                     }),
                 ]
             }

@@ -16,31 +16,31 @@ export class GenerateInterfaces {
             `//@ts-ignore`,
             `import * as t from "./types"`,
             compilationUnit.interfaces.getAlphabeticalOrdering({}).map<fp.IParagraph>({
-                callback: (iface, key) => {
+                callback: cp => {
                     return [
                         ``,
-                        `export interface I${sanitize(key)} {`,
+                        `export interface I${sanitize(cp.key)} {`,
                         () => {
                             return [
-                                iface.methods.getAlphabeticalOrdering({}).map({
-                                    callback: (method, methodName) => {
+                                cp.element.methods.getAlphabeticalOrdering({}).map({
+                                    callback: cp => {
                                         return [
-                                            `${sanitize(methodName)}(`,
-                                            method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
+                                            `${sanitize(cp.key)}(`,
+                                            cp.element.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                                                 onSeparator: () => `,`,
-                                                onElement: (param, paramKeyGetter) => [
+                                                onElement: cp => [
                                                     ` readonly `,
-                                                    paramKeyGetter,
+                                                    cp.key,
                                                     `: `,
-                                                    param.type,
+                                                    cp.element.type,
                                                 ],
                                             }),
                                             `)`,
                                             `: `,
                                             ((): fp.InlinePart => {
-                                                switch (method.type[0]) {
+                                                switch (cp.element.type[0]) {
                                                     case "function": {
-                                                        const $ = method.type[1]
+                                                        const $ = cp.element.type[1]
                                                         return [
                                                             ((): string => {
                                                                 switch ($.guaranteed[0]) {
@@ -61,7 +61,7 @@ export class GenerateInterfaces {
                                                         return `void`
                                                     }
                                                     default:
-                                                        return assertUnreachable(method.type[0])
+                                                        return assertUnreachable(cp.element.type[0])
                                                 }
                                             })(),
                                         ]

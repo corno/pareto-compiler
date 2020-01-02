@@ -6,7 +6,7 @@ import {
     GenericInType,
     GenericReturnType,
 } from "../../generated/types"
-import { sanitize } from "./sanitize"
+import { sanitize, sanitize2 } from "./sanitize"
 
 function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
@@ -18,25 +18,25 @@ export class GenerateGenericTypes {
         return [
             `//tslint:disable: ban-types interface-name pareto array-type no-empty-interface`,
             compilationUnit["generic interface declarations"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
-                callback: (type, key) => {
+                callback: cp => {
                     return [
                         ``,
                         fp.line([
-                            `export interface ${sanitize(key)}<`,
-                            type.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
+                            `export interface ${sanitize(cp.key)}<`,
+                            cp.element.parameters.getAlphabeticalOrdering({}).mapWithSeparator({
                                 onSeparator: () => `, `,
-                                onElement: (_param, paramKey) => {
-                                    return sanitize(paramKey)
+                                onElement: cp => {
+                                    return sanitize(cp.key)
                                 },
                             }),
                             `>`,
-                            type["base interfaces"].getAlphabeticalOrdering({}).onEmpty<fp.InlinePart>({
+                            cp.element["base interfaces"].getAlphabeticalOrdering({}).onEmpty<fp.InlinePart>({
                                 onEmpty: () => ``,
-                                onNotEmpty: baseInterfaces => [
+                                onNotEmpty: cp => [
                                     ` extends `,
-                                    baseInterfaces.mapWithSeparator<fp.InlinePart>({
+                                    cp.dictionaryOrdering.mapWithSeparator<fp.InlinePart>({
                                         onSeparator: () => `, `,
-                                        onElement: bi => this.GenericInterfaceReference(bi.interface),
+                                        onElement: cp => this.GenericInterfaceReference(cp.element.interface),
                                     }),
                                 ],
                             }),
@@ -44,19 +44,19 @@ export class GenerateGenericTypes {
                         ]),
                         () => {
                             //methods
-                            return type.methods.getAlphabeticalOrdering({}).map({
-                                callback: (method, methodKey) => {
+                            return cp.element.methods.getAlphabeticalOrdering({}).map({
+                                callback: cp => {
                                     return fp.line([
-                                        `${sanitize(methodKey)}`,
-                                        method["type parameters"].getAlphabeticalOrdering({}).onEmpty<fp.InlinePart>({
+                                        `${sanitize(cp.key)}`,
+                                        cp.element["type parameters"].getAlphabeticalOrdering({}).onEmpty<fp.InlinePart>({
                                             onEmpty: () => ``,
-                                            onNotEmpty: typeParams => {
+                                            onNotEmpty: cp => {
                                                 return [
                                                     `<`,
-                                                    typeParams.mapWithSeparator<fp.InlinePart>({
+                                                    cp.dictionaryOrdering.mapWithSeparator<fp.InlinePart>({
                                                         onSeparator: () => `, `,
-                                                        onElement: (_tp, typeParamKey) => {
-                                                            return sanitize(typeParamKey)
+                                                        onElement: cp => {
+                                                            return sanitize(cp.key)
                                                         },
                                                     }),
                                                     `>`,
@@ -64,21 +64,21 @@ export class GenerateGenericTypes {
                                             },
                                         }),
                                         `(p: {`,
-                                        method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
+                                        cp.element.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                                             onSeparator: () => `, `,
-                                            onElement: (param, paramKey) => [
+                                            onElement: cp => [
                                                 ` readonly `,
-                                                sanitize(paramKey),
+                                                sanitize(cp.key),
                                                 `: `,
-                                                this.GenericInType(param.type),
+                                                this.GenericInType(cp.element.type),
                                             ],
                                         }),
                                         `})`,
                                         `: `,
                                         ((): fp.InlinePart => {
-                                            switch (method.type[0]) {
+                                            switch (cp.element.type[0]) {
                                                 case "function": {
-                                                    const $ = method.type[1]
+                                                    const $ = cp.element.type[1]
                                                     return [
                                                         ((): string => {
                                                             switch ($.guaranteed[0]) {
@@ -99,7 +99,7 @@ export class GenerateGenericTypes {
                                                     return `void`
                                                 }
                                                 default:
-                                                    return assertUnreachable(method.type[0])
+                                                    return assertUnreachable(cp.element.type[0])
                                             }
                                         })(),
                                     ])
@@ -137,10 +137,10 @@ export class GenerateGenericTypes {
                     `(`,
                     $.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                         onSeparator: () => `, `,
-                        onElement: (param, paramKey) => [
-                            sanitize(paramKey),
+                        onElement: cp => [
+                            sanitize(cp.key),
                             `: `,
-                            this.GenericReturnType(param.type),
+                            this.GenericReturnType(cp.element.type),
                         ],
                     }),
                     `)`,
@@ -176,7 +176,7 @@ export class GenerateGenericTypes {
             }
             case "method type parameter": {
                 const $ = gt.type[1]
-                return $["type parameter"].getKey({ sanitizer: sanitize })
+                return $["type parameter"].getKey({ sanitizer: sanitize2 })
             }
             case "string": {
                 return "string"
@@ -193,7 +193,7 @@ export class GenerateGenericTypes {
             }
             case "method type parameter": {
                 const $ = gt.type[1]
-                return $["type parameter"].getKey({ sanitizer: key => key})
+                return $["type parameter"].getKey({ sanitizer: p => p.rawValue})
             }
             case "reference to generic declaration": {
                 const $ = gt.type[1]
@@ -212,7 +212,7 @@ export class GenerateGenericTypes {
             `<`,
             gir["type arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
                 onSeparator: () => `, `,
-                onElement: ta => this.GenericReturnType(ta.type),
+                onElement: cp => this.GenericReturnType(cp.element.type),
             }),
             `>`,
         ]

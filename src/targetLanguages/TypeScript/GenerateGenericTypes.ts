@@ -193,7 +193,7 @@ export class GenerateGenericTypes {
             }
             case "method type parameter": {
                 const $ = gt.type[1]
-                return $["type parameter"].getKey({ sanitizer: p => p.rawValue})
+                return $["type parameter"].getKey({})
             }
             case "reference to generic declaration": {
                 const $ = gt.type[1]

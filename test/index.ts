@@ -34,7 +34,7 @@ const compilationUnit = compile(builder => {
                         )
                         , v => v
                         , s => s
-                            .Statement("console.log('X')")
+                            .Statement(t => t.raw("console.log('X')"))
                     )
             ))
     )

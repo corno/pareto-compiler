@@ -22,11 +22,11 @@ export class GenerateTypes {
                         ``,
                         fp.line([
                             `export type ${sanitize(key)} = `,
-                            ((): fp.IInlineSection => {
+                            ((): fp.InlinePart => {
                                 switch (type.type[0]) {
                                     case "object": {
                                         const $ = type.type[1]
-                                        return fp.line([
+                                        return [
                                             `{`,
                                             () => {
                                                 return $.properties.getAlphabeticalOrdering({}).map({
@@ -34,32 +34,32 @@ export class GenerateTypes {
                                                         return [
                                                             fp.line([
                                                                 `readonly "${altKey}": `,
-                                                                ((): fp.IInlineSection => {
+                                                                ((): fp.InlinePart => {
                                                                     switch (alt.type[0]) {
                                                                         case "generic type": {
                                                                             const $ = alt.type[1]
-                                                                            return fp.line([
+                                                                            return [
                                                                                 `gt.`,
                                                                                 $["referenced type"].getKey({ sanitizer: key => key}),
                                                                                 `<`,
-                                                                                fp.line($.arguments.getAlphabeticalOrdering({}).mapWithSeparator({
+                                                                                $.arguments.getAlphabeticalOrdering({}).mapWithSeparator({
                                                                                     onSeparator: () => `, `,
                                                                                     onElement: arg => arg.raw,
-                                                                                })),
+                                                                                }),
                                                                                 `>`,
-                                                                            ])
+                                                                            ]
                                                                         }
                                                                         case "raw": {
                                                                             const $ = alt.type[1]
-                                                                            return fp.token($.raw)
+                                                                            return $.raw
                                                                         }
                                                                         case "reference": {
                                                                             const $ = alt.type[1]
-                                                                            return fp.token($["referenced type"])
+                                                                            return $["referenced type"]
                                                                         }
                                                                         case "string": {
                                                                             //const $ = alt.type[1]
-                                                                            return fp.token(`string`)
+                                                                            return `string`
                                                                         }
                                                                         default: return assertUnreachable(alt.type[0])
                                                                     }
@@ -70,11 +70,11 @@ export class GenerateTypes {
                                                 })
                                             },
                                             `}`,
-                                        ])
+                                        ]
                                     }
                                     case "tagged union": {
                                         const $ = type.type[1]
-                                        return fp.line([
+                                        return [
                                             () => {
                                                 return $.alternatives.getAlphabeticalOrdering({}).map({
                                                     callback: (alt, altKey) => {
@@ -84,7 +84,7 @@ export class GenerateTypes {
                                                     },
                                                 })
                                             },
-                                        ])
+                                        ]
                                     }
                                     default: return assertUnreachable(type.type[0])
                                 }

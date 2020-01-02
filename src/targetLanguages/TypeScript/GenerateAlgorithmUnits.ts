@@ -1,9 +1,12 @@
+//tslint:disable: no-shadowed-variable
+
 import * as fp from "fountain-pen"
 import {
     Block,
     CompilationUnit,
+    FunctionCall,
     FunctionSpecification,
-    Initializer
+    Initializer,
 } from "../../generated/types"
 import { sanitize } from "./sanitize"
 
@@ -14,19 +17,22 @@ function assertUnreachable<T>(_x: never): T {
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering`,
+            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable`,
             `//@ts-ignore`,
             `import * as gt from "./genericTypes"`,
             `//@ts-ignore`,
             `import * as i from "./interfaces"`,
             `//@ts-ignore`,
             `import * as t from "./types"`,
+            ``,
+            `function assertUnreachable(_x: never) { throw new Error("Unreachable") }`,
+            ``,
             compilationUnit["algorithm units"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: (alg, key) => {
                     switch (alg.type[0]) {
                         case "class": {
                             const clss = alg.type[1]
-                            return fp.paragraph([
+                            return [
                                 ``,
                                 `export class C${sanitize(key)} {`,
                                 () => {
@@ -103,11 +109,12 @@ export class GenerateAlgorithms {
                                     ]
                                 },
                                 `}`,
-                            ])
+                            ]
                         }
                         case "function": {
                             const $ = alg.type[1]
                             return [
+                                ``,
                                 fp.line([
                                     ((): string => {
                                         switch ($.specification.access[0]) {
@@ -133,14 +140,14 @@ export class GenerateAlgorithms {
             ``,
         ]
     }
-    private FunctionSpecification(fs: FunctionSpecification, name: string): fp.IInlineSection {
-        return fp.line([
+    private FunctionSpecification(fs: FunctionSpecification, name: string): fp.InlinePart {
+        return [
             `${sanitize(name)}(`,
-            ((): fp.IInlineSection => {
+            ((): fp.InlinePart => {
                 switch (fs.access[0]) {
                     case "private": {
                         const $ = fs.access[1]
-                        return fp.line([
+                        return [
                             `_p: { `,
                             () => {
                                 return $.parameters.getAlphabeticalOrdering({}).map({
@@ -150,11 +157,11 @@ export class GenerateAlgorithms {
                                 })
                             },
                             `}`,
-                        ])
+                        ]
                     }
                     case "public": {
                         const $ = fs.access[1]
-                        return fp.line([
+                        return [
                             () => {
                                 return $.parameters.getOrderings({}).dependencies.map({
                                     callback: (param, paramKey) => {
@@ -162,7 +169,7 @@ export class GenerateAlgorithms {
                                     },
                                 })
                             },
-                        ])
+                        ]
                     }
                     default:
                         return assertUnreachable(fs.access[0])
@@ -173,7 +180,7 @@ export class GenerateAlgorithms {
                 return this.Block(fs.block)
             },
             `}`,
-        ])
+        ]
     }
     private Block(b: Block): fp.IParagraph {
         return [
@@ -189,18 +196,106 @@ export class GenerateAlgorithms {
             }),
             b.statements.map({
                 callback: statement => {
-                    return [
-                        statement["raw value"],
-                    ]
+                    return ((): fp.IParagraph => {
+                        switch (statement.type[0]) {
+                            case "call": {
+                                const $$ = statement.type[1]
+                                return [fp.line([this.FunctionCall($$.call)])]
+                            }
+                            case "raw": {
+                                const $$ = statement.type[1]
+                                return [
+                                    $$["raw value"],
+                                ]
+                            }
+                            case "switch": {
+                                const $$ = statement.type[1]
+                                return [
+                                    `switch (${$$["raw expression"]}[0]) {`,
+                                    () => {
+                                        return [
+                                            $$.cases.getAlphabeticalOrdering({}).map({
+                                                callback: (cs, caseKey) => {
+                                                    return [
+                                                        `case "${caseKey}": {`,
+                                                        () => {
+                                                            return [
+                                                                `const _$ = ${$$["raw expression"]}[1]`,
+                                                                `{`,
+                                                                () => {
+                                                                    return [
+                                                                        `const $ = _$`,
+                                                                        this.Block(cs.block),
+                                                                        `break`,
+                                                                    ]
+                                                                },
+                                                                `}`,
+                                                            ]
+                                                        },
+                                                        `}`,
+                                                    ]
+                                                },
+                                            }),
+                                            `default: return assertUnreachable(${$$["raw expression"]}[0])`,
+                                        ]
+                                    },
+                                    `}`,
+                                ]
+                            }
+                            default:
+                                return assertUnreachable(statement.type[0])
+                        }
+
+                    })()
                 },
             }),
         ]
     }
-    private Initializer(initializer: Initializer): fp.IInlineSection {
+    private FunctionCall($: FunctionCall): fp.InlinePart {
+        return [
+            $.path,
+            `({`,
+            () => {
+                return $.arguments.getAlphabeticalOrdering({}).map({
+                    callback: (arg, argKey) => {
+                        return [
+                            fp.line([
+                                `"${argKey}": `,
+                                ((): fp.InlinePart => {
+                                    switch (arg.type[0]) {
+                                        case "callback": {
+                                            const $$ = arg.type[1]
+                                            return [
+                                                `_cp => {`,
+                                                () => {
+                                                    return this.Block($$.block)
+                                                },
+                                                `}`,
+                                            ]
+                                        }
+                                        case "initializer": {
+                                            const $$ = arg.type[1]
+                                            return this.Initializer($$.initializer)
+                                        }
+                                        default:
+                                            return assertUnreachable(arg.type[0])
+                                    }
+
+                                })(),
+                                `,`,
+                            ]),
+                        ]
+                    },
+                })
+            },
+            `})`,
+        ]
+    }
+    private Initializer(initializer: Initializer): fp.InlinePart {
         switch (initializer.type[0]) {
             case "constructor call": {
                 const $ = initializer.type[1]
-                return fp.line([
+                return [
                     `new C`,
                     sanitize($.path),
                     `({`,
@@ -218,52 +313,15 @@ export class GenerateAlgorithms {
                         })
                     },
                     `})`,
-                ])
+                ]
             }
             case "function call": {
                 const $ = initializer.type[1]
-                return fp.line([
-                    $.path,
-                    `({`,
-                    () => {
-                        return $.arguments.getAlphabeticalOrdering({}).map({
-                            callback: (arg, argKey) => {
-                                return [
-                                    fp.line([
-                                        `"${argKey}": `,
-                                        ((): fp.IInlineSection => {
-                                            switch (arg.type[0]) {
-                                                case "callback": {
-                                                    const $$ = arg.type[1]
-                                                    return fp.line([
-                                                        `_cp => {`,
-                                                        () => {
-                                                            return this.Block($$.block)
-                                                        },
-                                                        `}`,
-                                                    ])
-                                                }
-                                                case "initializer": {
-                                                    const $$ = arg.type[1]
-                                                    return this.Initializer($$.initializer)
-                                                }
-                                                default:
-                                                    return assertUnreachable(arg.type[0])
-                                            }
-
-                                        })(),
-                                        `,`,
-                                    ]),
-                                ]
-                            },
-                        })
-                    },
-                    `})`,
-                ])
+                return this.FunctionCall($.call)
             }
             case "object": {
                 const $ = initializer.type[1]
-                return fp.line([
+                return [
                     `{`,
                     () => {
                         return $.properties.getAlphabeticalOrdering({}).map({
@@ -279,21 +337,23 @@ export class GenerateAlgorithms {
                         })
                     },
                     `}`,
-                ])
+                ]
             }
             case "rawx": {
                 const $ = initializer.type[1]
-                return fp.token($.rawstring)
+                return $.rawstring
             }
             case "selection": {
                 const $ = initializer.type[1]
-                return fp.line([
+                return [
                     ((): string => {
                         switch ($["start point"][0]) {
-                            case "parameter": {
-                                const $$ = $["start point"][1]
-                                return `_p["${$$.parameter}"]`
-                            }
+                            case "parameter":
+                                const _$ = $["start point"][1]
+                                {
+                                    const $ = _$
+                                    return `_p["${$.parameter}"]`
+                                }
                             case "callback parameter": {
                                 const $$ = $["start point"][1]
                                 return `_cp["${$$.parameter}"]`
@@ -310,24 +370,24 @@ export class GenerateAlgorithms {
                                 return assertUnreachable($["start point"][0])
                         }
                     })(),
-                    fp.line($.steps.map({
+                    $.steps.map({
                         callback: step => `["${step.rawselectionstring}"]`,
-                    })),
-                ])
+                    }),
+                ]
             }
             case "tagged union": {
                 const $ = initializer.type[1]
                 switch ($["type specification"][0]) {
                     case "derived": {
-                        return fp.line([
+                        return [
                             `[ "${$.state}", `,
                             this.Initializer($.initializer),
                             ` ]`,
-                        ])
+                        ]
                     }
                     case "reference": {
                         const $$ = $["type specification"][1]
-                        return fp.line([
+                        return [
                             `((): t.${$$.type} => {`,
                             () => {
                                 return [
@@ -339,7 +399,7 @@ export class GenerateAlgorithms {
                                 ]
                             },
                             `})()`,
-                        ])
+                        ]
                     }
                     default:
                         return assertUnreachable($["type specification"][0])

@@ -24,24 +24,24 @@ export class GenerateInterfaces {
                             return [
                                 iface.methods.getAlphabeticalOrdering({}).map({
                                     callback: (method, methodName) => {
-                                        return fp.line([
+                                        return [
                                             `${sanitize(methodName)}(`,
-                                            fp.line(method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
+                                            method.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                                                 onSeparator: () => `,`,
-                                                onElement: (param, paramKeyGetter) => fp.line([
+                                                onElement: (param, paramKeyGetter) => [
                                                     ` readonly `,
                                                     paramKeyGetter,
                                                     `: `,
                                                     param.type,
-                                                ]),
-                                            })),
+                                                ],
+                                            }),
                                             `)`,
                                             `: `,
-                                            ((): fp.IInlineSection => {
+                                            ((): fp.InlinePart => {
                                                 switch (method.type[0]) {
                                                     case "function": {
                                                         const $ = method.type[1]
-                                                        return fp.line([
+                                                        return [
                                                             ((): string => {
                                                                 switch ($.guaranteed[0]) {
                                                                     case "no": {
@@ -55,16 +55,16 @@ export class GenerateInterfaces {
                                                                 }
                                                             })(),
                                                             $["raw return type"],
-                                                        ])
+                                                        ]
                                                     }
                                                     case "procedure": {
-                                                        return fp.token(`void`)
+                                                        return `void`
                                                     }
                                                     default:
                                                         return assertUnreachable(method.type[0])
                                                 }
                                             })(),
-                                        ])
+                                        ]
                                     },
                                 }),
                             ]

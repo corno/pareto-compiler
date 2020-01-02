@@ -86,6 +86,14 @@ export type FunctionCallArgurment = {
     readonly "type": ArgumentType
 }
 
+export type FunctionCallInitializer = {
+    readonly "call": FunctionCall
+}
+
+export type FunctionCallStatement = {
+    readonly "call": FunctionCall
+}
+
 export type FunctionSpecification = {
     readonly "access": FunctionAccess
     readonly "block": Block
@@ -199,7 +207,7 @@ export type InitializerArgument = {
 
 export type InitializerType =
     | [ "constructor call", ConstructorCall ]
-    | [ "function call", FunctionCall ]
+    | [ "function call", FunctionCallInitializer ]
     | [ "object", ObjectInitializer ]
     | [ "rawx", RawInitializer ]
     | [ "selection", SelectionInitializer ]
@@ -310,6 +318,10 @@ export type RawPropertyType = {
     readonly "raw": string
 }
 
+export type RawStatement = {
+    readonly "raw value": string
+}
+
 export type ReferencedTaggedUnionType = {
     readonly "type": string
 }
@@ -323,7 +335,7 @@ export type ReferenceToInterfaceParameter = {
 }
 
 export type ReferenceToMethodTypeParameter = {
-    readonly "type parameter": string
+    readonly "type parameter": gt.Reference<GenericMethodTypeParameter>
 }
 
 export type SelectionInitializer = {
@@ -358,8 +370,13 @@ export type StartFromVariable = {
 }
 
 export type Statement = {
-    readonly "raw value": string
+    readonly "type": StatementType
 }
+
+export type StatementType =
+    | [ "call", FunctionCallStatement ]
+    | [ "raw", RawStatement ]
+    | [ "switch", SwitchStatement ]
 
 export type String = {
 }
@@ -368,6 +385,15 @@ export type StringGenericInType = {
 }
 
 export type StringGenericReturnType = {
+}
+
+export type SwitchCase = {
+    readonly "block": Block
+}
+
+export type SwitchStatement = {
+    readonly "cases": gt.Dictionary<SwitchCase>
+    readonly "raw expression": string
 }
 
 export type TaggedUnion = {

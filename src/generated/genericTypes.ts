@@ -26,3 +26,7 @@ export * from "lingua-franca"
 // export interface OrderedDictionary<Type, Orderings> extends Dictionary<Type> {
 //     getOrderings(): Orderings
 // }
+
+export interface Out {
+    write(p: { string: string }): void
+}

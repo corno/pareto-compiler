@@ -17,16 +17,13 @@ function assertUnreachable<T>(_x: never): T {
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable`,
-            `//@ts-ignore`,
+            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable no-empty`,
+            `import { gf } from "../genericFunctions"`,
             `import * as gt from "./genericTypes"`,
-            `//@ts-ignore`,
             `import * as i from "./interfaces"`,
-            `//@ts-ignore`,
             `import * as t from "./types"`,
             ``,
             `function assertUnreachable(_x: never) { throw new Error("Unreachable") }`,
-            ``,
             compilationUnit["algorithm units"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: cp => {
                     switch (cp.element.type[0]) {
@@ -56,35 +53,32 @@ export class GenerateAlgorithms {
                                                 ]
                                             },
                                         }),
-                                        //the possible constructor
-                                        clss.properties.getAlphabeticalOrdering({}).filter({
-                                            callback: cp => cp.element.initialization[0] === "parametrized" ? cp.element.initialization[1] : null,
-                                        }).onEmpty({
-                                            onEmpty: () => [],
-                                            onNotEmpty: cp => [
-                                                fp.line([
-                                                    `constructor(p: {`,
-                                                    () => {
-                                                        return cp.dictionaryOrdering.map({
-                                                            callback: cp => {
-                                                                return `"${cp.key}": ${cp.element.type}`
-                                                            },
-                                                        })
+                                        //the constructor
+                                        fp.line([
+                                            `constructor(_p: {`,
+                                            () => {
+                                                return clss.properties.getAlphabeticalOrdering({}).filter({
+                                                    callback: cp => cp.element.initialization[0] === "parametrized" ? cp.element.initialization[1] : null,
+                                                }).map({
+                                                    callback: cp => {
+                                                        return `"${cp.key}": ${cp.element.type}`
                                                     },
-                                                    `}) {`,
-                                                ]),
-                                                () => {
-                                                    return cp.dictionaryOrdering.map({
-                                                        callback: cp => {
-                                                            return [
-                                                                `this.${sanitize(cp.key)} = p["${cp.key}"]`,
-                                                            ]
-                                                        },
-                                                    })
+                                                })
+                                            },
+                                            `}) {`,
+                                        ]),
+                                        () => {
+                                            return clss.properties.getAlphabeticalOrdering({}).filter({
+                                                callback: cp => cp.element.initialization[0] === "parametrized" ? cp.element.initialization[1] : null,
+                                            }).map({
+                                                callback: cp => {
+                                                    return [
+                                                        `this.${sanitize(cp.key)} = _p["${cp.key}"]`,
+                                                    ]
                                                 },
-                                                `}`,
-                                            ],
-                                        }),
+                                            })
+                                        },
+                                        `}`,
                                         //the methods
                                         clss.methods.getAlphabeticalOrdering({}).map({
                                             callback: cp => {

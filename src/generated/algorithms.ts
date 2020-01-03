@@ -1,43 +1,35 @@
-// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable
-//@ts-ignore
+// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable no-empty
+import { gf } from "../genericFunctions"
 import * as gt from "./genericTypes"
-//@ts-ignore
 import * as i from "./interfaces"
-//@ts-ignore
 import * as t from "./types"
 
 function assertUnreachable(_x: never) { throw new Error("Unreachable") }
 
 
 export class CAlgorithmUnitBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.AlgorithmUnit>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.AlgorithmUnit>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public AlgorithmUnit(
         key: string,
         par__type: (builder: CAlgorithmUnitTypeBuilder) => t.AlgorithmUnitType,
     ) {
         const x = this.x_AlgorithmUnit({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": p => par__type(p.builder),
         })
         return x
     }
     private x_AlgorithmUnit(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": (p: { builder: CAlgorithmUnitTypeBuilder }) => t.AlgorithmUnitType
     }) {
         const var_type = _p["par__type"]({
             "builder": new CAlgorithmUnitTypeBuilder({
-                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -49,18 +41,14 @@ export class CAlgorithmUnitBuilder {
 }
 
 export class CAlgorithmUnitTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public class(
         par__properties: (builder: CClassPropertyBuilder) => void,
         par__methods: (builder: CClassMethodBuilder) => void,
     ) {
         const x = this.x_class({
-            "buildContext": this.buildContext,
             "par__methods": p => par__methods(p.builder),
             "par__properties": p => par__properties(p.builder),
         })
@@ -72,7 +60,6 @@ export class CAlgorithmUnitTypeBuilder {
         par__specification_block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_function({
-            "buildContext": this.buildContext,
             "par__specification_access": p => par__specification_access(p.builder),
             "par__specification_block_statements": p => par__specification_block_statements(p.builder),
             "par__specification_block_variables": p => par__specification_block_variables(p.builder),
@@ -80,14 +67,12 @@ export class CAlgorithmUnitTypeBuilder {
         return x
     }
     private x_class(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__methods": (p: { builder: CClassMethodBuilder }) => void
         readonly "par__properties": (p: { builder: CClassPropertyBuilder }) => void
     }) {
-        const var_properties = _p.buildContext.createDictionary<t.ClassProperty>({
+        const var_properties = gf.createDictionary<t.ClassProperty>({
             "callback": _cp => {
                 const x = new CClassPropertyBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__properties"]({
@@ -100,10 +85,9 @@ export class CAlgorithmUnitTypeBuilder {
                 "typeInfo": "ClassProperty",
             }),
         })
-        const var_methods = _p.buildContext.createDictionary<t.ClassMethod>({
+        const var_methods = gf.createDictionary<t.ClassMethod>({
             "callback": _cp => {
                 const x = new CClassMethodBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__methods"]({
@@ -125,13 +109,11 @@ export class CAlgorithmUnitTypeBuilder {
         return sg
     }
     private x_function(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__specification_access": (p: { builder: CFunctionAccessBuilder }) => t.FunctionAccess
         readonly "par__specification_block_statements": (p: { builder: CStatementBuilder }) => void
         readonly "par__specification_block_variables": (p: { builder: CVariableBuilder }) => void
     }) {
         const var_specification = create_function_specification({
-            "buildContext": _p["buildContext"],
             "par__access": _p["par__specification_access"],
             "par__block_statements": _p["par__specification_block_statements"],
             "par__block_variables": _p["par__specification_block_variables"],
@@ -146,21 +128,17 @@ export class CAlgorithmUnitTypeBuilder {
 }
 
 export class CArgumentTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public callback(
         par__block_variables: (builder: CVariableBuilder) => void,
         par__block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_callback({
-            "buildContext": this.buildContext,
             "par__block_statements": p => par__block_statements(p.builder),
             "par__block_variables": p => par__block_variables(p.builder),
             "param_function parameters": this.param_function_parameters,
@@ -171,20 +149,17 @@ export class CArgumentTypeBuilder {
         par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_initializer({
-            "buildContext": this.buildContext,
             "par__initializer_type": p => par__initializer_type(p.builder),
             "param_function parameters": this.param_function_parameters,
         })
         return x
     }
     private x_callback(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__block_statements": (p: { builder: CStatementBuilder }) => void
         readonly "par__block_variables": (p: { builder: CVariableBuilder }) => void
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_block = create_block({
-            "buildContext": _p["buildContext"],
             "par__statements": _p["par__block_statements"],
             "par__variables": _p["par__block_variables"],
             "param_function parameters": _p["param_function parameters"],
@@ -197,12 +172,10 @@ export class CArgumentTypeBuilder {
         return sg
     }
     private x_initializer(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
             "param_function parameters": _p["param_function parameters"],
         })
@@ -216,14 +189,11 @@ export class CArgumentTypeBuilder {
 }
 
 export class CBaseInterfaceBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.BaseInterface>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.BaseInterface>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public BaseInterface(
         key: string,
@@ -231,7 +201,6 @@ export class CBaseInterfaceBuilder {
         par__interface_type_arguments: (builder: CGenericArgumentBuilder) => void,
     ) {
         const x = this.x_BaseInterface({
-            "buildContext": this.buildContext,
             "key": key,
             "par__interface_interface": par__interface_interface,
             "par__interface_type arguments": p => par__interface_type_arguments(p.builder),
@@ -239,16 +208,14 @@ export class CBaseInterfaceBuilder {
         return x
     }
     private x_BaseInterface(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__interface_interface": string
         readonly "par__interface_type arguments": (p: { builder: CGenericArgumentBuilder }) => void
     }) {
         const var_interface = create_generic_interface_reference({
-            "buildContext": _p["buildContext"],
             "par__interface": _p["par__interface_interface"],
             "par__type arguments": _p["par__interface_type arguments"],
-            "param_method type parameters": _p.buildContext.createNonExistentLookup({}),
+            "param_method type parameters": gf.createNonExistentLookup({}),
         })
         const entry = {
             "interface": var_interface,
@@ -259,14 +226,11 @@ export class CBaseInterfaceBuilder {
 }
 
 export class CClassMethodBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ClassMethod>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.ClassMethod>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public ClassMethod(
         key: string,
@@ -275,7 +239,6 @@ export class CClassMethodBuilder {
         par__specification_block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_ClassMethod({
-            "buildContext": this.buildContext,
             "key": key,
             "par__specification_access": p => par__specification_access(p.builder),
             "par__specification_block_statements": p => par__specification_block_statements(p.builder),
@@ -284,14 +247,12 @@ export class CClassMethodBuilder {
         return x
     }
     private x_ClassMethod(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__specification_access": (p: { builder: CFunctionAccessBuilder }) => t.FunctionAccess
         readonly "par__specification_block_statements": (p: { builder: CStatementBuilder }) => void
         readonly "par__specification_block_variables": (p: { builder: CVariableBuilder }) => void
     }) {
         const var_specification = create_function_specification({
-            "buildContext": _p["buildContext"],
             "par__access": _p["par__specification_access"],
             "par__block_statements": _p["par__specification_block_statements"],
             "par__block_variables": _p["par__specification_block_variables"],
@@ -305,34 +266,28 @@ export class CClassMethodBuilder {
 }
 
 export class CClassPropertyBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ClassProperty>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.ClassProperty>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public ClassProperty(
         key: string,
         par__initialization: (builder: CPropertyInitializationBuilder) => t.PropertyInitialization,
     ) {
         const x = this.x_ClassProperty({
-            "buildContext": this.buildContext,
             "key": key,
             "par__initialization": p => par__initialization(p.builder),
         })
         return x
     }
     private x_ClassProperty(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__initialization": (p: { builder: CPropertyInitializationBuilder }) => t.PropertyInitialization
     }) {
         const var_initialization = _p["par__initialization"]({
             "builder": new CPropertyInitializationBuilder({
-                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -344,11 +299,8 @@ export class CClassPropertyBuilder {
 }
 
 export class CCompilationUnitBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public build(
         par__generic_interface_declarations: (builder: CGenericInterfaceDeclarationBuilder) => void,
@@ -357,7 +309,6 @@ export class CCompilationUnitBuilder {
         par__algorithm_units: (builder: CAlgorithmUnitBuilder) => void,
     ) {
         const x = this.x_build({
-            "buildContext": this.buildContext,
             "par__algorithm units": p => par__algorithm_units(p.builder),
             "par__generic interface declarations": p => par__generic_interface_declarations(p.builder),
             "par__interfaces": p => par__interfaces(p.builder),
@@ -366,16 +317,14 @@ export class CCompilationUnitBuilder {
         return x
     }
     private x_build(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__algorithm units": (p: { builder: CAlgorithmUnitBuilder }) => void
         readonly "par__generic interface declarations": (p: { builder: CGenericInterfaceDeclarationBuilder }) => void
         readonly "par__interfaces": (p: { builder: CInterfaceBuilder }) => void
         readonly "par__types": (p: { builder: CTypeBuilder }) => void
     }) {
-        const var_generic_interface_declarations = _p.buildContext.createDictionary<t.GenericInterfaceDeclaration>({
+        const var_generic_interface_declarations = gf.createDictionary<t.GenericInterfaceDeclaration>({
             "callback": _cp => {
                 const x = new CGenericInterfaceDeclarationBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__generic interface declarations"]({
@@ -388,12 +337,11 @@ export class CCompilationUnitBuilder {
                 "typeInfo": "GenericInterfaceDeclaration",
             }),
         })
-        const var_types = _p.buildContext.createDictionary<t.Type>({
+        const var_types = gf.createDictionary<t.Type>({
             "callback": _cp => {
                 const x = new CTypeBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
-                    "propvar_generic interface declarations": this.buildContext.createLookup({ dict: var_generic_interface_declarations }),
+                    "propvar_generic interface declarations": gf.createLookup({ dict: var_generic_interface_declarations }),
                 })
                 const y = _p["par__types"]({
                     "builder": x,
@@ -405,10 +353,9 @@ export class CCompilationUnitBuilder {
                 "typeInfo": "Type",
             }),
         })
-        const var_interfaces = _p.buildContext.createDictionary<t.Interface>({
+        const var_interfaces = gf.createDictionary<t.Interface>({
             "callback": _cp => {
                 const x = new CInterfaceBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__interfaces"]({
@@ -421,10 +368,9 @@ export class CCompilationUnitBuilder {
                 "typeInfo": "Interface",
             }),
         })
-        const var_algorithm_units = _p.buildContext.createDictionary<t.AlgorithmUnit>({
+        const var_algorithm_units = gf.createDictionary<t.AlgorithmUnit>({
             "callback": _cp => {
                 const x = new CAlgorithmUnitBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__algorithm units"]({
@@ -448,24 +394,20 @@ export class CCompilationUnitBuilder {
 }
 
 export class CConstructorCallArgurmentBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ConstructorCallArgurment>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.ConstructorCallArgurment>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public ConstructorCallArgurment(
         key: string,
         par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_ConstructorCallArgurment({
-            "buildContext": this.buildContext,
             "key": key,
             "par__initializer_type": p => par__initializer_type(p.builder),
             "param_function parameters": this.param_function_parameters,
@@ -473,13 +415,11 @@ export class CConstructorCallArgurmentBuilder {
         return x
     }
     private x_ConstructorCallArgurment(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
             "param_function parameters": _p["param_function parameters"],
         })
@@ -492,15 +432,13 @@ export class CConstructorCallArgurmentBuilder {
 }
 
 function create_block(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__statements": (p: { builder: CStatementBuilder }) => void
     readonly "par__variables": (p: { builder: CVariableBuilder }) => void
     readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
 }) {
-    const var_variables = _p.buildContext.createOrderedDictionary<t.Variable, t.VariableOrderings>({
+    const var_variables = gf.createOrderedDictionary<t.Variable, t.VariableOrderings>({
         "callback": _cp => {
             const x = new CVariableBuilder({
-                "buildContext": _p["buildContext"],
                 "builder": _cp["builder"],
                 "param_function parameters": _p["param_function parameters"],
             })
@@ -520,10 +458,9 @@ function create_block(_p: {
             "typeInfo": "Variable",
         }),
     })
-    const var_statements = _p.buildContext.createList<t.Statement>({
+    const var_statements = gf.createList<t.Statement>({
         "callback": _cp => {
             const x = new CStatementBuilder({
-                "buildContext": _p["buildContext"],
                 "builder": _cp["builder"],
                 "param_function parameters": _p["param_function parameters"],
             })
@@ -541,16 +478,14 @@ function create_block(_p: {
 }
 
 function create_function_call(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__arguments": (p: { builder: CFunctionCallArgurmentBuilder }) => void
     readonly "par__path": string
     readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
 }) {
     const var_path = _p["par__path"]
-    const var_arguments = _p.buildContext.createDictionary<t.FunctionCallArgurment>({
+    const var_arguments = gf.createDictionary<t.FunctionCallArgurment>({
         "callback": _cp => {
             const x = new CFunctionCallArgurmentBuilder({
-                "buildContext": _p["buildContext"],
                 "builder": _cp["builder"],
                 "param_function parameters": _p["param_function parameters"],
             })
@@ -572,21 +507,18 @@ function create_function_call(_p: {
 }
 
 function create_function_specification(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__access": (p: { builder: CFunctionAccessBuilder }) => t.FunctionAccess
     readonly "par__block_statements": (p: { builder: CStatementBuilder }) => void
     readonly "par__block_variables": (p: { builder: CVariableBuilder }) => void
 }) {
     const var_access = _p["par__access"]({
         "builder": new CFunctionAccessBuilder({
-            "buildContext": _p["buildContext"],
         }),
     })
     const var_block = create_block({
-        "buildContext": _p["buildContext"],
         "par__statements": _p["par__block_statements"],
         "par__variables": _p["par__block_variables"],
-        "param_function parameters": _p.buildContext.createNonExistentLookup({}),
+        "param_function parameters": gf.createNonExistentLookup({}),
     })
     const component = {
         "access": var_access,
@@ -596,13 +528,11 @@ function create_function_specification(_p: {
 }
 
 function create_generic_in_type(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__type": (p: { builder: CGenericInTypeTypeBuilder }) => t.GenericInTypeType
     readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
 }) {
     const var_type = _p["par__type"]({
         "builder": new CGenericInTypeTypeBuilder({
-            "buildContext": _p["buildContext"],
             "param_method type parameters": _p["param_method type parameters"],
         }),
     })
@@ -613,16 +543,14 @@ function create_generic_in_type(_p: {
 }
 
 function create_generic_interface_reference(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__interface": string
     readonly "par__type arguments": (p: { builder: CGenericArgumentBuilder }) => void
     readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
 }) {
     const var_interface = _p["par__interface"]
-    const var_type_arguments = _p.buildContext.createDictionary<t.GenericArgument>({
+    const var_type_arguments = gf.createDictionary<t.GenericArgument>({
         "callback": _cp => {
             const x = new CGenericArgumentBuilder({
-                "buildContext": _p["buildContext"],
                 "builder": _cp["builder"],
                 "param_method type parameters": _p["param_method type parameters"],
             })
@@ -644,13 +572,11 @@ function create_generic_interface_reference(_p: {
 }
 
 function create_generic_return_type(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
     readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
 }) {
     const var_type = _p["par__type"]({
         "builder": new CGenericReturnTypeTypeBuilder({
-            "buildContext": _p["buildContext"],
             "param_method type parameters": _p["param_method type parameters"],
         }),
     })
@@ -661,13 +587,11 @@ function create_generic_return_type(_p: {
 }
 
 function create_initializer(_p: {
-    readonly "buildContext": gt.IBuildContext
     readonly "par__type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
     readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
 }) {
     const var_type = _p["par__type"]({
         "builder": new CInitializerTypeBuilder({
-            "buildContext": _p["buildContext"],
             "param_function parameters": _p["param_function parameters"],
         }),
     })
@@ -678,17 +602,13 @@ function create_initializer(_p: {
 }
 
 export class CFunctionAccessBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public private(
         par__parameters: (builder: CPrivateParameterBuilder) => void,
     ) {
         const x = this.x_private({
-            "buildContext": this.buildContext,
             "par__parameters": p => par__parameters(p.builder),
         })
         return x
@@ -697,19 +617,16 @@ export class CFunctionAccessBuilder {
         par__parameters: (builder: CPublicParameterBuilder) => void,
     ) {
         const x = this.x_public({
-            "buildContext": this.buildContext,
             "par__parameters": p => par__parameters(p.builder),
         })
         return x
     }
     private x_private(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__parameters": (p: { builder: CPrivateParameterBuilder }) => void
     }) {
-        const var_parameters = _p.buildContext.createDictionary<t.PrivateParameter>({
+        const var_parameters = gf.createDictionary<t.PrivateParameter>({
             "callback": _cp => {
                 const x = new CPrivateParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
@@ -730,13 +647,11 @@ export class CFunctionAccessBuilder {
         return sg
     }
     private x_public(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__parameters": (p: { builder: CPublicParameterBuilder }) => void
     }) {
-        const var_parameters = _p.buildContext.createOrderedDictionary<t.PublicParameter, t.PublicParameterOrderings>({
+        const var_parameters = gf.createOrderedDictionary<t.PublicParameter, t.PublicParameterOrderings>({
             "callback": _cp => {
                 const x = new CPublicParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
@@ -765,24 +680,20 @@ export class CFunctionAccessBuilder {
 }
 
 export class CFunctionCallArgurmentBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.FunctionCallArgurment>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.FunctionCallArgurment>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public FunctionCallArgurment(
         key: string,
         par__type: (builder: CArgumentTypeBuilder) => t.ArgumentType,
     ) {
         const x = this.x_FunctionCallArgurment({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": p => par__type(p.builder),
             "param_function parameters": this.param_function_parameters,
@@ -790,14 +701,12 @@ export class CFunctionCallArgurmentBuilder {
         return x
     }
     private x_FunctionCallArgurment(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": (p: { builder: CArgumentTypeBuilder }) => t.ArgumentType
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_type = _p["par__type"]({
             "builder": new CArgumentTypeBuilder({
-                "buildContext": _p["buildContext"],
                 "param_function parameters": _p["param_function parameters"],
             }),
         })
@@ -810,24 +719,20 @@ export class CFunctionCallArgurmentBuilder {
 }
 
 export class CGenericArgumentBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericArgument>
     private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericArgument>
         "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_method_type_parameters = p["param_method type parameters"]
+        this.builder = _p["builder"]
+        this.param_method_type_parameters = _p["param_method type parameters"]
     }
     public GenericArgument(
         key: string,
         par__type_type: (builder: CGenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
     ) {
         const x = this.x_GenericArgument({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type_type": p => par__type_type(p.builder),
             "param_method type parameters": this.param_method_type_parameters,
@@ -835,13 +740,11 @@ export class CGenericArgumentBuilder {
         return x
     }
     private x_GenericArgument(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type_type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_type = create_generic_return_type({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
             "param_method type parameters": _p["param_method type parameters"],
         })
@@ -854,24 +757,20 @@ export class CGenericArgumentBuilder {
 }
 
 export class CGenericCallbackParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericCallbackParameter>
     private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericCallbackParameter>
         "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_method_type_parameters = p["param_method type parameters"]
+        this.builder = _p["builder"]
+        this.param_method_type_parameters = _p["param_method type parameters"]
     }
     public GenericCallbackParameter(
         key: string,
         par__type_type: (builder: CGenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
     ) {
         const x = this.x_GenericCallbackParameter({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type_type": p => par__type_type(p.builder),
             "param_method type parameters": this.param_method_type_parameters,
@@ -879,13 +778,11 @@ export class CGenericCallbackParameterBuilder {
         return x
     }
     private x_GenericCallbackParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type_type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_type = create_generic_return_type({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
             "param_method type parameters": _p["param_method type parameters"],
         })
@@ -898,21 +795,17 @@ export class CGenericCallbackParameterBuilder {
 }
 
 export class CGenericCallbackTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_method_type_parameters = p["param_method type parameters"]
+        this.param_method_type_parameters = _p["param_method type parameters"]
     }
     public function(
         par__guaranteed: (builder: CIsCallbackReturnValueGuaranteedBuilder) => t.IsCallbackReturnValueGuaranteed,
         par__type_type: (builder: CGenericInTypeTypeBuilder) => t.GenericInTypeType,
     ) {
         const x = this.x_function({
-            "buildContext": this.buildContext,
             "par__guaranteed": p => par__guaranteed(p.builder),
             "par__type_type": p => par__type_type(p.builder),
             "param_method type parameters": this.param_method_type_parameters,
@@ -922,25 +815,21 @@ export class CGenericCallbackTypeBuilder {
     public procedure(
     ) {
         const x = this.x_procedure({
-            "buildContext": this.buildContext,
             "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_function(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__guaranteed": (p: { builder: CIsCallbackReturnValueGuaranteedBuilder }) => t.IsCallbackReturnValueGuaranteed
         readonly "par__type_type": (p: { builder: CGenericInTypeTypeBuilder }) => t.GenericInTypeType
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
             "builder": new CIsCallbackReturnValueGuaranteedBuilder({
-                "buildContext": _p["buildContext"],
                 "param_method type parameters": _p["param_method type parameters"],
             }),
         })
         const var_type = create_generic_in_type({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
             "param_method type parameters": _p["param_method type parameters"],
         })
@@ -953,7 +842,6 @@ export class CGenericCallbackTypeBuilder {
         return sg
     }
     private x_procedure(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const sg = ((): t.GenericCallbackType => {
@@ -965,21 +853,17 @@ export class CGenericCallbackTypeBuilder {
 }
 
 export class CGenericFunctionTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly propvar_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "propvar_type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.propvar_type_parameters = p["propvar_type parameters"]
+        this.propvar_type_parameters = _p["propvar_type parameters"]
     }
     public function(
         par__guaranteed: (builder: CIsGenericReturnValueGuaranteedBuilder) => t.IsGenericReturnValueGuaranteed,
         par__type_type: (builder: CGenericReturnTypeTypeBuilder) => t.GenericReturnTypeType,
     ) {
         const x = this.x_function({
-            "buildContext": this.buildContext,
             "par__guaranteed": p => par__guaranteed(p.builder),
             "par__type_type": p => par__type_type(p.builder),
         })
@@ -988,22 +872,18 @@ export class CGenericFunctionTypeBuilder {
     public procedure(
     ) {
         const x = this.x_procedure({
-            "buildContext": this.buildContext,
         })
         return x
     }
     private x_function(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__guaranteed": (p: { builder: CIsGenericReturnValueGuaranteedBuilder }) => t.IsGenericReturnValueGuaranteed
         readonly "par__type_type": (p: { builder: CGenericReturnTypeTypeBuilder }) => t.GenericReturnTypeType
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
             "builder": new CIsGenericReturnValueGuaranteedBuilder({
-                "buildContext": _p["buildContext"],
             }),
         })
         const var_type = create_generic_return_type({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
             "param_method type parameters": this.propvar_type_parameters,
         })
@@ -1016,7 +896,6 @@ export class CGenericFunctionTypeBuilder {
         return sg
     }
     private x_procedure(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.GenericFunctionType => {
             return ["procedure", {
@@ -1027,14 +906,11 @@ export class CGenericFunctionTypeBuilder {
 }
 
 export class CGenericInterfaceDeclarationBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericInterfaceDeclaration>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericInterfaceDeclaration>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public GenericInterfaceDeclaration(
         key: string,
@@ -1043,7 +919,6 @@ export class CGenericInterfaceDeclarationBuilder {
         par__methods: (builder: CGenericInterfaceMethodBuilder) => void,
     ) {
         const x = this.x_GenericInterfaceDeclaration({
-            "buildContext": this.buildContext,
             "key": key,
             "par__base interfaces": p => par__base_interfaces(p.builder),
             "par__methods": p => par__methods(p.builder),
@@ -1052,16 +927,14 @@ export class CGenericInterfaceDeclarationBuilder {
         return x
     }
     private x_GenericInterfaceDeclaration(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__base interfaces": (p: { builder: CBaseInterfaceBuilder }) => void
         readonly "par__methods": (p: { builder: CGenericInterfaceMethodBuilder }) => void
         readonly "par__parameters": (p: { builder: CGenericInterfaceParameterBuilder }) => void
     }) {
-        const var_parameters = _p.buildContext.createDictionary<t.GenericInterfaceParameter>({
+        const var_parameters = gf.createDictionary<t.GenericInterfaceParameter>({
             "callback": _cp => {
                 const x = new CGenericInterfaceParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
@@ -1074,10 +947,9 @@ export class CGenericInterfaceDeclarationBuilder {
                 "typeInfo": "GenericInterfaceParameter",
             }),
         })
-        const var_base_interfaces = _p.buildContext.createDictionary<t.BaseInterface>({
+        const var_base_interfaces = gf.createDictionary<t.BaseInterface>({
             "callback": _cp => {
                 const x = new CBaseInterfaceBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__base interfaces"]({
@@ -1090,10 +962,9 @@ export class CGenericInterfaceDeclarationBuilder {
                 "typeInfo": "BaseInterface",
             }),
         })
-        const var_methods = _p.buildContext.createDictionary<t.GenericInterfaceMethod>({
+        const var_methods = gf.createDictionary<t.GenericInterfaceMethod>({
             "callback": _cp => {
                 const x = new CGenericInterfaceMethodBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__methods"]({
@@ -1117,14 +988,11 @@ export class CGenericInterfaceDeclarationBuilder {
 }
 
 export class CGenericInterfaceMethodBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericInterfaceMethod>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericInterfaceMethod>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public GenericInterfaceMethod(
         key: string,
@@ -1133,7 +1001,6 @@ export class CGenericInterfaceMethodBuilder {
         par__type: (builder: CGenericFunctionTypeBuilder) => t.GenericFunctionType,
     ) {
         const x = this.x_GenericInterfaceMethod({
-            "buildContext": this.buildContext,
             "key": key,
             "par__parameters": p => par__parameters(p.builder),
             "par__type": p => par__type(p.builder),
@@ -1142,16 +1009,14 @@ export class CGenericInterfaceMethodBuilder {
         return x
     }
     private x_GenericInterfaceMethod(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__parameters": (p: { builder: CGenericMethodParameterBuilder }) => void
         readonly "par__type": (p: { builder: CGenericFunctionTypeBuilder }) => t.GenericFunctionType
         readonly "par__type parameters": (p: { builder: CGenericMethodTypeParameterBuilder }) => void
     }) {
-        const var_type_parameters = _p.buildContext.createDictionary<t.GenericMethodTypeParameter>({
+        const var_type_parameters = gf.createDictionary<t.GenericMethodTypeParameter>({
             "callback": _cp => {
                 const x = new CGenericMethodTypeParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__type parameters"]({
@@ -1164,12 +1029,11 @@ export class CGenericInterfaceMethodBuilder {
                 "typeInfo": "GenericMethodTypeParameter",
             }),
         })
-        const var_parameters = _p.buildContext.createDictionary<t.GenericMethodParameter>({
+        const var_parameters = gf.createDictionary<t.GenericMethodParameter>({
             "callback": _cp => {
                 const x = new CGenericMethodParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
-                    "propvar_type parameters": this.buildContext.createLookup({ dict: var_type_parameters }),
+                    "propvar_type parameters": gf.createLookup({ dict: var_type_parameters }),
                 })
                 const y = _p["par__parameters"]({
                     "builder": x,
@@ -1183,8 +1047,7 @@ export class CGenericInterfaceMethodBuilder {
         })
         const var_type = _p["par__type"]({
             "builder": new CGenericFunctionTypeBuilder({
-                "buildContext": _p["buildContext"],
-                "propvar_type parameters": this.buildContext.createLookup({ dict: var_type_parameters }),
+                "propvar_type parameters": gf.createLookup({ dict: var_type_parameters }),
             }),
         })
         const entry = {
@@ -1198,26 +1061,21 @@ export class CGenericInterfaceMethodBuilder {
 }
 
 export class CGenericInterfaceParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericInterfaceParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericInterfaceParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public GenericInterfaceParameter(
         key: string,
     ) {
         const x = this.x_GenericInterfaceParameter({
-            "buildContext": this.buildContext,
             "key": key,
         })
         return x
     }
     private x_GenericInterfaceParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
     }) {
         const entry = {
@@ -1228,21 +1086,17 @@ export class CGenericInterfaceParameterBuilder {
 }
 
 export class CGenericInTypeTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_method_type_parameters = p["param_method type parameters"]
+        this.param_method_type_parameters = _p["param_method type parameters"]
     }
     public callback(
         par__parameters: (builder: CGenericCallbackParameterBuilder) => void,
         par__type: (builder: CGenericCallbackTypeBuilder) => t.GenericCallbackType,
     ) {
         const x = this.x_callback({
-            "buildContext": this.buildContext,
             "par__parameters": p => par__parameters(p.builder),
             "par__type": p => par__type(p.builder),
             "param_method type parameters": this.param_method_type_parameters,
@@ -1253,7 +1107,6 @@ export class CGenericInTypeTypeBuilder {
         par__type_parameter: string,
     ) {
         const x = this.x_method_type_parameter({
-            "buildContext": this.buildContext,
             "par__type parameter": par__type_parameter,
             "param_method type parameters": this.param_method_type_parameters,
         })
@@ -1262,21 +1115,18 @@ export class CGenericInTypeTypeBuilder {
     public string(
     ) {
         const x = this.x_string({
-            "buildContext": this.buildContext,
             "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_callback(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__parameters": (p: { builder: CGenericCallbackParameterBuilder }) => void
         readonly "par__type": (p: { builder: CGenericCallbackTypeBuilder }) => t.GenericCallbackType
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        const var_parameters = _p.buildContext.createDictionary<t.GenericCallbackParameter>({
+        const var_parameters = gf.createDictionary<t.GenericCallbackParameter>({
             "callback": _cp => {
                 const x = new CGenericCallbackParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                     "param_method type parameters": _p["param_method type parameters"],
                 })
@@ -1292,7 +1142,6 @@ export class CGenericInTypeTypeBuilder {
         })
         const var_type = _p["par__type"]({
             "builder": new CGenericCallbackTypeBuilder({
-                "buildContext": _p["buildContext"],
                 "param_method type parameters": _p["param_method type parameters"],
             }),
         })
@@ -1305,7 +1154,6 @@ export class CGenericInTypeTypeBuilder {
         return sg
     }
     private x_method_type_parameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__type parameter": string
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
@@ -1325,7 +1173,6 @@ export class CGenericInTypeTypeBuilder {
         return sg
     }
     private x_string(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const sg = ((): t.GenericInTypeType => {
@@ -1337,36 +1184,30 @@ export class CGenericInTypeTypeBuilder {
 }
 
 export class CGenericMethodParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericMethodParameter>
     private readonly propvar_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericMethodParameter>
         "propvar_type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.propvar_type_parameters = p["propvar_type parameters"]
+        this.builder = _p["builder"]
+        this.propvar_type_parameters = _p["propvar_type parameters"]
     }
     public GenericMethodParameter(
         key: string,
         par__type_type: (builder: CGenericInTypeTypeBuilder) => t.GenericInTypeType,
     ) {
         const x = this.x_GenericMethodParameter({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type_type": p => par__type_type(p.builder),
         })
         return x
     }
     private x_GenericMethodParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type_type": (p: { builder: CGenericInTypeTypeBuilder }) => t.GenericInTypeType
     }) {
         const var_type = create_generic_in_type({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__type_type"],
             "param_method type parameters": this.propvar_type_parameters,
         })
@@ -1379,26 +1220,21 @@ export class CGenericMethodParameterBuilder {
 }
 
 export class CGenericMethodTypeParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public GenericMethodTypeParameter(
         key: string,
     ) {
         const x = this.x_GenericMethodTypeParameter({
-            "buildContext": this.buildContext,
             "key": key,
         })
         return x
     }
     private x_GenericMethodTypeParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
     }) {
         const entry = {
@@ -1409,20 +1245,16 @@ export class CGenericMethodTypeParameterBuilder {
 }
 
 export class CGenericReturnTypeTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_method_type_parameters = p["param_method type parameters"]
+        this.param_method_type_parameters = _p["param_method type parameters"]
     }
     public interface_parameter(
         par__parameter: string,
     ) {
         const x = this.x_interface_parameter({
-            "buildContext": this.buildContext,
             "par__parameter": par__parameter,
             "param_method type parameters": this.param_method_type_parameters,
         })
@@ -1432,7 +1264,6 @@ export class CGenericReturnTypeTypeBuilder {
         par__type_parameter: string,
     ) {
         const x = this.x_method_type_parameter({
-            "buildContext": this.buildContext,
             "par__type parameter": par__type_parameter,
             "param_method type parameters": this.param_method_type_parameters,
         })
@@ -1443,7 +1274,6 @@ export class CGenericReturnTypeTypeBuilder {
         par__interface_type_arguments: (builder: CGenericArgumentBuilder) => void,
     ) {
         const x = this.x_reference_to_generic_declaration({
-            "buildContext": this.buildContext,
             "par__interface_interface": par__interface_interface,
             "par__interface_type arguments": p => par__interface_type_arguments(p.builder),
             "param_method type parameters": this.param_method_type_parameters,
@@ -1453,13 +1283,11 @@ export class CGenericReturnTypeTypeBuilder {
     public string(
     ) {
         const x = this.x_string({
-            "buildContext": this.buildContext,
             "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_interface_parameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__parameter": string
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
@@ -1472,7 +1300,6 @@ export class CGenericReturnTypeTypeBuilder {
         return sg
     }
     private x_method_type_parameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__type parameter": string
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
@@ -1492,13 +1319,11 @@ export class CGenericReturnTypeTypeBuilder {
         return sg
     }
     private x_reference_to_generic_declaration(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__interface_interface": string
         readonly "par__interface_type arguments": (p: { builder: CGenericArgumentBuilder }) => void
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const var_interface = create_generic_interface_reference({
-            "buildContext": _p["buildContext"],
             "par__interface": _p["par__interface_interface"],
             "par__type arguments": _p["par__interface_type arguments"],
             "param_method type parameters": _p["param_method type parameters"],
@@ -1511,7 +1336,6 @@ export class CGenericReturnTypeTypeBuilder {
         return sg
     }
     private x_string(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const sg = ((): t.GenericReturnTypeType => {
@@ -1523,28 +1347,23 @@ export class CGenericReturnTypeTypeBuilder {
 }
 
 export class CGenericTypeArgumentsBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.GenericTypeArguments>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.GenericTypeArguments>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public GenericTypeArguments(
         key: string,
         par__raw: string,
     ) {
         const x = this.x_GenericTypeArguments({
-            "buildContext": this.buildContext,
             "key": key,
             "par__raw": par__raw,
         })
         return x
     }
     private x_GenericTypeArguments(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__raw": string
     }) {
@@ -1558,21 +1377,17 @@ export class CGenericTypeArgumentsBuilder {
 }
 
 export class CInitializerTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public constructor_call(
         par__path: string,
         par__arguments: (builder: CConstructorCallArgurmentBuilder) => void,
     ) {
         const x = this.x_constructor_call({
-            "buildContext": this.buildContext,
             "par__arguments": p => par__arguments(p.builder),
             "par__path": par__path,
             "param_function parameters": this.param_function_parameters,
@@ -1584,7 +1399,6 @@ export class CInitializerTypeBuilder {
         par__call_arguments: (builder: CFunctionCallArgurmentBuilder) => void,
     ) {
         const x = this.x_function_call({
-            "buildContext": this.buildContext,
             "par__call_arguments": p => par__call_arguments(p.builder),
             "par__call_path": par__call_path,
             "param_function parameters": this.param_function_parameters,
@@ -1595,7 +1409,6 @@ export class CInitializerTypeBuilder {
         par__properties: (builder: CPropertyInitialierBuilder) => void,
     ) {
         const x = this.x_object({
-            "buildContext": this.buildContext,
             "par__properties": p => par__properties(p.builder),
             "param_function parameters": this.param_function_parameters,
         })
@@ -1605,7 +1418,6 @@ export class CInitializerTypeBuilder {
         par__rawstring: string,
     ) {
         const x = this.x_rawx({
-            "buildContext": this.buildContext,
             "par__rawstring": par__rawstring,
             "param_function parameters": this.param_function_parameters,
         })
@@ -1616,7 +1428,6 @@ export class CInitializerTypeBuilder {
         par__steps: (builder: CSelectionStepBuilder) => void,
     ) {
         const x = this.x_selection({
-            "buildContext": this.buildContext,
             "par__start point": p => par__start_point(p.builder),
             "par__steps": p => par__steps(p.builder),
             "param_function parameters": this.param_function_parameters,
@@ -1629,7 +1440,6 @@ export class CInitializerTypeBuilder {
         par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_tagged_union({
-            "buildContext": this.buildContext,
             "par__initializer_type": p => par__initializer_type(p.builder),
             "par__state": par__state,
             "par__type specification": p => par__type_specification(p.builder),
@@ -1638,16 +1448,14 @@ export class CInitializerTypeBuilder {
         return x
     }
     private x_constructor_call(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__arguments": (p: { builder: CConstructorCallArgurmentBuilder }) => void
         readonly "par__path": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_path = _p["par__path"]
-        const var_arguments = _p.buildContext.createDictionary<t.ConstructorCallArgurment>({
+        const var_arguments = gf.createDictionary<t.ConstructorCallArgurment>({
             "callback": _cp => {
                 const x = new CConstructorCallArgurmentBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                     "param_function parameters": _p["param_function parameters"],
                 })
@@ -1670,13 +1478,11 @@ export class CInitializerTypeBuilder {
         return sg
     }
     private x_function_call(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__call_arguments": (p: { builder: CFunctionCallArgurmentBuilder }) => void
         readonly "par__call_path": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_call = create_function_call({
-            "buildContext": _p["buildContext"],
             "par__arguments": _p["par__call_arguments"],
             "par__path": _p["par__call_path"],
             "param_function parameters": _p["param_function parameters"],
@@ -1689,14 +1495,12 @@ export class CInitializerTypeBuilder {
         return sg
     }
     private x_object(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__properties": (p: { builder: CPropertyInitialierBuilder }) => void
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        const var_properties = _p.buildContext.createDictionary<t.PropertyInitialier>({
+        const var_properties = gf.createDictionary<t.PropertyInitialier>({
             "callback": _cp => {
                 const x = new CPropertyInitialierBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                     "param_function parameters": _p["param_function parameters"],
                 })
@@ -1718,7 +1522,6 @@ export class CInitializerTypeBuilder {
         return sg
     }
     private x_rawx(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__rawstring": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -1731,21 +1534,18 @@ export class CInitializerTypeBuilder {
         return sg
     }
     private x_selection(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__start point": (p: { builder: CSelectionStartPointBuilder }) => t.SelectionStartPoint
         readonly "par__steps": (p: { builder: CSelectionStepBuilder }) => void
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_start_point = _p["par__start point"]({
             "builder": new CSelectionStartPointBuilder({
-                "buildContext": _p["buildContext"],
                 "param_function parameters": _p["param_function parameters"],
             }),
         })
-        const var_steps = _p.buildContext.createList<t.SelectionStep>({
+        const var_steps = gf.createList<t.SelectionStep>({
             "callback": _cp => {
                 const x = new CSelectionStepBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                     "param_function parameters": _p["param_function parameters"],
                 })
@@ -1764,7 +1564,6 @@ export class CInitializerTypeBuilder {
         return sg
     }
     private x_tagged_union(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
         readonly "par__state": string
         readonly "par__type specification": (p: { builder: CTaggedUnionTypeSpecificationBuilder }) => t.TaggedUnionTypeSpecification
@@ -1772,13 +1571,11 @@ export class CInitializerTypeBuilder {
     }) {
         const var_type_specification = _p["par__type specification"]({
             "builder": new CTaggedUnionTypeSpecificationBuilder({
-                "buildContext": _p["buildContext"],
                 "param_function parameters": _p["param_function parameters"],
             }),
         })
         const var_state = _p["par__state"]
         const var_initializer = create_initializer({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
             "param_function parameters": _p["param_function parameters"],
         })
@@ -1794,35 +1591,29 @@ export class CInitializerTypeBuilder {
 }
 
 export class CInterfaceBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Interface>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.Interface>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public Interface(
         key: string,
         par__methods: (builder: CInterfaceMethodBuilder) => void,
     ) {
         const x = this.x_Interface({
-            "buildContext": this.buildContext,
             "key": key,
             "par__methods": p => par__methods(p.builder),
         })
         return x
     }
     private x_Interface(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__methods": (p: { builder: CInterfaceMethodBuilder }) => void
     }) {
-        const var_methods = _p.buildContext.createDictionary<t.InterfaceMethod>({
+        const var_methods = gf.createDictionary<t.InterfaceMethod>({
             "callback": _cp => {
                 const x = new CInterfaceMethodBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__methods"]({
@@ -1844,14 +1635,11 @@ export class CInterfaceBuilder {
 }
 
 export class CInterfaceMethodBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.InterfaceMethod>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.InterfaceMethod>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public InterfaceMethod(
         key: string,
@@ -1859,7 +1647,6 @@ export class CInterfaceMethodBuilder {
         par__type: (builder: CInterfaceMethodTypeBuilder) => t.InterfaceMethodType,
     ) {
         const x = this.x_InterfaceMethod({
-            "buildContext": this.buildContext,
             "key": key,
             "par__parameters": p => par__parameters(p.builder),
             "par__type": p => par__type(p.builder),
@@ -1867,15 +1654,13 @@ export class CInterfaceMethodBuilder {
         return x
     }
     private x_InterfaceMethod(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__parameters": (p: { builder: CInterfaceMethodParameterBuilder }) => void
         readonly "par__type": (p: { builder: CInterfaceMethodTypeBuilder }) => t.InterfaceMethodType
     }) {
-        const var_parameters = _p.buildContext.createDictionary<t.InterfaceMethodParameter>({
+        const var_parameters = gf.createDictionary<t.InterfaceMethodParameter>({
             "callback": _cp => {
                 const x = new CInterfaceMethodParameterBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__parameters"]({
@@ -1890,7 +1675,6 @@ export class CInterfaceMethodBuilder {
         })
         const var_type = _p["par__type"]({
             "builder": new CInterfaceMethodTypeBuilder({
-                "buildContext": _p["buildContext"],
             }),
         })
         const entry = {
@@ -1903,28 +1687,23 @@ export class CInterfaceMethodBuilder {
 }
 
 export class CInterfaceMethodParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.InterfaceMethodParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.InterfaceMethodParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public InterfaceMethodParameter(
         key: string,
         par__type: string,
     ) {
         const x = this.x_InterfaceMethodParameter({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": par__type,
         })
         return x
     }
     private x_InterfaceMethodParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": string
     }) {
@@ -1938,18 +1717,14 @@ export class CInterfaceMethodParameterBuilder {
 }
 
 export class CInterfaceMethodTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public function(
         par__guaranteed: (builder: CIsInterfaceReturnValueGuaranteedBuilder) => t.IsInterfaceReturnValueGuaranteed,
         par__raw_return_type: string,
     ) {
         const x = this.x_function({
-            "buildContext": this.buildContext,
             "par__guaranteed": p => par__guaranteed(p.builder),
             "par__raw return type": par__raw_return_type,
         })
@@ -1958,18 +1733,15 @@ export class CInterfaceMethodTypeBuilder {
     public procedure(
     ) {
         const x = this.x_procedure({
-            "buildContext": this.buildContext,
         })
         return x
     }
     private x_function(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__guaranteed": (p: { builder: CIsInterfaceReturnValueGuaranteedBuilder }) => t.IsInterfaceReturnValueGuaranteed
         readonly "par__raw return type": string
     }) {
         const var_guaranteed = _p["par__guaranteed"]({
             "builder": new CIsInterfaceReturnValueGuaranteedBuilder({
-                "buildContext": _p["buildContext"],
             }),
         })
         const var_raw_return_type = _p["par__raw return type"]
@@ -1982,7 +1754,6 @@ export class CInterfaceMethodTypeBuilder {
         return sg
     }
     private x_procedure(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.InterfaceMethodType => {
             return ["procedure", {
@@ -1993,25 +1764,20 @@ export class CInterfaceMethodTypeBuilder {
 }
 
 export class CIsCallbackReturnValueGuaranteedBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_method_type_parameters: gt.ILookup<t.GenericMethodTypeParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_method_type_parameters = p["param_method type parameters"]
+        this.param_method_type_parameters = _p["param_method type parameters"]
     }
     public no(
     ) {
         const x = this.x_no({
-            "buildContext": this.buildContext,
             "param_method type parameters": this.param_method_type_parameters,
         })
         return x
     }
     private x_no(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const sg = ((): t.IsCallbackReturnValueGuaranteed => {
@@ -2021,7 +1787,6 @@ export class CIsCallbackReturnValueGuaranteedBuilder {
         return sg
     }
     private x_yes(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "param_method type parameters": gt.ILookup<t.GenericMethodTypeParameter>
     }) {
         const sg = ((): t.IsCallbackReturnValueGuaranteed => {
@@ -2033,7 +1798,6 @@ export class CIsCallbackReturnValueGuaranteedBuilder {
     public yes(
     ) {
         const x = this.x_yes({
-            "buildContext": this.buildContext,
             "param_method type parameters": this.param_method_type_parameters,
         })
         return x
@@ -2041,21 +1805,16 @@ export class CIsCallbackReturnValueGuaranteedBuilder {
 }
 
 export class CIsGenericReturnValueGuaranteedBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public no(
     ) {
         const x = this.x_no({
-            "buildContext": this.buildContext,
         })
         return x
     }
     private x_no(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.IsGenericReturnValueGuaranteed => {
             return ["no", {
@@ -2064,7 +1823,6 @@ export class CIsGenericReturnValueGuaranteedBuilder {
         return sg
     }
     private x_yes(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.IsGenericReturnValueGuaranteed => {
             return ["yes", {
@@ -2075,28 +1833,22 @@ export class CIsGenericReturnValueGuaranteedBuilder {
     public yes(
     ) {
         const x = this.x_yes({
-            "buildContext": this.buildContext,
         })
         return x
     }
 }
 
 export class CIsInterfaceReturnValueGuaranteedBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public no(
     ) {
         const x = this.x_no({
-            "buildContext": this.buildContext,
         })
         return x
     }
     private x_no(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.IsInterfaceReturnValueGuaranteed => {
             return ["no", {
@@ -2105,7 +1857,6 @@ export class CIsInterfaceReturnValueGuaranteedBuilder {
         return sg
     }
     private x_yes(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.IsInterfaceReturnValueGuaranteed => {
             return ["yes", {
@@ -2116,44 +1867,37 @@ export class CIsInterfaceReturnValueGuaranteedBuilder {
     public yes(
     ) {
         const x = this.x_yes({
-            "buildContext": this.buildContext,
         })
         return x
     }
 }
 
 export class CObjectPropertyBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.ObjectProperty>
     private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.ObjectProperty>
         "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
+        this.builder = _p["builder"]
+        this.propvar_generic_interface_declarations = _p["propvar_generic interface declarations"]
     }
     public ObjectProperty(
         key: string,
         par__type: (builder: CPropertyTypeBuilder) => t.PropertyType,
     ) {
         const x = this.x_ObjectProperty({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": p => par__type(p.builder),
         })
         return x
     }
     private x_ObjectProperty(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": (p: { builder: CPropertyTypeBuilder }) => t.PropertyType
     }) {
         const var_type = _p["par__type"]({
             "builder": new CPropertyTypeBuilder({
-                "buildContext": _p["buildContext"],
                 "propvar_generic interface declarations": this.propvar_generic_interface_declarations,
             }),
         })
@@ -2166,28 +1910,23 @@ export class CObjectPropertyBuilder {
 }
 
 export class CPrivateParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public PrivateParameter(
         key: string,
         par__type: string,
     ) {
         const x = this.x_PrivateParameter({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": par__type,
         })
         return x
     }
     private x_PrivateParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": string
     }) {
@@ -2201,24 +1940,20 @@ export class CPrivateParameterBuilder {
 }
 
 export class CPropertyInitialierBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.PropertyInitialier>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.PropertyInitialier>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public PropertyInitialier(
         key: string,
         par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_PropertyInitialier({
-            "buildContext": this.buildContext,
             "key": key,
             "par__initializer_type": p => par__initializer_type(p.builder),
             "param_function parameters": this.param_function_parameters,
@@ -2226,13 +1961,11 @@ export class CPropertyInitialierBuilder {
         return x
     }
     private x_PropertyInitialier(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
             "param_function parameters": _p["param_function parameters"],
         })
@@ -2245,17 +1978,13 @@ export class CPropertyInitialierBuilder {
 }
 
 export class CPropertyInitializationBuilder {
-    private readonly buildContext: gt.IBuildContext
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
     }) {
-        this.buildContext = p["buildContext"]
     }
     public default(
         par__initializer: string,
     ) {
         const x = this.x_default({
-            "buildContext": this.buildContext,
             "par__initializer": par__initializer,
         })
         return x
@@ -2264,13 +1993,11 @@ export class CPropertyInitializationBuilder {
         par__type: string,
     ) {
         const x = this.x_parametrized({
-            "buildContext": this.buildContext,
             "par__type": par__type,
         })
         return x
     }
     private x_default(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__initializer": string
     }) {
         const var_initializer = _p["par__initializer"]
@@ -2282,7 +2009,6 @@ export class CPropertyInitializationBuilder {
         return sg
     }
     private x_parametrized(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__type": string
     }) {
         const var_type = _p["par__type"]
@@ -2296,21 +2022,17 @@ export class CPropertyInitializationBuilder {
 }
 
 export class CPropertyTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
-        this.buildContext = p["buildContext"]
-        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
+        this.propvar_generic_interface_declarations = _p["propvar_generic interface declarations"]
     }
     public generic_type(
         par__referenced_type: string,
         par__arguments: (builder: CGenericTypeArgumentsBuilder) => void,
     ) {
         const x = this.x_generic_type({
-            "buildContext": this.buildContext,
             "par__arguments": p => par__arguments(p.builder),
             "par__referenced type": par__referenced_type,
         })
@@ -2320,7 +2042,6 @@ export class CPropertyTypeBuilder {
         par__raw: string,
     ) {
         const x = this.x_raw({
-            "buildContext": this.buildContext,
             "par__raw": par__raw,
         })
         return x
@@ -2329,7 +2050,6 @@ export class CPropertyTypeBuilder {
         par__referenced_type: string,
     ) {
         const x = this.x_reference({
-            "buildContext": this.buildContext,
             "par__referenced type": par__referenced_type,
         })
         return x
@@ -2337,12 +2057,10 @@ export class CPropertyTypeBuilder {
     public string(
     ) {
         const x = this.x_string({
-            "buildContext": this.buildContext,
         })
         return x
     }
     private x_generic_type(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__arguments": (p: { builder: CGenericTypeArgumentsBuilder }) => void
         readonly "par__referenced type": string
     }) {
@@ -2354,10 +2072,9 @@ export class CPropertyTypeBuilder {
                 "typeInfo": "XXXX",
             }),
         })
-        const var_arguments = _p.buildContext.createDictionary<t.GenericTypeArguments>({
+        const var_arguments = gf.createDictionary<t.GenericTypeArguments>({
             "callback": _cp => {
                 const x = new CGenericTypeArgumentsBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__arguments"]({
@@ -2379,7 +2096,6 @@ export class CPropertyTypeBuilder {
         return sg
     }
     private x_raw(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__raw": string
     }) {
         const var_raw = _p["par__raw"]
@@ -2391,7 +2107,6 @@ export class CPropertyTypeBuilder {
         return sg
     }
     private x_reference(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__referenced type": string
     }) {
         const var_referenced_type = _p["par__referenced type"]
@@ -2403,7 +2118,6 @@ export class CPropertyTypeBuilder {
         return sg
     }
     private x_string(_p: {
-        readonly "buildContext": gt.IBuildContext
     }) {
         const sg = ((): t.PropertyType => {
             return ["string", {
@@ -2414,28 +2128,23 @@ export class CPropertyTypeBuilder {
 }
 
 export class CPublicParameterBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.PublicParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.PublicParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public PublicParameter(
         key: string,
         par__type: string,
     ) {
         const x = this.x_PublicParameter({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": par__type,
         })
         return x
     }
     private x_PublicParameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": string
     }) {
@@ -2449,20 +2158,16 @@ export class CPublicParameterBuilder {
 }
 
 export class CSelectionStartPointBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public callback_parameter(
         par__parameter: string,
     ) {
         const x = this.x_callback_parameter({
-            "buildContext": this.buildContext,
             "par__parameter": par__parameter,
             "param_function parameters": this.param_function_parameters,
         })
@@ -2472,7 +2177,6 @@ export class CSelectionStartPointBuilder {
         par__parameter: string,
     ) {
         const x = this.x_parameter({
-            "buildContext": this.buildContext,
             "par__parameter": par__parameter,
             "param_function parameters": this.param_function_parameters,
         })
@@ -2482,7 +2186,6 @@ export class CSelectionStartPointBuilder {
         par__property: string,
     ) {
         const x = this.x_property({
-            "buildContext": this.buildContext,
             "par__property": par__property,
             "param_function parameters": this.param_function_parameters,
         })
@@ -2492,14 +2195,12 @@ export class CSelectionStartPointBuilder {
         par__variable: string,
     ) {
         const x = this.x_variable({
-            "buildContext": this.buildContext,
             "par__variable": par__variable,
             "param_function parameters": this.param_function_parameters,
         })
         return x
     }
     private x_callback_parameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__parameter": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -2512,7 +2213,6 @@ export class CSelectionStartPointBuilder {
         return sg
     }
     private x_parameter(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__parameter": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -2525,7 +2225,6 @@ export class CSelectionStartPointBuilder {
         return sg
     }
     private x_property(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__property": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -2538,7 +2237,6 @@ export class CSelectionStartPointBuilder {
         return sg
     }
     private x_variable(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__variable": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -2553,30 +2251,25 @@ export class CSelectionStartPointBuilder {
 }
 
 export class CSelectionStepBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IListBuilder<t.SelectionStep>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IListBuilder<t.SelectionStep>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public SelectionStep(
         par__rawselectionstring: string,
     ) {
         const x = this.x_SelectionStep({
-            "buildContext": this.buildContext,
             "par__rawselectionstring": par__rawselectionstring,
             "param_function parameters": this.param_function_parameters,
         })
         return x
     }
     private x_SelectionStep(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__rawselectionstring": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -2606,8 +2299,11 @@ function serialize_block(_p: {
     _p.out.write({
         "string": '"statements": ',
     })
-    _p.type["statements"].map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "[",
+    })
+    _p.type["statements"].mapWithSeparator({
+        "onElement": _cp => {
             _p.out.write({
                 "string": "{",
             })
@@ -2658,7 +2354,13 @@ function serialize_block(_p: {
                             "string": '"raw value": ',
                         })
                         _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
                             "string": $["raw value"],
+                        })
+                        _p.out.write({
+                            "string": '"',
                         })
                         _p.out.write({
                             "string": "}",
@@ -2685,8 +2387,20 @@ function serialize_block(_p: {
                         _p.out.write({
                             "string": '"cases": ',
                         })
-                        $["cases"].getAlphabeticalOrdering({}).map({
-                            "callback": _cp => {
+                        _p.out.write({
+                            "string": "{",
+                        })
+                        $["cases"].getAlphabeticalOrdering({}).mapWithSeparator({
+                            "onElement": _cp => {
+                                _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
+                                    "string": _cp.key,
+                                })
+                                _p.out.write({
+                                    "string": '": ',
+                                })
                                 _p.out.write({
                                     "string": "{",
                                 })
@@ -2698,12 +2412,29 @@ function serialize_block(_p: {
                                     "string": "}",
                                 })
                             },
+                            "onSeparator": _cp => {
+                                _p.out.write({
+                                    "string": ",",
+                                })
+                            },
+                        })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": ",",
                         })
                         _p.out.write({
                             "string": '"raw expression": ',
                         })
                         _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
                             "string": $["raw expression"],
+                        })
+                        _p.out.write({
+                            "string": '"',
                         })
                         _p.out.write({
                             "string": "}",
@@ -2720,12 +2451,35 @@ function serialize_block(_p: {
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "]",
+    })
+    _p.out.write({
+        "string": ",",
     })
     _p.out.write({
         "string": '"variables": ',
     })
-    _p.type["variables"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["variables"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
@@ -2737,6 +2491,14 @@ function serialize_block(_p: {
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
     })
     _p.out.write({
         "string": "}",
@@ -2753,8 +2515,20 @@ function serialize_function_call(_p: {
     _p.out.write({
         "string": '"arguments": ',
     })
-    _p.type["arguments"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
@@ -2820,12 +2594,29 @@ function serialize_function_call(_p: {
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
+    })
+    _p.out.write({
+        "string": ",",
     })
     _p.out.write({
         "string": '"path": ',
     })
     _p.out.write({
+        "string": '"',
+    })
+    _p.out.write({
         "string": _p.type["path"],
+    })
+    _p.out.write({
+        "string": '"',
     })
     _p.out.write({
         "string": "}",
@@ -2859,8 +2650,20 @@ function serialize_function_specification(_p: {
                 _p.out.write({
                     "string": '"parameters": ',
                 })
-                $["parameters"].getAlphabeticalOrdering({}).map({
-                    "callback": _cp => {
+                _p.out.write({
+                    "string": "{",
+                })
+                $["parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                    "onElement": _cp => {
+                        _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
+                            "string": _cp.key,
+                        })
+                        _p.out.write({
+                            "string": '": ',
+                        })
                         _p.out.write({
                             "string": "{",
                         })
@@ -2868,12 +2671,26 @@ function serialize_function_specification(_p: {
                             "string": '"type": ',
                         })
                         _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
                             "string": _cp.element["type"],
+                        })
+                        _p.out.write({
+                            "string": '"',
                         })
                         _p.out.write({
                             "string": "}",
                         })
                     },
+                    "onSeparator": _cp => {
+                        _p.out.write({
+                            "string": ",",
+                        })
+                    },
+                })
+                _p.out.write({
+                    "string": "}",
                 })
                 _p.out.write({
                     "string": "}",
@@ -2900,8 +2717,20 @@ function serialize_function_specification(_p: {
                 _p.out.write({
                     "string": '"parameters": ',
                 })
-                $["parameters"].getAlphabeticalOrdering({}).map({
-                    "callback": _cp => {
+                _p.out.write({
+                    "string": "{",
+                })
+                $["parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                    "onElement": _cp => {
+                        _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
+                            "string": _cp.key,
+                        })
+                        _p.out.write({
+                            "string": '": ',
+                        })
                         _p.out.write({
                             "string": "{",
                         })
@@ -2909,12 +2738,26 @@ function serialize_function_specification(_p: {
                             "string": '"type": ',
                         })
                         _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
                             "string": _cp.element["type"],
+                        })
+                        _p.out.write({
+                            "string": '"',
                         })
                         _p.out.write({
                             "string": "}",
                         })
                     },
+                    "onSeparator": _cp => {
+                        _p.out.write({
+                            "string": ",",
+                        })
+                    },
+                })
+                _p.out.write({
+                    "string": "}",
                 })
                 _p.out.write({
                     "string": "}",
@@ -2927,6 +2770,9 @@ function serialize_function_specification(_p: {
         }
         default: return assertUnreachable(_p.type["access"][0])
     }
+    _p.out.write({
+        "string": ",",
+    })
     _p.out.write({
         "string": '"block": ',
     })
@@ -2963,8 +2809,20 @@ function serialize_generic_in_type(_p: {
                 _p.out.write({
                     "string": '"parameters": ',
                 })
-                $["parameters"].getAlphabeticalOrdering({}).map({
-                    "callback": _cp => {
+                _p.out.write({
+                    "string": "{",
+                })
+                $["parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                    "onElement": _cp => {
+                        _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
+                            "string": _cp.key,
+                        })
+                        _p.out.write({
+                            "string": '": ',
+                        })
                         _p.out.write({
                             "string": "{",
                         })
@@ -2976,6 +2834,17 @@ function serialize_generic_in_type(_p: {
                             "string": "}",
                         })
                     },
+                    "onSeparator": _cp => {
+                        _p.out.write({
+                            "string": ",",
+                        })
+                    },
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": ",",
                 })
                 _p.out.write({
                     "string": '"type": ',
@@ -3045,6 +2914,9 @@ function serialize_generic_in_type(_p: {
                                 default: return assertUnreachable($["guaranteed"][0])
                             }
                             _p.out.write({
+                                "string": ",",
+                            })
+                            _p.out.write({
                                 "string": '"type": ',
                             })
                             serialize_generic_in_type({ type: $["type"], out: _p.out })
@@ -3106,7 +2978,15 @@ function serialize_generic_in_type(_p: {
                 _p.out.write({
                     "string": '"type parameter": ',
                 })
-                //serializeReference
+                _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
+                    "string": $["type parameter"].getKey({}),
+                })
+                _p.out.write({
+                    "string": '"',
+                })
                 _p.out.write({
                     "string": "}",
                 })
@@ -3156,13 +3036,34 @@ function serialize_generic_interface_reference(_p: {
         "string": '"interface": ',
     })
     _p.out.write({
+        "string": '"',
+    })
+    _p.out.write({
         "string": _p.type["interface"],
+    })
+    _p.out.write({
+        "string": '"',
+    })
+    _p.out.write({
+        "string": ",",
     })
     _p.out.write({
         "string": '"type arguments": ',
     })
-    _p.type["type arguments"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["type arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
@@ -3174,6 +3075,14 @@ function serialize_generic_interface_reference(_p: {
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
     })
     _p.out.write({
         "string": "}",
@@ -3208,7 +3117,13 @@ function serialize_generic_return_type(_p: {
                     "string": '"parameter": ',
                 })
                 _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
                     "string": $["parameter"],
+                })
+                _p.out.write({
+                    "string": '"',
                 })
                 _p.out.write({
                     "string": "}",
@@ -3235,7 +3150,15 @@ function serialize_generic_return_type(_p: {
                 _p.out.write({
                     "string": '"type parameter": ',
                 })
-                //serializeReference
+                _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
+                    "string": $["type parameter"].getKey({}),
+                })
+                _p.out.write({
+                    "string": '"',
+                })
                 _p.out.write({
                     "string": "}",
                 })
@@ -3327,8 +3250,20 @@ function serialize_initializer(_p: {
                 _p.out.write({
                     "string": '"arguments": ',
                 })
-                $["arguments"].getAlphabeticalOrdering({}).map({
-                    "callback": _cp => {
+                _p.out.write({
+                    "string": "{",
+                })
+                $["arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
+                    "onElement": _cp => {
+                        _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
+                            "string": _cp.key,
+                        })
+                        _p.out.write({
+                            "string": '": ',
+                        })
                         _p.out.write({
                             "string": "{",
                         })
@@ -3340,12 +3275,29 @@ function serialize_initializer(_p: {
                             "string": "}",
                         })
                     },
+                    "onSeparator": _cp => {
+                        _p.out.write({
+                            "string": ",",
+                        })
+                    },
+                })
+                _p.out.write({
+                    "string": "}",
+                })
+                _p.out.write({
+                    "string": ",",
                 })
                 _p.out.write({
                     "string": '"path": ',
                 })
                 _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
                     "string": $["path"],
+                })
+                _p.out.write({
+                    "string": '"',
                 })
                 _p.out.write({
                     "string": "}",
@@ -3398,8 +3350,20 @@ function serialize_initializer(_p: {
                 _p.out.write({
                     "string": '"properties": ',
                 })
-                $["properties"].getAlphabeticalOrdering({}).map({
-                    "callback": _cp => {
+                _p.out.write({
+                    "string": "{",
+                })
+                $["properties"].getAlphabeticalOrdering({}).mapWithSeparator({
+                    "onElement": _cp => {
+                        _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
+                            "string": _cp.key,
+                        })
+                        _p.out.write({
+                            "string": '": ',
+                        })
                         _p.out.write({
                             "string": "{",
                         })
@@ -3411,6 +3375,14 @@ function serialize_initializer(_p: {
                             "string": "}",
                         })
                     },
+                    "onSeparator": _cp => {
+                        _p.out.write({
+                            "string": ",",
+                        })
+                    },
+                })
+                _p.out.write({
+                    "string": "}",
                 })
                 _p.out.write({
                     "string": "}",
@@ -3438,7 +3410,13 @@ function serialize_initializer(_p: {
                     "string": '"rawstring": ',
                 })
                 _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
                     "string": $["rawstring"],
+                })
+                _p.out.write({
+                    "string": '"',
                 })
                 _p.out.write({
                     "string": "}",
@@ -3483,7 +3461,13 @@ function serialize_initializer(_p: {
                                 "string": '"parameter": ',
                             })
                             _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
                                 "string": $["parameter"],
+                            })
+                            _p.out.write({
+                                "string": '"',
                             })
                             _p.out.write({
                                 "string": "}",
@@ -3511,7 +3495,13 @@ function serialize_initializer(_p: {
                                 "string": '"parameter": ',
                             })
                             _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
                                 "string": $["parameter"],
+                            })
+                            _p.out.write({
+                                "string": '"',
                             })
                             _p.out.write({
                                 "string": "}",
@@ -3539,7 +3529,13 @@ function serialize_initializer(_p: {
                                 "string": '"property": ',
                             })
                             _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
                                 "string": $["property"],
+                            })
+                            _p.out.write({
+                                "string": '"',
                             })
                             _p.out.write({
                                 "string": "}",
@@ -3567,7 +3563,13 @@ function serialize_initializer(_p: {
                                 "string": '"variable": ',
                             })
                             _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
                                 "string": $["variable"],
+                            })
+                            _p.out.write({
+                                "string": '"',
                             })
                             _p.out.write({
                                 "string": "}",
@@ -3581,10 +3583,16 @@ function serialize_initializer(_p: {
                     default: return assertUnreachable($["start point"][0])
                 }
                 _p.out.write({
+                    "string": ",",
+                })
+                _p.out.write({
                     "string": '"steps": ',
                 })
-                $["steps"].map({
-                    "callback": _cp => {
+                _p.out.write({
+                    "string": "[",
+                })
+                $["steps"].mapWithSeparator({
+                    "onElement": _cp => {
                         _p.out.write({
                             "string": "{",
                         })
@@ -3592,12 +3600,26 @@ function serialize_initializer(_p: {
                             "string": '"rawselectionstring": ',
                         })
                         _p.out.write({
+                            "string": '"',
+                        })
+                        _p.out.write({
                             "string": _cp.element["rawselectionstring"],
+                        })
+                        _p.out.write({
+                            "string": '"',
                         })
                         _p.out.write({
                             "string": "}",
                         })
                     },
+                    "onSeparator": _cp => {
+                        _p.out.write({
+                            "string": ",",
+                        })
+                    },
+                })
+                _p.out.write({
+                    "string": "]",
                 })
                 _p.out.write({
                     "string": "}",
@@ -3626,10 +3648,22 @@ function serialize_initializer(_p: {
                 })
                 serialize_initializer({ type: $["initializer"], out: _p.out })
                 _p.out.write({
+                    "string": ",",
+                })
+                _p.out.write({
                     "string": '"state": ',
                 })
                 _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
                     "string": $["state"],
+                })
+                _p.out.write({
+                    "string": '"',
+                })
+                _p.out.write({
+                    "string": ",",
                 })
                 _p.out.write({
                     "string": '"type specification": ',
@@ -3674,7 +3708,13 @@ function serialize_initializer(_p: {
                                 "string": '"type": ',
                             })
                             _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
                                 "string": $["type"],
+                            })
+                            _p.out.write({
+                                "string": '"',
                             })
                             _p.out.write({
                                 "string": "}",
@@ -3713,8 +3753,20 @@ function serializex(_p: {
     _p.out.write({
         "string": '"algorithm units": ',
     })
-    _p.type["algorithm units"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["algorithm units"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
@@ -3738,8 +3790,20 @@ function serializex(_p: {
                         _p.out.write({
                             "string": '"methods": ',
                         })
-                        $["methods"].getAlphabeticalOrdering({}).map({
-                            "callback": _cp => {
+                        _p.out.write({
+                            "string": "{",
+                        })
+                        $["methods"].getAlphabeticalOrdering({}).mapWithSeparator({
+                            "onElement": _cp => {
+                                _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
+                                    "string": _cp.key,
+                                })
+                                _p.out.write({
+                                    "string": '": ',
+                                })
                                 _p.out.write({
                                     "string": "{",
                                 })
@@ -3751,12 +3815,35 @@ function serializex(_p: {
                                     "string": "}",
                                 })
                             },
+                            "onSeparator": _cp => {
+                                _p.out.write({
+                                    "string": ",",
+                                })
+                            },
+                        })
+                        _p.out.write({
+                            "string": "}",
+                        })
+                        _p.out.write({
+                            "string": ",",
                         })
                         _p.out.write({
                             "string": '"properties": ',
                         })
-                        $["properties"].getAlphabeticalOrdering({}).map({
-                            "callback": _cp => {
+                        _p.out.write({
+                            "string": "{",
+                        })
+                        $["properties"].getAlphabeticalOrdering({}).mapWithSeparator({
+                            "onElement": _cp => {
+                                _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
+                                    "string": _cp.key,
+                                })
+                                _p.out.write({
+                                    "string": '": ',
+                                })
                                 _p.out.write({
                                     "string": "{",
                                 })
@@ -3781,7 +3868,13 @@ function serializex(_p: {
                                                 "string": '"initializer": ',
                                             })
                                             _p.out.write({
+                                                "string": '"',
+                                            })
+                                            _p.out.write({
                                                 "string": $["initializer"],
+                                            })
+                                            _p.out.write({
+                                                "string": '"',
                                             })
                                             _p.out.write({
                                                 "string": "}",
@@ -3809,7 +3902,13 @@ function serializex(_p: {
                                                 "string": '"type": ',
                                             })
                                             _p.out.write({
+                                                "string": '"',
+                                            })
+                                            _p.out.write({
                                                 "string": $["type"],
+                                            })
+                                            _p.out.write({
+                                                "string": '"',
                                             })
                                             _p.out.write({
                                                 "string": "}",
@@ -3826,6 +3925,14 @@ function serializex(_p: {
                                     "string": "}",
                                 })
                             },
+                            "onSeparator": _cp => {
+                                _p.out.write({
+                                    "string": ",",
+                                })
+                            },
+                        })
+                        _p.out.write({
+                            "string": "}",
                         })
                         _p.out.write({
                             "string": "}",
@@ -3868,20 +3975,55 @@ function serializex(_p: {
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
+    })
+    _p.out.write({
+        "string": ",",
     })
     _p.out.write({
         "string": '"generic interface declarations": ',
     })
-    _p.type["generic interface declarations"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["generic interface declarations"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
             _p.out.write({
                 "string": '"base interfaces": ',
             })
-            _cp.element["base interfaces"].getAlphabeticalOrdering({}).map({
-                "callback": _cp => {
+            _p.out.write({
+                "string": "{",
+            })
+            _cp.element["base interfaces"].getAlphabeticalOrdering({}).mapWithSeparator({
+                "onElement": _cp => {
+                    _p.out.write({
+                        "string": '"',
+                    })
+                    _p.out.write({
+                        "string": _cp.key,
+                    })
+                    _p.out.write({
+                        "string": '": ',
+                    })
                     _p.out.write({
                         "string": "{",
                     })
@@ -3893,20 +4035,55 @@ function serializex(_p: {
                         "string": "}",
                     })
                 },
+                "onSeparator": _cp => {
+                    _p.out.write({
+                        "string": ",",
+                    })
+                },
+            })
+            _p.out.write({
+                "string": "}",
+            })
+            _p.out.write({
+                "string": ",",
             })
             _p.out.write({
                 "string": '"methods": ',
             })
-            _cp.element["methods"].getAlphabeticalOrdering({}).map({
-                "callback": _cp => {
+            _p.out.write({
+                "string": "{",
+            })
+            _cp.element["methods"].getAlphabeticalOrdering({}).mapWithSeparator({
+                "onElement": _cp => {
+                    _p.out.write({
+                        "string": '"',
+                    })
+                    _p.out.write({
+                        "string": _cp.key,
+                    })
+                    _p.out.write({
+                        "string": '": ',
+                    })
                     _p.out.write({
                         "string": "{",
                     })
                     _p.out.write({
                         "string": '"parameters": ',
                     })
-                    _cp.element["parameters"].getAlphabeticalOrdering({}).map({
-                        "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
+                    _cp.element["parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                        "onElement": _cp => {
+                            _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
+                                "string": _cp.key,
+                            })
+                            _p.out.write({
+                                "string": '": ',
+                            })
                             _p.out.write({
                                 "string": "{",
                             })
@@ -3918,6 +4095,17 @@ function serializex(_p: {
                                 "string": "}",
                             })
                         },
+                        "onSeparator": _cp => {
+                            _p.out.write({
+                                "string": ",",
+                            })
+                        },
+                    })
+                    _p.out.write({
+                        "string": "}",
+                    })
+                    _p.out.write({
+                        "string": ",",
                     })
                     _p.out.write({
                         "string": '"type": ',
@@ -3986,6 +4174,9 @@ function serializex(_p: {
                                     }
                                     default: return assertUnreachable($["guaranteed"][0])
                                 }
+                                _p.out.write({
+                                    "string": ",",
+                                })
                                 _p.out.write({
                                     "string": '"type": ',
                                 })
@@ -4024,10 +4215,25 @@ function serializex(_p: {
                         default: return assertUnreachable(_cp.element["type"][0])
                     }
                     _p.out.write({
+                        "string": ",",
+                    })
+                    _p.out.write({
                         "string": '"type parameters": ',
                     })
-                    _cp.element["type parameters"].getAlphabeticalOrdering({}).map({
-                        "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
+                    _cp.element["type parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                        "onElement": _cp => {
+                            _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
+                                "string": _cp.key,
+                            })
+                            _p.out.write({
+                                "string": '": ',
+                            })
                             _p.out.write({
                                 "string": "{",
                             })
@@ -4035,51 +4241,137 @@ function serializex(_p: {
                                 "string": "}",
                             })
                         },
+                        "onSeparator": _cp => {
+                            _p.out.write({
+                                "string": ",",
+                            })
+                        },
+                    })
+                    _p.out.write({
+                        "string": "}",
                     })
                     _p.out.write({
                         "string": "}",
                     })
                 },
-            })
-            _p.out.write({
-                "string": '"parameters": ',
-            })
-            _cp.element["parameters"].getAlphabeticalOrdering({}).map({
-                "callback": _cp => {
+                "onSeparator": _cp => {
                     _p.out.write({
-                        "string": "{",
-                    })
-                    _p.out.write({
-                        "string": "}",
+                        "string": ",",
                     })
                 },
             })
             _p.out.write({
                 "string": "}",
             })
+            _p.out.write({
+                "string": ",",
+            })
+            _p.out.write({
+                "string": '"parameters": ',
+            })
+            _p.out.write({
+                "string": "{",
+            })
+            _cp.element["parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                "onElement": _cp => {
+                    _p.out.write({
+                        "string": '"',
+                    })
+                    _p.out.write({
+                        "string": _cp.key,
+                    })
+                    _p.out.write({
+                        "string": '": ',
+                    })
+                    _p.out.write({
+                        "string": "{",
+                    })
+                    _p.out.write({
+                        "string": "}",
+                    })
+                },
+                "onSeparator": _cp => {
+                    _p.out.write({
+                        "string": ",",
+                    })
+                },
+            })
+            _p.out.write({
+                "string": "}",
+            })
+            _p.out.write({
+                "string": "}",
+            })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
+    })
+    _p.out.write({
+        "string": ",",
     })
     _p.out.write({
         "string": '"interfaces": ',
     })
-    _p.type["interfaces"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["interfaces"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
             _p.out.write({
                 "string": '"methods": ',
             })
-            _cp.element["methods"].getAlphabeticalOrdering({}).map({
-                "callback": _cp => {
+            _p.out.write({
+                "string": "{",
+            })
+            _cp.element["methods"].getAlphabeticalOrdering({}).mapWithSeparator({
+                "onElement": _cp => {
+                    _p.out.write({
+                        "string": '"',
+                    })
+                    _p.out.write({
+                        "string": _cp.key,
+                    })
+                    _p.out.write({
+                        "string": '": ',
+                    })
                     _p.out.write({
                         "string": "{",
                     })
                     _p.out.write({
                         "string": '"parameters": ',
                     })
-                    _cp.element["parameters"].getAlphabeticalOrdering({}).map({
-                        "callback": _cp => {
+                    _p.out.write({
+                        "string": "{",
+                    })
+                    _cp.element["parameters"].getAlphabeticalOrdering({}).mapWithSeparator({
+                        "onElement": _cp => {
+                            _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
+                                "string": _cp.key,
+                            })
+                            _p.out.write({
+                                "string": '": ',
+                            })
                             _p.out.write({
                                 "string": "{",
                             })
@@ -4087,12 +4379,29 @@ function serializex(_p: {
                                 "string": '"type": ',
                             })
                             _p.out.write({
+                                "string": '"',
+                            })
+                            _p.out.write({
                                 "string": _cp.element["type"],
+                            })
+                            _p.out.write({
+                                "string": '"',
                             })
                             _p.out.write({
                                 "string": "}",
                             })
                         },
+                        "onSeparator": _cp => {
+                            _p.out.write({
+                                "string": ",",
+                            })
+                        },
+                    })
+                    _p.out.write({
+                        "string": "}",
+                    })
+                    _p.out.write({
+                        "string": ",",
                     })
                     _p.out.write({
                         "string": '"type": ',
@@ -4162,10 +4471,19 @@ function serializex(_p: {
                                     default: return assertUnreachable($["guaranteed"][0])
                                 }
                                 _p.out.write({
+                                    "string": ",",
+                                })
+                                _p.out.write({
                                     "string": '"raw return type": ',
                                 })
                                 _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
                                     "string": $["raw return type"],
+                                })
+                                _p.out.write({
+                                    "string": '"',
                                 })
                                 _p.out.write({
                                     "string": "}",
@@ -4204,17 +4522,48 @@ function serializex(_p: {
                         "string": "}",
                     })
                 },
+                "onSeparator": _cp => {
+                    _p.out.write({
+                        "string": ",",
+                    })
+                },
+            })
+            _p.out.write({
+                "string": "}",
             })
             _p.out.write({
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
+    })
+    _p.out.write({
+        "string": ",",
     })
     _p.out.write({
         "string": '"types": ',
     })
-    _p.type["types"].getAlphabeticalOrdering({}).map({
-        "callback": _cp => {
+    _p.out.write({
+        "string": "{",
+    })
+    _p.type["types"].getAlphabeticalOrdering({}).mapWithSeparator({
+        "onElement": _cp => {
+            _p.out.write({
+                "string": '"',
+            })
+            _p.out.write({
+                "string": _cp.key,
+            })
+            _p.out.write({
+                "string": '": ',
+            })
             _p.out.write({
                 "string": "{",
             })
@@ -4238,8 +4587,20 @@ function serializex(_p: {
                         _p.out.write({
                             "string": '"properties": ',
                         })
-                        $["properties"].getAlphabeticalOrdering({}).map({
-                            "callback": _cp => {
+                        _p.out.write({
+                            "string": "{",
+                        })
+                        $["properties"].getAlphabeticalOrdering({}).mapWithSeparator({
+                            "onElement": _cp => {
+                                _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
+                                    "string": _cp.key,
+                                })
+                                _p.out.write({
+                                    "string": '": ',
+                                })
                                 _p.out.write({
                                     "string": "{",
                                 })
@@ -4263,8 +4624,20 @@ function serializex(_p: {
                                             _p.out.write({
                                                 "string": '"arguments": ',
                                             })
-                                            $["arguments"].getAlphabeticalOrdering({}).map({
-                                                "callback": _cp => {
+                                            _p.out.write({
+                                                "string": "{",
+                                            })
+                                            $["arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
+                                                "onElement": _cp => {
+                                                    _p.out.write({
+                                                        "string": '"',
+                                                    })
+                                                    _p.out.write({
+                                                        "string": _cp.key,
+                                                    })
+                                                    _p.out.write({
+                                                        "string": '": ',
+                                                    })
                                                     _p.out.write({
                                                         "string": "{",
                                                     })
@@ -4272,17 +4645,42 @@ function serializex(_p: {
                                                         "string": '"raw": ',
                                                     })
                                                     _p.out.write({
+                                                        "string": '"',
+                                                    })
+                                                    _p.out.write({
                                                         "string": _cp.element["raw"],
+                                                    })
+                                                    _p.out.write({
+                                                        "string": '"',
                                                     })
                                                     _p.out.write({
                                                         "string": "}",
                                                     })
                                                 },
+                                                "onSeparator": _cp => {
+                                                    _p.out.write({
+                                                        "string": ",",
+                                                    })
+                                                },
+                                            })
+                                            _p.out.write({
+                                                "string": "}",
+                                            })
+                                            _p.out.write({
+                                                "string": ",",
                                             })
                                             _p.out.write({
                                                 "string": '"referenced type": ',
                                             })
-                                            //serializeReference
+                                            _p.out.write({
+                                                "string": '"',
+                                            })
+                                            _p.out.write({
+                                                "string": $["referenced type"].getKey({}),
+                                            })
+                                            _p.out.write({
+                                                "string": '"',
+                                            })
                                             _p.out.write({
                                                 "string": "}",
                                             })
@@ -4309,7 +4707,13 @@ function serializex(_p: {
                                                 "string": '"raw": ',
                                             })
                                             _p.out.write({
+                                                "string": '"',
+                                            })
+                                            _p.out.write({
                                                 "string": $["raw"],
+                                            })
+                                            _p.out.write({
+                                                "string": '"',
                                             })
                                             _p.out.write({
                                                 "string": "}",
@@ -4337,7 +4741,13 @@ function serializex(_p: {
                                                 "string": '"referenced type": ',
                                             })
                                             _p.out.write({
+                                                "string": '"',
+                                            })
+                                            _p.out.write({
                                                 "string": $["referenced type"],
+                                            })
+                                            _p.out.write({
+                                                "string": '"',
                                             })
                                             _p.out.write({
                                                 "string": "}",
@@ -4376,6 +4786,14 @@ function serializex(_p: {
                                     "string": "}",
                                 })
                             },
+                            "onSeparator": _cp => {
+                                _p.out.write({
+                                    "string": ",",
+                                })
+                            },
+                        })
+                        _p.out.write({
+                            "string": "}",
                         })
                         _p.out.write({
                             "string": "}",
@@ -4402,8 +4820,20 @@ function serializex(_p: {
                         _p.out.write({
                             "string": '"alternatives": ',
                         })
-                        $["alternatives"].getAlphabeticalOrdering({}).map({
-                            "callback": _cp => {
+                        _p.out.write({
+                            "string": "{",
+                        })
+                        $["alternatives"].getAlphabeticalOrdering({}).mapWithSeparator({
+                            "onElement": _cp => {
+                                _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
+                                    "string": _cp.key,
+                                })
+                                _p.out.write({
+                                    "string": '": ',
+                                })
                                 _p.out.write({
                                     "string": "{",
                                 })
@@ -4411,12 +4841,26 @@ function serializex(_p: {
                                     "string": '"referenced type": ',
                                 })
                                 _p.out.write({
+                                    "string": '"',
+                                })
+                                _p.out.write({
                                     "string": _cp.element["referenced type"],
+                                })
+                                _p.out.write({
+                                    "string": '"',
                                 })
                                 _p.out.write({
                                     "string": "}",
                                 })
                             },
+                            "onSeparator": _cp => {
+                                _p.out.write({
+                                    "string": ",",
+                                })
+                            },
+                        })
+                        _p.out.write({
+                            "string": "}",
                         })
                         _p.out.write({
                             "string": "}",
@@ -4433,6 +4877,14 @@ function serializex(_p: {
                 "string": "}",
             })
         },
+        "onSeparator": _cp => {
+            _p.out.write({
+                "string": ",",
+            })
+        },
+    })
+    _p.out.write({
+        "string": "}",
     })
     _p.out.write({
         "string": "}",
@@ -4440,36 +4892,30 @@ function serializex(_p: {
 }
 
 export class CStatementBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IListBuilder<t.Statement>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IListBuilder<t.Statement>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public Statement(
         par__type: (builder: CStatementTypeBuilder) => t.StatementType,
     ) {
         const x = this.x_Statement({
-            "buildContext": this.buildContext,
             "par__type": p => par__type(p.builder),
             "param_function parameters": this.param_function_parameters,
         })
         return x
     }
     private x_Statement(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__type": (p: { builder: CStatementTypeBuilder }) => t.StatementType
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_type = _p["par__type"]({
             "builder": new CStatementTypeBuilder({
-                "buildContext": _p["buildContext"],
                 "param_function parameters": _p["param_function parameters"],
             }),
         })
@@ -4482,21 +4928,17 @@ export class CStatementBuilder {
 }
 
 export class CStatementTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public call(
         par__call_path: string,
         par__call_arguments: (builder: CFunctionCallArgurmentBuilder) => void,
     ) {
         const x = this.x_call({
-            "buildContext": this.buildContext,
             "par__call_arguments": p => par__call_arguments(p.builder),
             "par__call_path": par__call_path,
             "param_function parameters": this.param_function_parameters,
@@ -4507,7 +4949,6 @@ export class CStatementTypeBuilder {
         par__raw_value: string,
     ) {
         const x = this.x_raw({
-            "buildContext": this.buildContext,
             "par__raw value": par__raw_value,
             "param_function parameters": this.param_function_parameters,
         })
@@ -4518,7 +4959,6 @@ export class CStatementTypeBuilder {
         par__cases: (builder: CSwitchCaseBuilder) => void,
     ) {
         const x = this.x_switch({
-            "buildContext": this.buildContext,
             "par__cases": p => par__cases(p.builder),
             "par__raw expression": par__raw_expression,
             "param_function parameters": this.param_function_parameters,
@@ -4526,13 +4966,11 @@ export class CStatementTypeBuilder {
         return x
     }
     private x_call(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__call_arguments": (p: { builder: CFunctionCallArgurmentBuilder }) => void
         readonly "par__call_path": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_call = create_function_call({
-            "buildContext": _p["buildContext"],
             "par__arguments": _p["par__call_arguments"],
             "par__path": _p["par__call_path"],
             "param_function parameters": _p["param_function parameters"],
@@ -4545,7 +4983,6 @@ export class CStatementTypeBuilder {
         return sg
     }
     private x_raw(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__raw value": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -4558,16 +4995,14 @@ export class CStatementTypeBuilder {
         return sg
     }
     private x_switch(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__cases": (p: { builder: CSwitchCaseBuilder }) => void
         readonly "par__raw expression": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_raw_expression = _p["par__raw expression"]
-        const var_cases = _p.buildContext.createDictionary<t.SwitchCase>({
+        const var_cases = gf.createDictionary<t.SwitchCase>({
             "callback": _cp => {
                 const x = new CSwitchCaseBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                     "param_function parameters": _p["param_function parameters"],
                 })
@@ -4592,17 +5027,14 @@ export class CStatementTypeBuilder {
 }
 
 export class CSwitchCaseBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.SwitchCase>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.SwitchCase>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public SwitchCase(
         key: string,
@@ -4610,7 +5042,6 @@ export class CSwitchCaseBuilder {
         par__block_statements: (builder: CStatementBuilder) => void,
     ) {
         const x = this.x_SwitchCase({
-            "buildContext": this.buildContext,
             "key": key,
             "par__block_statements": p => par__block_statements(p.builder),
             "par__block_variables": p => par__block_variables(p.builder),
@@ -4619,14 +5050,12 @@ export class CSwitchCaseBuilder {
         return x
     }
     private x_SwitchCase(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__block_statements": (p: { builder: CStatementBuilder }) => void
         readonly "par__block_variables": (p: { builder: CVariableBuilder }) => void
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_block = create_block({
-            "buildContext": _p["buildContext"],
             "par__statements": _p["par__block_statements"],
             "par__variables": _p["par__block_variables"],
             "param_function parameters": _p["param_function parameters"],
@@ -4640,28 +5069,23 @@ export class CSwitchCaseBuilder {
 }
 
 export class CTaggedUnionAlternativeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.TaggedUnionAlternative>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.TaggedUnionAlternative>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
+        this.builder = _p["builder"]
     }
     public TaggedUnionAlternative(
         key: string,
         par__referenced_type: string,
     ) {
         const x = this.x_TaggedUnionAlternative({
-            "buildContext": this.buildContext,
             "key": key,
             "par__referenced type": par__referenced_type,
         })
         return x
     }
     private x_TaggedUnionAlternative(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__referenced type": string
     }) {
@@ -4675,19 +5099,15 @@ export class CTaggedUnionAlternativeBuilder {
 }
 
 export class CTaggedUnionTypeSpecificationBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public derived(
     ) {
         const x = this.x_derived({
-            "buildContext": this.buildContext,
             "param_function parameters": this.param_function_parameters,
         })
         return x
@@ -4696,14 +5116,12 @@ export class CTaggedUnionTypeSpecificationBuilder {
         par__type: string,
     ) {
         const x = this.x_reference({
-            "buildContext": this.buildContext,
             "par__type": par__type,
             "param_function parameters": this.param_function_parameters,
         })
         return x
     }
     private x_derived(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const sg = ((): t.TaggedUnionTypeSpecification => {
@@ -4713,7 +5131,6 @@ export class CTaggedUnionTypeSpecificationBuilder {
         return sg
     }
     private x_reference(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__type": string
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
@@ -4728,37 +5145,31 @@ export class CTaggedUnionTypeSpecificationBuilder {
 }
 
 export class CTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Type>
     private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.Type>
         "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
+        this.builder = _p["builder"]
+        this.propvar_generic_interface_declarations = _p["propvar_generic interface declarations"]
     }
     public Type(
         key: string,
         par__type: (builder: CTypeTypeBuilder) => t.TypeType,
     ) {
         const x = this.x_Type({
-            "buildContext": this.buildContext,
             "key": key,
             "par__type": p => par__type(p.builder),
         })
         return x
     }
     private x_Type(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__type": (p: { builder: CTypeTypeBuilder }) => t.TypeType
     }) {
         const var_type = _p["par__type"]({
             "builder": new CTypeTypeBuilder({
-                "buildContext": _p["buildContext"],
                 "propvar_generic interface declarations": this.propvar_generic_interface_declarations,
             }),
         })
@@ -4771,20 +5182,16 @@ export class CTypeBuilder {
 }
 
 export class CTypeTypeBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly propvar_generic_interface_declarations: gt.ILookup<t.GenericInterfaceDeclaration>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "propvar_generic interface declarations": gt.ILookup<t.GenericInterfaceDeclaration>
     }) {
-        this.buildContext = p["buildContext"]
-        this.propvar_generic_interface_declarations = p["propvar_generic interface declarations"]
+        this.propvar_generic_interface_declarations = _p["propvar_generic interface declarations"]
     }
     public object(
         par__properties: (builder: CObjectPropertyBuilder) => void,
     ) {
         const x = this.x_object({
-            "buildContext": this.buildContext,
             "par__properties": p => par__properties(p.builder),
         })
         return x
@@ -4793,19 +5200,16 @@ export class CTypeTypeBuilder {
         par__alternatives: (builder: CTaggedUnionAlternativeBuilder) => void,
     ) {
         const x = this.x_tagged_union({
-            "buildContext": this.buildContext,
             "par__alternatives": p => par__alternatives(p.builder),
         })
         return x
     }
     private x_object(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__properties": (p: { builder: CObjectPropertyBuilder }) => void
     }) {
-        const var_properties = _p.buildContext.createDictionary<t.ObjectProperty>({
+        const var_properties = gf.createDictionary<t.ObjectProperty>({
             "callback": _cp => {
                 const x = new CObjectPropertyBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                     "propvar_generic interface declarations": this.propvar_generic_interface_declarations,
                 })
@@ -4827,13 +5231,11 @@ export class CTypeTypeBuilder {
         return sg
     }
     private x_tagged_union(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "par__alternatives": (p: { builder: CTaggedUnionAlternativeBuilder }) => void
     }) {
-        const var_alternatives = _p.buildContext.createDictionary<t.TaggedUnionAlternative>({
+        const var_alternatives = gf.createDictionary<t.TaggedUnionAlternative>({
             "callback": _cp => {
                 const x = new CTaggedUnionAlternativeBuilder({
-                    "buildContext": _p["buildContext"],
                     "builder": _cp["builder"],
                 })
                 const y = _p["par__alternatives"]({
@@ -4856,24 +5258,20 @@ export class CTypeTypeBuilder {
 }
 
 export class CVariableBuilder {
-    private readonly buildContext: gt.IBuildContext
     private readonly builder: gt.IDictionaryBuilder<t.Variable>
     private readonly param_function_parameters: gt.ILookup<t.PrivateParameter>
-    constructor(p: {
-        "buildContext": gt.IBuildContext
+    constructor(_p: {
         "builder": gt.IDictionaryBuilder<t.Variable>
         "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
-        this.buildContext = p["buildContext"]
-        this.builder = p["builder"]
-        this.param_function_parameters = p["param_function parameters"]
+        this.builder = _p["builder"]
+        this.param_function_parameters = _p["param_function parameters"]
     }
     public Variable(
         key: string,
         par__initializer_type: (builder: CInitializerTypeBuilder) => t.InitializerType,
     ) {
         const x = this.x_Variable({
-            "buildContext": this.buildContext,
             "key": key,
             "par__initializer_type": p => par__initializer_type(p.builder),
             "param_function parameters": this.param_function_parameters,
@@ -4881,13 +5279,11 @@ export class CVariableBuilder {
         return x
     }
     private x_Variable(_p: {
-        readonly "buildContext": gt.IBuildContext
         readonly "key": string
         readonly "par__initializer_type": (p: { builder: CInitializerTypeBuilder }) => t.InitializerType
         readonly "param_function parameters": gt.ILookup<t.PrivateParameter>
     }) {
         const var_initializer = create_initializer({
-            "buildContext": _p["buildContext"],
             "par__type": _p["par__initializer_type"],
             "param_function parameters": _p["param_function parameters"],
         })

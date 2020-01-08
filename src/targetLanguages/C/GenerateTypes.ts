@@ -11,22 +11,21 @@ function assertUnreachable<T>(_x: never): T {
 
 
 export class GenerateTypes {
-    public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
+    public CompilationUnit(compilationUnit: CompilationUnit, moduleName: string): fp.IParagraph {
         return [
-            `//tslint:disable: ban-types`,
-            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
-            `import * as gt from "./genericTypes"`,
+            `#ifndef ${sanitize(moduleName)}_H`,
+            `#define ${sanitize(moduleName)}_H`,
             compilationUnit.types.getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: cp => {
                     return [
                         ``,
                         fp.line([
-                            `export type ${sanitize(cp.key)} = `,
                             ((): fp.InlinePart => {
                                 switch (cp.element.type[0]) {
                                     case "object": {
                                         const $ = cp.element.type[1]
                                         return [
+                                            `struct ${sanitize(cp.key)} `,
                                             `{`,
                                             () => {
                                                 return $.properties.getAlphabeticalOrdering({}).map({
@@ -75,6 +74,17 @@ export class GenerateTypes {
                                     case "tagged union": {
                                         const $ = cp.element.type[1]
                                         return [
+                                            `enum ${sanitize(cp.key)} `,
+                                            () => {
+                                                return $.alternatives.getAlphabeticalOrdering({}).map({
+                                                    callback: cp => {
+                                                        return [
+                                                            `| [ "${cp.key}", ${cp.element["xreferenced type"]} ]`,
+                                                        ]
+                                                    },
+                                                })
+                                            },
+                                            `union ${sanitize(cp.key)} `,
                                             () => {
                                                 return $.alternatives.getAlphabeticalOrdering({}).map({
                                                     callback: cp => {
@@ -93,6 +103,8 @@ export class GenerateTypes {
                     ]
                 },
             }),
+            ``,
+            `#endif`,
             ``,
         ]
     }

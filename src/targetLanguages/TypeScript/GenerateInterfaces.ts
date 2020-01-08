@@ -13,7 +13,7 @@ export class GenerateInterfaces {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
             `//tslint:disable: ban-types`,
-            `//@ts-ignore`,
+            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as t from "./types"`,
             compilationUnit.interfaces.getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: cp => {
@@ -24,18 +24,18 @@ export class GenerateInterfaces {
                             return [
                                 cp.element.methods.getAlphabeticalOrdering({}).map({
                                     callback: cp => {
-                                        return [
-                                            `${sanitize(cp.key)}(`,
+                                        return fp.line([
+                                            `${sanitize(cp.key)}(p: {`,
                                             cp.element.parameters.getAlphabeticalOrdering({}).mapWithSeparator<fp.InlinePart>({
                                                 onSeparator: () => `,`,
                                                 onElement: cp => [
                                                     ` readonly `,
                                                     cp.key,
                                                     `: `,
-                                                    cp.element.type,
+                                                    cp.element.xtype,
                                                 ],
                                             }),
-                                            `)`,
+                                            `})`,
                                             `: `,
                                             ((): fp.InlinePart => {
                                                 switch (cp.element.type[0]) {
@@ -54,7 +54,7 @@ export class GenerateInterfaces {
                                                                         return assertUnreachable($.guaranteed[0])
                                                                 }
                                                             })(),
-                                                            $["raw return type"],
+                                                            $["xraw return type"],
                                                         ]
                                                     }
                                                     case "procedure": {
@@ -64,7 +64,7 @@ export class GenerateInterfaces {
                                                         return assertUnreachable(cp.element.type[0])
                                                 }
                                             })(),
-                                        ]
+                                        ])
                                     },
                                 }),
                             ]

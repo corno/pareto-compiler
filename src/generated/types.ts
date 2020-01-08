@@ -55,7 +55,7 @@ export type CompilationUnit = {
 
 export type ConstructorCall = {
     readonly "arguments": gt.Dictionary<ConstructorCallArgurment>
-    readonly "path": string
+    readonly "xpath": string
 }
 
 export type ConstructorCallArgurment = {
@@ -63,10 +63,13 @@ export type ConstructorCallArgurment = {
 }
 
 export type DefaultInitialize = {
-    readonly "initializer": string
+    readonly "xinitializer": string
 }
 
 export type DerivedTaggedUnionType = {
+}
+
+export type False = {
 }
 
 export type Function = {
@@ -79,7 +82,7 @@ export type FunctionAccess =
 
 export type FunctionCall = {
     readonly "arguments": gt.Dictionary<FunctionCallArgurment>
-    readonly "path": string
+    readonly "xpath": string
 }
 
 export type FunctionCallArgurment = {
@@ -96,7 +99,6 @@ export type FunctionCallStatement = {
 
 export type FunctionSpecification = {
     readonly "access": FunctionAccess
-    readonly "block": Block
 }
 
 export type GenericArgument = {
@@ -129,6 +131,10 @@ export type GenericFunction = {
     readonly "type": GenericReturnType
 }
 
+export type GenericFunctionCallInitializer = {
+    readonly "call": FunctionCall
+}
+
 export type GenericFunctionType =
     | [ "function", GenericFunction ]
     | [ "procedure", GenericProcedure ]
@@ -149,8 +155,8 @@ export type GenericInterfaceParameter = {
 }
 
 export type GenericInterfaceReference = {
-    readonly "interface": string
     readonly "type arguments": gt.Dictionary<GenericArgument>
+    readonly "xinterface": string
 }
 
 export type GenericInType = {
@@ -189,7 +195,7 @@ export type GenericReturnValueIsNotGuaranteed = {
 }
 
 export type GenericTypeArguments = {
-    readonly "raw": string
+    readonly "xraw": string
 }
 
 export type GenericTypeProperty = {
@@ -207,11 +213,15 @@ export type InitializerArgument = {
 
 export type InitializerType =
     | [ "constructor call", ConstructorCall ]
+    | [ "false", False ]
     | [ "function call", FunctionCallInitializer ]
+    | [ "generic function call", GenericFunctionCallInitializer ]
     | [ "object", ObjectInitializer ]
     | [ "rawx", RawInitializer ]
     | [ "selection", SelectionInitializer ]
+    | [ "string literal", StringLiteral ]
     | [ "tagged union", TaggedUnionInitializer ]
+    | [ "true", True ]
 
 export type InReferenceToMethodTypeParameter = {
     readonly "type parameter": gt.Reference<GenericMethodTypeParameter>
@@ -223,7 +233,7 @@ export type Interface = {
 
 export type InterfaceFunction = {
     readonly "guaranteed": IsInterfaceReturnValueGuaranteed
-    readonly "raw return type": string
+    readonly "xraw return type": string
 }
 
 export type InterfaceMethod = {
@@ -232,7 +242,7 @@ export type InterfaceMethod = {
 }
 
 export type InterfaceMethodParameter = {
-    readonly "type": string
+    readonly "xtype": string
 }
 
 export type InterfaceMethodType =
@@ -273,16 +283,20 @@ export type ObjectType = {
 }
 
 export type ParametrizedInitialize = {
-    readonly "type": string
+    readonly "xtype": string
 }
 
 export type Private = {
+    readonly "block": Block
     readonly "parameters": gt.Dictionary<PrivateParameter>
 }
 
 export type PrivateParameter = {
-    readonly "type": string
+    readonly "type": PrivateParameterType
 }
+
+export type PrivateParameterType =
+    | [ "rawz", RawPrivateParameter ]
 
 export type PropertyInitialier = {
     readonly "initializer": Initializer
@@ -299,31 +313,43 @@ export type PropertyType =
     | [ "string", String ]
 
 export type Public = {
+    readonly "block": Block
     readonly "parameters": gt.OrderedDictionary<PublicParameter, PublicParameterOrderings>
 }
 
 export type PublicParameter = {
-    readonly "type": string
+    readonly "type": PublicParameterType
 }
 
 export type PublicParameterOrderings = {
     readonly "dependencies": gt.DictionaryOrdering<PublicParameter>
 }
 
+export type PublicParameterType =
+    | [ "rawz", RawPublicParameter ]
+
 export type RawInitializer = {
-    readonly "rawstring": string
+    readonly "xrawstring": string
+}
+
+export type RawPrivateParameter = {
+    readonly "rawPrivParam": string
 }
 
 export type RawPropertyType = {
-    readonly "raw": string
+    readonly "xraw": string
+}
+
+export type RawPublicParameter = {
+    readonly "rawPubParam": string
 }
 
 export type RawStatement = {
-    readonly "raw value": string
+    readonly "xraw value": string
 }
 
 export type ReferencedTaggedUnionType = {
-    readonly "type": string
+    readonly "xtype": string
 }
 
 export type ReferenceToGenericDeclaration = {
@@ -331,7 +357,7 @@ export type ReferenceToGenericDeclaration = {
 }
 
 export type ReferenceToInterfaceParameter = {
-    readonly "parameter": string
+    readonly "xparameter": string
 }
 
 export type ReferenceToMethodTypeParameter = {
@@ -350,23 +376,23 @@ export type SelectionStartPoint =
     | [ "variable", StartFromVariable ]
 
 export type SelectionStep = {
-    readonly "rawselectionstring": string
+    readonly "xrawselectionstring": string
 }
 
 export type StartFromCallbackParameter = {
-    readonly "parameter": string
+    readonly "xparameter": string
 }
 
 export type StartFromParameter = {
-    readonly "parameter": string
+    readonly "xparameter": string
 }
 
 export type StartFromProperty = {
-    readonly "property": string
+    readonly "xproperty": string
 }
 
 export type StartFromVariable = {
-    readonly "variable": string
+    readonly "xvariable": string
 }
 
 export type Statement = {
@@ -376,6 +402,7 @@ export type Statement = {
 export type StatementType =
     | [ "call", FunctionCallStatement ]
     | [ "raw", RawStatement ]
+    | [ "sub block", SubBlock ]
     | [ "switch", SwitchStatement ]
 
 export type String = {
@@ -387,13 +414,21 @@ export type StringGenericInType = {
 export type StringGenericReturnType = {
 }
 
+export type StringLiteral = {
+    readonly "value": string
+}
+
+export type SubBlock = {
+    readonly "block": Block
+}
+
 export type SwitchCase = {
     readonly "block": Block
 }
 
 export type SwitchStatement = {
     readonly "cases": gt.Dictionary<SwitchCase>
-    readonly "raw expression": string
+    readonly "xraw expression": string
 }
 
 export type TaggedUnion = {
@@ -401,25 +436,28 @@ export type TaggedUnion = {
 }
 
 export type TaggedUnionAlternative = {
-    readonly "referenced type": string
+    readonly "xreferenced type": string
 }
 
 export type TaggedUnionInitializer = {
     readonly "initializer": Initializer
-    readonly "state": string
     readonly "type specification": TaggedUnionTypeSpecification
+    readonly "xstate": string
 }
 
 export type TaggedUnionTypeSpecification =
     | [ "derived", DerivedTaggedUnionType ]
     | [ "reference", ReferencedTaggedUnionType ]
 
+export type True = {
+}
+
 export type Type = {
     readonly "type": TypeType
 }
 
 export type TypeReference = {
-    readonly "referenced type": string
+    readonly "xreferenced type": string
 }
 
 export type TypeType =

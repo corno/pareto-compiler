@@ -1,20 +1,18 @@
 export * from "./generated/types"
 export * from "./generated/algorithms"
+export { Directory, Node, saveDirectory } from "./directory"
 
-import * as fp from "fountain-pen"
 import * as lf from "lingua-franca"
 import { CCompilationUnitBuilder } from "./generated/algorithms"
 import { CompilationUnit } from "./generated/types"
-import { GenerateAlgorithms } from "./targetLanguages/TypeScript/GenerateAlgorithmUnits"
-import { GenerateGenericTypes } from "./targetLanguages/TypeScript/GenerateGenericTypes"
-import { GenerateInterfaces } from "./targetLanguages/TypeScript/GenerateInterfaces"
-import { GenerateTypes } from "./targetLanguages/TypeScript/GenerateTypes"
+import { createGenerator as createCGenerator } from "./targetLanguages/C"
+import { createGenerator as createTypescriptGenerator } from "./targetLanguages/TypeScript"
 
 export function compile(
     //resolveReporter: lf.IResolveReporter,
     callback: (builder: CCompilationUnitBuilder) => CompilationUnit
 ) {
-    return callback(new CCompilationUnitBuilder({ buildContext: lf.createBuildContext()}))
+    return callback(new CCompilationUnitBuilder({ buildContext: lf.createBuildContext() }))
 }
 
 export type GeneratedCode = {
@@ -24,22 +22,11 @@ export type GeneratedCode = {
     algorithms: string
 }
 
-function serialize(paragraph: fp.IParagraph) {
-    const out: string[] = []
-    fp.serialize(paragraph, "    ", true, str => { out.push(str) })
-    return out.join("\n")
-}
-
-export function generateTypeScriptCode(compilationUnit: CompilationUnit): GeneratedCode {
-    const genericTypeParagraphs = new GenerateGenericTypes().CompilationUnit(compilationUnit)
-    const typeParagraphs = new GenerateTypes().CompilationUnit(compilationUnit)
-    const interfaceParagraphs = new GenerateInterfaces().CompilationUnit(compilationUnit)
-    const algorithmParagraphs = new GenerateAlgorithms().CompilationUnit(compilationUnit)
-
-    return {
-        genericTypes: serialize(genericTypeParagraphs),
-        interfaces: serialize(interfaceParagraphs),
-        types: serialize(typeParagraphs),
-        algorithms: serialize(algorithmParagraphs),
-    }
+export const generate = {
+    TypeScript: function generateTypeScriptCode(compilationUnit: CompilationUnit) {
+        return createTypescriptGenerator().generateCode(compilationUnit)
+    },
+    C: function generateCCode(compilationUnit: CompilationUnit, moduleName: string) {
+        return createCGenerator().generateCode(compilationUnit, moduleName)
+    },
 }

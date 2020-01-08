@@ -1,6 +1,7 @@
 //tslint:disable: no-console no-shadowed-variable
 //import * as lf from "lingua-franca"
-import { compile, generateTypeScriptCode } from "../src"
+import { compile, generate } from "../src"
+import { saveDirectory } from "../src/directory"
 
 // const rr = new lf.SimpleResolveReporter(
 //     (_dependent, message) => {
@@ -20,28 +21,34 @@ const compilationUnit = compile(builder => {
             ))
         , i => i
                 .Interface("InterfaceX", m => m
-                    .InterfaceMethod("IM", p => p.InterfaceMethodParameter("IMP", "X"), t => t.procedure())
+                    .InterfaceMethod("IM", p => p.InterfaceMethodParameter("IMP", "string"), t => t.procedure())
                 )
         , a => a
             .AlgorithmUnit("Foo", t => t.class(
                 p => p
-                    .ClassProperty("a", t => t.default("new Array<int>()"))
+                    .ClassProperty("a", t => t.default("new Array<number>()"))
                     .ClassProperty("b", t => t.parametrized("string"))
                 , m => m
                     .ClassMethod("bla"
                         , a => a.private(p => p
-                            .PrivateParameter("param", "boolean")
+                            .PrivateParameter("param", t => t.rawz("boolean"))
+                            , v => v
+                            , s => s
+                                .Statement(t => t.raw("console.error(\"XX\")"))
                         )
-                        , v => v
-                        , s => s
-                            .Statement(t => t.raw("console.log('X')"))
                     )
             ))
     )
 })
 
-const typeScriptCode = generateTypeScriptCode(compilationUnit)
-console.log(typeScriptCode.types)
-console.log(typeScriptCode.algorithms)
-
+saveDirectory("./test/out", {
+    nodes: {
+        TypeScript: ["directory", {
+            nodes: {
+                generated : [ "directory", generate.TypeScript(compilationUnit)],
+            },
+        }],
+        C: ["directory", generate.C(compilationUnit, "FOO")],
+    },
+})
 

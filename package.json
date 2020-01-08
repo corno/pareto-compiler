@@ -30,6 +30,7 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "@types/node": "^13.1.4",
     "fountain-pen": "^3.0.0",
     "lingua-franca": "^0.7.1"
   }

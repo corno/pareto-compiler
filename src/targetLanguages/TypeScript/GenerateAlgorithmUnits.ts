@@ -19,8 +19,11 @@ export class GenerateAlgorithms {
         return [
             `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable no-empty`,
             `import { gf } from "../genericFunctions"`,
+            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as gt from "./genericTypes"`,
+            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as i from "./interfaces"`,
+            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as t from "./types"`,
             ``,
             `function assertUnreachable(_x: never) { throw new Error("Unreachable") }`,
@@ -43,9 +46,9 @@ export class GenerateAlgorithms {
                                                         ((): fp.InlinePart => {
                                                             switch (cp.element.initialization[0]) {
                                                                 case "default":
-                                                                    return ` = ${cp.element.initialization[1].initializer}`
+                                                                    return ` = ${cp.element.initialization[1].xinitializer}`
                                                                 case "parametrized":
-                                                                    return `: ${cp.element.initialization[1].type}`
+                                                                    return `: ${cp.element.initialization[1].xtype}`
                                                                 default: return assertUnreachable(cp.element.initialization[0])
                                                             }
                                                         })(),
@@ -61,7 +64,7 @@ export class GenerateAlgorithms {
                                                     callback: cp => cp.element.initialization[0] === "parametrized" ? cp.element.initialization[1] : null,
                                                 }).map({
                                                     callback: cp => {
-                                                        return `"${cp.key}": ${cp.element.type}`
+                                                        return `"${cp.key}": ${cp.element.xtype}`
                                                     },
                                                 })
                                             },
@@ -147,10 +150,21 @@ export class GenerateAlgorithms {
                             `_p: { `,
                             () => {
                                 return $.parameters.getAlphabeticalOrdering({}).map({
-                                    callback: cp => {
-                                        return `readonly "${cp.key}": ${cp.element.type}`
+                                    callback: (cp): string => {
+                                        switch (cp.element.type[0]) {
+                                            case "rawz": {
+                                                const $$ = cp.element.type[1]
+                                                return `readonly "${cp.key}": ${$$.rawPrivParam}`
+                                            }
+                                            default:
+                                                return assertUnreachable(cp.element.type[0])
+                                        }
                                     },
                                 })
+                            },
+                            `}) {`,
+                            () => {
+                                return this.Block($.block)
                             },
                             `}`,
                         ]
@@ -160,22 +174,29 @@ export class GenerateAlgorithms {
                         return [
                             () => {
                                 return $.parameters.getOrderings({}).dependencies.map({
-                                    callback: cp => {
-                                        return `${sanitize(cp.key)}: ${cp.element.type},`
+                                    callback: (cp): string => {
+                                        switch (cp.element.type[0]) {
+                                            case "rawz": {
+                                                const $$ = cp.element.type[1]
+                                                return `readonly "${cp.key}": ${$$.rawPubParam}`
+                                            }
+                                            default:
+                                                return assertUnreachable(cp.element.type[0])
+                                        }
                                     },
                                 })
                             },
+                            `) {`,
+                            () => {
+                                return this.Block($.block)
+                            },
+                            `}`,
                         ]
                     }
                     default:
                         return assertUnreachable(fs.access[0])
                 }
             })(),
-            `) {`,
-            () => {
-                return this.Block(fs.block)
-            },
-            `}`,
         ]
     }
     private Block(b: Block): fp.IParagraph {
@@ -201,13 +222,23 @@ export class GenerateAlgorithms {
                             case "raw": {
                                 const $$ = cp.element.type[1]
                                 return [
-                                    $$["raw value"],
+                                    $$["xraw value"],
+                                ]
+                            }
+                            case "sub block": {
+                                const $$ = cp.element.type[1]
+                                return [
+                                    `{`,
+                                    () => {
+                                        return this.Block($$.block)
+                                    },
+                                    `}`,
                                 ]
                             }
                             case "switch": {
                                 const $$ = cp.element.type[1]
                                 return [
-                                    `switch (${$$["raw expression"]}[0]) {`,
+                                    `switch (${$$["xraw expression"]}[0]) {`,
                                     () => {
                                         return [
                                             $$.cases.getAlphabeticalOrdering({}).map({
@@ -216,7 +247,7 @@ export class GenerateAlgorithms {
                                                         `case "${cp.key}": {`,
                                                         () => {
                                                             return [
-                                                                `const _$ = ${$$["raw expression"]}[1]`,
+                                                                `const _$ = ${$$["xraw expression"]}[1]`,
                                                                 `{`,
                                                                 () => {
                                                                     return [
@@ -232,7 +263,7 @@ export class GenerateAlgorithms {
                                                     ]
                                                 },
                                             }),
-                                            `default: return assertUnreachable(${$$["raw expression"]}[0])`,
+                                            `default: return assertUnreachable(${$$["xraw expression"]}[0])`,
                                         ]
                                     },
                                     `}`,
@@ -249,7 +280,7 @@ export class GenerateAlgorithms {
     }
     private FunctionCall($: FunctionCall): fp.InlinePart {
         return [
-            $.path,
+            $.xpath,
             `({`,
             () => {
                 return $.arguments.getAlphabeticalOrdering({}).map({
@@ -293,7 +324,7 @@ export class GenerateAlgorithms {
                 const $ = initializer.type[1]
                 return [
                     `new C`,
-                    sanitize($.path),
+                    sanitize($.xpath),
                     `({`,
                     () => {
                         return $.arguments.getAlphabeticalOrdering({}).map({
@@ -314,6 +345,13 @@ export class GenerateAlgorithms {
             case "function call": {
                 const $ = initializer.type[1]
                 return this.FunctionCall($.call)
+            }
+            case "false": {
+                return "false"
+            }
+            case "generic function call": {
+                const $ = initializer.type[1]
+                return ["gt.", this.FunctionCall($.call)]
             }
             case "object": {
                 const $ = initializer.type[1]
@@ -337,7 +375,7 @@ export class GenerateAlgorithms {
             }
             case "rawx": {
                 const $ = initializer.type[1]
-                return $.rawstring
+                return $.xrawstring
             }
             case "selection": {
                 const $ = initializer.type[1]
@@ -348,35 +386,39 @@ export class GenerateAlgorithms {
                                 const _$ = $["start point"][1]
                                 {
                                     const $ = _$
-                                    return `_p["${$.parameter}"]`
+                                    return `_p["${$.xparameter}"]`
                                 }
                             case "callback parameter": {
                                 const $$ = $["start point"][1]
-                                return `_cp["${$$.parameter}"]`
+                                return `_cp["${$$.xparameter}"]`
                             }
                             case "property": {
                                 const $$ = $["start point"][1]
-                                return `this.${sanitize($$.property)}`
+                                return `this.${sanitize($$.xproperty)}`
                             }
                             case "variable": {
                                 const $$ = $["start point"][1]
-                                return `${sanitize($$.variable)}`
+                                return `${sanitize($$.xvariable)}`
                             }
                             default:
                                 return assertUnreachable($["start point"][0])
                         }
                     })(),
                     $.steps.map({
-                        callback: cp => `["${cp.element.rawselectionstring}"]`,
+                        callback: cp => `["${cp.element.xrawselectionstring}"]`,
                     }),
                 ]
+            }
+            case "string literal": {
+                const $ = initializer.type[1]
+                return `"${$.value}"`
             }
             case "tagged union": {
                 const $ = initializer.type[1]
                 switch ($["type specification"][0]) {
                     case "derived": {
                         return [
-                            `[ "${$.state}", `,
+                            `[ "${$.xstate}", `,
                             this.Initializer($.initializer),
                             ` ]`,
                         ]
@@ -384,11 +426,11 @@ export class GenerateAlgorithms {
                     case "reference": {
                         const $$ = $["type specification"][1]
                         return [
-                            `((): t.${$$.type} => {`,
+                            `((): t.${$$.xtype} => {`,
                             () => {
                                 return [
                                     fp.line([
-                                        `return ["${$.state}", `,
+                                        `return ["${$.xstate}", `,
                                         this.Initializer($.initializer),
                                         `]`,
                                     ]),
@@ -400,6 +442,9 @@ export class GenerateAlgorithms {
                     default:
                         return assertUnreachable($["type specification"][0])
                 }
+            }
+            case "true": {
+                return "true"
             }
             default:
                 return assertUnreachable(initializer.type[0])

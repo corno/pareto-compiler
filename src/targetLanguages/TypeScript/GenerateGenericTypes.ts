@@ -189,7 +189,7 @@ export class GenerateGenericTypes {
         switch (gt.type[0]) {
             case "interface parameter": {
                 const $ = gt.type[1]
-                return $.parameter
+                return $.xparameter
             }
             case "method type parameter": {
                 const $ = gt.type[1]
@@ -208,7 +208,7 @@ export class GenerateGenericTypes {
     }
     private GenericInterfaceReference(gir: GenericInterfaceReference) {
         return [
-            gir.interface,
+            gir.xinterface,
             `<`,
             gir["type arguments"].getAlphabeticalOrdering({}).mapWithSeparator({
                 onSeparator: () => `, `,

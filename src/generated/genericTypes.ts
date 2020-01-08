@@ -30,3 +30,23 @@ export * from "lingua-franca"
 export interface Out {
     write(p: { string: string }): void
 }
+
+export interface In {
+    //write(p: { string: string }): void
+    processObject(p: {
+        callback: (cp: {
+
+        } ) => void
+    }): void
+    processArray(p: {
+        callback: (cp: {
+
+        }) => void
+    }): void
+    expectProperty(p: {
+        name: string,
+        callback: (cp: {
+
+        }) => void
+    }): void
+}

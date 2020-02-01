@@ -1,4 +1,3 @@
-//tslint:disable: no-shadowed-variable
 
 import * as fp from "fountain-pen"
 import {
@@ -383,9 +382,9 @@ export class GenerateAlgorithms {
                     ((): string => {
                         switch ($["start point"][0]) {
                             case "parameter":
-                                const _$ = $["start point"][1]
+                                const $_$ = $["start point"][1]
                                 {
-                                    const $ = _$
+                                    const $ = $_$
                                     return `_p["${$.xparameter}"]`
                                 }
                             case "callback parameter": {

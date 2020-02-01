@@ -1,4 +1,3 @@
-//tslint:disable: no-shadowed-variable
 import * as fp from "fountain-pen"
 import {
     CompilationUnit,

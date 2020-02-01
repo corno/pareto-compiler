@@ -1,4 +1,4 @@
-//tslint:disable: no-shadowed-variable
+/*eslint no-shadow: "off"*/
 import * as fp from "fountain-pen"
 import {
     CompilationUnit,
@@ -27,7 +27,7 @@ export class GenerateTypes {
                                         return [
                                             `struct ${sanitize(cp.key)} `,
                                             `{`,
-                                            () => {
+                                            (): fp.IParagraph => {
                                                 return $.properties.getAlphabeticalOrdering({}).map({
                                                     callback: cp => {
                                                         return [
@@ -75,7 +75,7 @@ export class GenerateTypes {
                                         const $ = cp.element.type[1]
                                         return [
                                             `enum ${sanitize(cp.key)} `,
-                                            () => {
+                                            (): fp.IParagraph => {
                                                 return $.alternatives.getAlphabeticalOrdering({}).map({
                                                     callback: cp => {
                                                         return [
@@ -85,7 +85,7 @@ export class GenerateTypes {
                                                 })
                                             },
                                             `union ${sanitize(cp.key)} `,
-                                            () => {
+                                            (): fp.IParagraph => {
                                                 return $.alternatives.getAlphabeticalOrdering({}).map({
                                                     callback: cp => {
                                                         return [

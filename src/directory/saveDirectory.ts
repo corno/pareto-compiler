@@ -2,11 +2,11 @@ import * as fs from "fs"
 import * as path from "path"
 import { Directory } from "./types"
 
-function assertUnreachable(_x: never) {
+function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
 }
 
-export function saveDirectory(targetPath: string, dir: Directory) {
+export function saveDirectory(targetPath: string, dir: Directory): void {
     Object.keys(dir.nodes).forEach(key => {
         const node = dir.nodes[key]
         switch (node[0]) {

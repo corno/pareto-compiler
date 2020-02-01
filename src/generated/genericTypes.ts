@@ -1,5 +1,3 @@
-//tslint:disable: array-type interface-name
-//tslint:disable: ban-types
 
 export * from "lingua-franca"
 

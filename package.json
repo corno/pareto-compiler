@@ -5,7 +5,7 @@
   "main": "dist/src/index.js",
   "scripts": {
     "build": "mkdir .\\dist & rd /s /q .\\dist && tsc",
-    "lint": "tslint --project tsconfig.json",
+    "lint": "node .\\node_modules\\eslint\\bin\\eslint.js src/**/*.ts",
     "buildLintAndTest": "npm run build && npm run lint && npm run test",
     "validatePublishReadiness": "git diff --exit-code && ncu -u --packageFile package.json && npm install && npm run buildLintAndTest",
     "pubMin": "npm run validatePublishReadiness && npm version minor && git push && npm publish",
@@ -27,13 +27,18 @@
     "dist/*"
   ],
   "devDependencies": {
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.4"
+    "@typescript-eslint/eslint-plugin": "^2.18.0",
+    "@typescript-eslint/eslint-plugin-tslint": "^2.18.0",
+    "@typescript-eslint/parser": "^2.18.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
   },
   "dependencies": {
-    "@types/node": "^13.1.4",
+    "@types/node": "^13.7.0",
+    "eslint": "^6.8.0",
     "fountain-pen": "^3.0.0",
     "http-server": "^0.12.1",
-    "lingua-franca": "^0.7.1"
+    "lingua-franca": "^0.7.1",
+    "tslint-to-eslint-config": "^0.5.0"
   }
 }

@@ -1,5 +1,5 @@
-//tslint:disable: ban-types
-//@ts-ignore
+/*eslint @typescript-eslint/no-unused-vars: "off"*/
+
 import * as t from "./types"
 
 export interface IInterfaceX {

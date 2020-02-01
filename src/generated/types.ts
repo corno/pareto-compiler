@@ -1,5 +1,6 @@
-//tslint:disable: ban-types
-//@ts-ignore
+/* eslint
+    @typescript-eslint/ban-types: "off",
+*/
 import * as gt from "./genericTypes"
 
 export type AlgorithmUnit = {

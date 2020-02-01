@@ -1,4 +1,4 @@
-//tslint:disable: no-console no-shadowed-variable
+/* eslint no-shadow: "off"*/
 //import * as lf from "lingua-franca"
 import { saveDirectory } from "../src/directory/index"
 import { compile, generate } from "../src/index"

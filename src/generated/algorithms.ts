@@ -1,4 +1,17 @@
-// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable no-empty
+/* eslint
+    comma-dangle: "off",
+    camelcase: "off",
+    dot-notation: "off",
+    no-empty: "off",
+    no-shadow: "off",
+    no-underscore-dangle: "off",
+    max-classes-per-file: "off",
+    quote-props: "off",
+    @typescript-eslint/camelcase: "off",
+    @typescript-eslint/explicit-function-return-type: "off",
+    @typescript-eslint/no-empty-function: "off",
+    @typescript-eslint/no-unused-vars: "off",
+*/
 import { gf } from "../genericFunctions"
 import * as gt from "./genericTypes"
 import * as i from "./interfaces"

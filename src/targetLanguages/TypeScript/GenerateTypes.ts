@@ -1,4 +1,3 @@
-//tslint:disable: no-shadowed-variable
 import * as fp from "fountain-pen"
 import {
     CompilationUnit,
@@ -8,7 +7,6 @@ import { sanitize, sanitize2 } from "./sanitize"
 function assertUnreachable<T>(_x: never): T {
     throw new Error("Unreachable")
 }
-
 
 export class GenerateTypes {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {

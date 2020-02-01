@@ -42,9 +42,8 @@ export interface In {
         }) => void
     }): void
     expectProperty(p: {
-        name: string,
+        name: string
         callback: (cp: {
-
         }) => void
     }): void
 }

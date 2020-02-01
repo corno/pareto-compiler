@@ -27,7 +27,7 @@ module.exports = {
         "@typescript-eslint/explicit-function-return-type": "off",
         "@typescript-eslint/interface-name-prefix": "off",
         "@typescript-eslint/member-delimiter-style": [
-            "off",
+            "error",
             {
                 "multiline": {
                     "delimiter": "none",
@@ -40,10 +40,10 @@ module.exports = {
             }
         ],
         "@typescript-eslint/no-empty-interface": "error",
-        "@typescript-eslint/no-explicit-any": "off",
+        "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-misused-new": "error",
         "@typescript-eslint/no-namespace": "error",
-        "@typescript-eslint/no-parameter-properties": "off",
+        "@typescript-eslint/no-parameter-properties": "error",
         "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": '^_' }],
         "@typescript-eslint/no-use-before-define": "off",
         "@typescript-eslint/no-var-requires": "error",
@@ -72,7 +72,7 @@ module.exports = {
                 "functions": "never",
             }
         ],
-        "complexity": "off",
+        "complexity": "error",
         "constructor-super": "error",
         "dot-notation": "error",
         "eqeqeq": [
@@ -124,9 +124,9 @@ module.exports = {
         "no-debugger": "error",
         "no-empty": "error",
         "no-eval": "error",
-        "no-fallthrough": "off",
-        "no-invalid-this": "off",
-        "no-multiple-empty-lines": "off",
+        "no-fallthrough": "error",
+        "no-invalid-this": "error",
+        "no-multiple-empty-lines": "error",
         "no-new-wrappers": "error",
         "no-shadow": [
             "error",
@@ -163,7 +163,7 @@ module.exports = {
             "never"
         ],
         "use-isnan": "error",
-        "valid-typeof": "off",
+        "valid-typeof": "error",
         "@typescript-eslint/tslint/config": [
             "error",
             {

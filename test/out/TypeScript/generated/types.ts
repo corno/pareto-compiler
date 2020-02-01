@@ -1,5 +1,5 @@
-/* eslint @typescript-eslint/no-unused-vars: "off" */
-
+//tslint:disable: ban-types
+//@ts-ignore
 import * as gt from "./genericTypes"
 
 export type Bar = {

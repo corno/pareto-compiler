@@ -1,1 +1,1 @@
-export const x = 5
+//tslint:disable: ban-types interface-name pareto array-type no-empty-interface

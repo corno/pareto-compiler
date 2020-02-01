@@ -1,3 +1,3 @@
 import { CFoo } from "./generated/algorithmUnits"
 
-new CFoo({b: "a string"}).bla(true)
+new CFoo({b: "a string"}).bla({ param: true})

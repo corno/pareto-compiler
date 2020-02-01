@@ -1,13 +1,15 @@
 /* eslint
     @typescript-eslint/no-unused-vars: "off",
     dot-notation: "off",
- */
+*/
 import { gf } from "../genericFunctions"
 import * as gt from "./genericTypes"
 import * as i from "./interfaces"
 import * as t from "./types"
 
-//function assertUnreachable(_x: never) { throw new Error("Unreachable") }
+export const _ = null
+
+function assertUnreachable(_x: never) { throw new Error("Unreachable") }
 
 export class CFoo {
     private readonly a = new Array<number>()
@@ -17,9 +19,9 @@ export class CFoo {
     }) {
         this.b = _p["b"]
     }
-    public bla(_p: {
-        readonly "param": boolean
-    }) {
-        console.error("XX")
+    public bla(
+        param: boolean,
+    ) {
+        console.error("XX", param)
     }
 }

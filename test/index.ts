@@ -34,7 +34,7 @@ const compilationUnit = compile(builder => {
                             .PublicParameter("param", t => t.rawz("boolean"))
                             , v => v
                             , s => s
-                                .Statement(t => t.raw("console.error(\"XX\")"))
+                                .Statement(t => t.raw("console.error(\"XX\", param)"))
                         )
                     )
             ))

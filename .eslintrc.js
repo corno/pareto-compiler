@@ -66,10 +66,9 @@ module.exports = {
             "error",
             {
                 "arrays": "always-multiline",
-                "functions": "always-multiline",
+                "functions": "only-multiline",
                 "imports": "always-multiline",
                 "objects": "always-multiline",
-                "functions": "never",
             }
         ],
         "complexity": "error",

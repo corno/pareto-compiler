@@ -11,9 +11,9 @@ function assertUnreachable<T>(_x: never): T {
 export class GenerateTypes {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `//tslint:disable: ban-types`,
-            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
+            `/* eslint */`,
             `import * as gt from "./genericTypes"`,
+            `export const _ = null`,
             compilationUnit.types.getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: cp => {
                     return [

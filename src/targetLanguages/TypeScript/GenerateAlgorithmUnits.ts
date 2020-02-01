@@ -16,14 +16,16 @@ function assertUnreachable<T>(_x: never): T {
 export class GenerateAlgorithms {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `// tslint:disable: max-classes-per-file object-literal-key-quotes variable-name no-string-literal member-ordering no-shadowed-variable no-empty`,
+            `/* eslint`,
+            `    @typescript-eslint/no-unused-vars: "off",`,
+            `    dot-notation: "off",`,
+            `*/`,
             `import { gf } from "../genericFunctions"`,
-            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as gt from "./genericTypes"`,
-            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as i from "./interfaces"`,
-            `//@ts-ignore`, //the file can be empty causing a 'is not a module' error
             `import * as t from "./types"`,
+            ``,
+            `export const _ = null`,
             ``,
             `function assertUnreachable(_x: never) { throw new Error("Unreachable") }`,
             compilationUnit["algorithm units"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
@@ -177,7 +179,7 @@ export class GenerateAlgorithms {
                                         switch (cp.element.type[0]) {
                                             case "rawz": {
                                                 const $$ = cp.element.type[1]
-                                                return `readonly "${cp.key}": ${$$.rawPubParam}`
+                                                return `${sanitize(cp.key)}: ${$$.rawPubParam},`
                                             }
                                             default:
                                                 return assertUnreachable(cp.element.type[0])

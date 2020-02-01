@@ -15,7 +15,7 @@ function assertUnreachable<T>(_x: never): T {
 export class GenerateGenericTypes {
     public CompilationUnit(compilationUnit: CompilationUnit): fp.IParagraph {
         return [
-            `//tslint:disable: ban-types interface-name pareto array-type no-empty-interface`,
+            `export const _ = null`,
             compilationUnit["generic interface declarations"].getAlphabeticalOrdering({}).map<fp.IParagraph>({
                 callback: cp => {
                     return [

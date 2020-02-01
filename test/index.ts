@@ -1,7 +1,7 @@
 //tslint:disable: no-console no-shadowed-variable
 //import * as lf from "lingua-franca"
-import { compile, generate } from "../src"
-import { saveDirectory } from "../src/directory"
+import { saveDirectory } from "../src/directory/index"
+import { compile, generate } from "../src/index"
 
 // const rr = new lf.SimpleResolveReporter(
 //     (_dependent, message) => {
@@ -30,8 +30,8 @@ const compilationUnit = compile(builder => {
                     .ClassProperty("b", t => t.parametrized("string"))
                 , m => m
                     .ClassMethod("bla"
-                        , a => a.private(p => p
-                            .PrivateParameter("param", t => t.rawz("boolean"))
+                        , a => a.public(p => p
+                            .PublicParameter("param", t => t.rawz("boolean"))
                             , v => v
                             , s => s
                                 .Statement(t => t.raw("console.error(\"XX\")"))

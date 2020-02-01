@@ -16,6 +16,7 @@
   "keywords": [],
   "author": "corno",
   "license": "ISC",
+  "type": "module",
   "types": "dist/src/index.d.ts",
   "prepublish": "tsc",
   "repository": {
@@ -32,6 +33,7 @@
   "dependencies": {
     "@types/node": "^13.1.4",
     "fountain-pen": "^3.0.0",
+    "http-server": "^0.12.1",
     "lingua-franca": "^0.7.1"
   }
 }

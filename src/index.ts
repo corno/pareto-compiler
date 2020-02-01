@@ -1,6 +1,6 @@
 export * from "./generated/types"
 export * from "./generated/algorithms"
-export { Directory, Node, saveDirectory } from "./directory"
+export { Directory, Node, saveDirectory } from "./directory/index"
 
 import * as lf from "lingua-franca"
 import { CCompilationUnitBuilder } from "./generated/algorithms"

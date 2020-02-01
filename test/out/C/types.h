@@ -1,8 +1,8 @@
 #ifndef FOO_H
 #define FOO_H
 
-struct Bar {
-    readonly "X": string
-}
+typedef struct X {
+    int a;
+} X;
 
 #endif

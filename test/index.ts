@@ -12,7 +12,9 @@ import { compile, generate } from "../src"
 //     }
 // )
 
-console.log("generating test code in ./test/out")
+const outDir = "./test/.out"
+
+console.log(`generating test code in ${outDir}`)
 
 const compilationUnit = compile(builder => {
     return builder.build(
@@ -43,7 +45,7 @@ const compilationUnit = compile(builder => {
     )
 })
 
-saveDirectory("./test/out", {
+saveDirectory(outDir, {
     nodes: {
         TypeScript: ["directory", {
             nodes: {

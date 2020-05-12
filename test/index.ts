@@ -1,7 +1,7 @@
 /* eslint no-shadow: "off"*/
 //import * as lf from "lingua-franca"
 import { saveDirectory } from "../src/directory/index"
-import { compile, generate } from "../src/index"
+import { compile, generate } from "../src"
 
 // const rr = new lf.SimpleResolveReporter(
 //     (_dependent, message) => {
@@ -11,6 +11,8 @@ import { compile, generate } from "../src/index"
 //         console.log(message)
 //     }
 // )
+
+console.log("generating test code in ./test/out")
 
 const compilationUnit = compile(builder => {
     return builder.build(

@@ -7,14 +7,13 @@
     no-underscore-dangle: "off",
     max-classes-per-file: "off",
     quote-props: "off",
-    @typescript-eslint/camelcase: "off",
     @typescript-eslint/explicit-function-return-type: "off",
     @typescript-eslint/no-empty-function: "off",
     @typescript-eslint/no-unused-vars: "off",
+    @typescript-eslint/explicit-module-boundary-types: "off",
 */
 import { gf } from "../genericFunctions"
 import * as gt from "./genericTypes"
-import * as i from "./interfaces"
 import * as t from "./types"
 
 function assertUnreachable(_x: never) { throw new Error("Unreachable") }

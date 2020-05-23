@@ -1,6 +1,6 @@
 {
   "name": "pareto-compiler",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "pareto compiler",
   "main": "dist/src/index.js",
   "scripts": {
